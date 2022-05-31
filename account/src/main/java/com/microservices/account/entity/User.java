@@ -28,7 +28,7 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = false, of =
         {"userId", "firstName", "lastName", "age", "email", "password", "gender", "role"})
 @Table(name = "users", schema = "PUBLIC")
-public class User extends BaseEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

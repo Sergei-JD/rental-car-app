@@ -24,7 +24,7 @@ import javax.persistence.Table;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of = {"accountId", "userId", "nickName", "password", "phoneNumber"})
 @Table(name = "account", schema = "PUBLIC")
-public class Account extends BaseEntity {
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

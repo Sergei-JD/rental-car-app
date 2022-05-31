@@ -1,3 +1,4 @@
+server.port: 8080
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -6,5 +7,5 @@ spring:
     password: postgres
   jpa:
     show-sql: true
-#    hibernate.ddl-auto: validate
+    hibernate.ddl-auto: validate
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
