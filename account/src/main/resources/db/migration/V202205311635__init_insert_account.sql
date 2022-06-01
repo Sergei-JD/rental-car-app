@@ -1,18 +1,18 @@
 -- -----------------------------------------------------
 -- Insert table users
 -- -----------------------------------------------------
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (1, 'Ivan', 'Ivanov', 46, 'ivan@email.com', '1111', 'MALE', 'ADMIN');
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (2, 'Petr', 'Petrov', 32, 'petr@email.com', '2222', 'MALE', 'CUSTOMER');
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (3, 'Sergey', 'Sergeev', 28, 'sergey@email.com', '3333', 'MALE', 'MECHANIC');
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (4, 'Sveta', 'Svetikova', 51, 'sveta@email.com', '4444', 'FEMALE', 'CUSTOMER');
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (5, 'Maria', 'Marieva', 22, 'maria@email.com', '5555', 'FEMALE', 'CUSTOMER');
-INSERT INTO users (user_id, first_name, last_name, age, email, password, gender, role)
-            VALUES (6, 'Valentina', 'Valentinova', 47, 'valentina@email.com', '6666', 'FEMALE', 'CUSTOMER');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (1, 'Ivan', 'Ivanov', '1999-06-21', '65634234235475', 'ivan@email.com', '1111', 'MALE', 'ADMIN');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (2, 'Petr', 'Petrov', '2001-06-21', '65634234235475', 'petr@email.com', '2222', 'MALE', 'CUSTOMER');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (3, 'Sergey', 'Sergeev', '1998-06-21', '65634234235475', 'sergey@email.com', '3333', 'MALE', 'MECHANIC');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (4, 'Sveta', 'Svetikova', '1983-06-21', '65634234235475', 'sveta@email.com', '4444', 'FEMALE', 'CUSTOMER');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (5, 'Maria', 'Marieva', '1984-06-21', '65634234235475', 'maria@email.com', '5555', 'FEMALE', 'CUSTOMER');
+INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passport_number, email, password, gender, role)
+            VALUES (6, 'Valentina', 'Valentinova', '1978-06-21', '65634234235475', 'valentina@email.com', '6666', 'FEMALE', 'CUSTOMER');
 
 -- -----------------------------------------------------
 -- Insert table account

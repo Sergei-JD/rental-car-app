@@ -20,6 +20,9 @@
 
     <properties>
         <java.version>17</java.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <org.modelmapper.version>3.1.0</org.modelmapper.version>
+        <org.hibernate.validator.version>8.0.0.Alpha3</org.hibernate.validator.version>
     </properties>
 
     <dependencies>
@@ -48,6 +51,24 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>${org.modelmapper.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.validator.version}</version>
         </dependency>
 
         <dependency>

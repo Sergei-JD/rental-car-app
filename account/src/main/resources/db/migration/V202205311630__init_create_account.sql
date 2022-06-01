@@ -3,14 +3,15 @@
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS users
 (
-    user_id    BIGSERIAL PRIMARY KEY,
-    first_name VARCHAR(256)        NOT NULL,
-    last_name  VARCHAR(256)        NOT NULL,
-    age        INTEGER             NOT NULL CHECK (users.age > 0),
-    email      VARCHAR(256) UNIQUE NOT NULL,
-    password   VARCHAR(256)        NOT NULL,
-    gender     VARCHAR(64),
-    role       VARCHAR(64)         NOT NULL
+    user_id                  BIGSERIAL PRIMARY KEY,
+    first_name               VARCHAR(256)        NOT NULL,
+    last_name                VARCHAR(256)        NOT NULL,
+    date_of_birth            TIMESTAMP           NOT NULL,
+    identity_passport_number VARCHAR(14)         NOT NULL,
+    email                    VARCHAR(256) UNIQUE NOT NULL,
+    password                 VARCHAR(256)        NOT NULL,
+    gender                   VARCHAR(64)         NOT NULL,
+    role                     VARCHAR(64)         NOT NULL
 );
 
 -- -----------------------------------------------------
@@ -38,7 +39,7 @@ CREATE TABLE IF NOT EXISTS credit_card
     cvv_code         VARCHAR(3)   NOT NULL,
     name_card_owner  VARCHAR(256) NOT NULL,
     balance          NUMERIC,
-    account_id       BIGINT REFERENCES account (account_id)
+    account_id       BIGINT       NOT NULL REFERENCES account (account_id)
 );
 
 -- -----------------------------------------------------
@@ -51,7 +52,7 @@ CREATE TABLE IF NOT EXISTS driver_license
     category              VARCHAR(32) NOT NULL,
     date_of_issue         TIMESTAMP   NOT NULL,
     expiration_date       TIMESTAMP   NOT NULL,
-    account_id            BIGINT REFERENCES account (account_id)
+    account_id            BIGINT      NOT NULL REFERENCES account (account_id)
 );
 
 COMMIT;

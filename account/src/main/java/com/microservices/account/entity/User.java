@@ -19,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -26,7 +27,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"userId", "firstName", "lastName", "age", "email", "password", "gender", "role"})
+        {"userId", "firstName", "lastName", "dateOfBirth", "identityPassportNumber", "email", "password", "gender", "role"})
 @Table(name = "users", schema = "PUBLIC")
 public class User {
 
@@ -41,8 +42,11 @@ public class User {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "age", nullable = false)
-    private Integer age;
+    @Column(name = "date_of_birth", nullable = false)
+    private Instant dateOfBirth;
+
+    @Column(name = "identity_passport_number", nullable = false)
+    private String identityPassportNumber;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;

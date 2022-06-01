@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS parking_space
     address          VARCHAR(256) NOT NULL,
     level            VARCHAR(3)   NOT NULL,
     number_space     VARCHAR(5)   NOT NULL,
-    order_id         BIGINT       NOT NULL
+    order_id         BIGINT       NOT NULL REFERENCES orders (order_id)
 );
 
 -- -----------------------------------------------------
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS parking_space
 CREATE TABLE IF NOT EXISTS reservation
 (
     reservation_id     BIGSERIAL PRIMARY KEY,
-    order_id           BIGINT      NOT NULL,
+    order_id           BIGINT      NOT NULL REFERENCES orders (order_id),
     car_catalog_id     BIGINT      NOT NULL,
     pick_up_date_time  TIMESTAMP   NOT NULL,
     drop_off_date_time TIMESTAMP   NOT NULL,
