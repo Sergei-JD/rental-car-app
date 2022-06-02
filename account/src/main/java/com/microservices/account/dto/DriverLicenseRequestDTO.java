@@ -18,23 +18,23 @@ import java.time.Instant;
 @AllArgsConstructor
 public class DriverLicenseRequestDTO {
 
-    @NotEmpty(message = "Driver License Number should not be empty")
-    @Size(min = 8, max = 32, message = "Driver License Number should be between 8 and 32 characters")
+    @NotEmpty(message = "'Driver license lumber' should not be empty")
+    @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")
     private String driverLicenseNumber;
 
-    @NotEmpty(message = "Category should not be empty")
-    @Size(min = 8, max = 32, message = "Category should be between 8 and 32 characters")
+    @NotEmpty(message = "'Category' should not be empty")
+    @Size(min = 1, max = 32, message = "'Category' should be between 1 and 32 characters")
     private String category;
 
-    @NotEmpty(message = "Date of issue should not be empty")
-    @Past(message = "Date of issue should be after current")
+    @NotEmpty(message = "'Date of issue' should not be empty")
+    @Past(message = "'Date of issue' should be after current")
     private Instant dateOfIssue;
 
-    @NotEmpty(message = "Expiration date should not be empty")
-    @Future(message = "Expiration date should be after current")
+    @NotEmpty(message = "'Expiration date' should not be empty")
+    @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
 
-    @NotEmpty(message = "Account id should not be empty")
-    @Positive(message = "Account id should be positive number")
+    @NotEmpty(message = "'Account id' should not be empty")
+    @Positive(message = "'Account id' should be positive number")
     private Long accountId;
 }

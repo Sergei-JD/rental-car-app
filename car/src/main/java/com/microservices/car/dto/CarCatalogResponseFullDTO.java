@@ -1,4 +1,4 @@
-package com.microservices.account.dto;
+package com.microservices.car.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class AccountResponseFullDTO extends AccountRequestDTO {
+public class CarCatalogResponseFullDTO extends CarCatalogRequestDTO {
 
-    @Positive(message = "'Account id' should be positive number")
-    private Long accountId;
+    @Positive(message = "'CarCatalog id' should be positive number")
+    private Long carCatalogId;
 }

@@ -17,6 +17,6 @@ import javax.validation.constraints.Positive;
 @EqualsAndHashCode(callSuper = true)
 public class CreditCardResponseFullDTO extends CreditCardRequestDTO {
 
-    @Positive(message = "Credit card id should be positive number")
+    @Positive(message = "'Credit card id' should be positive number")
     private Long creditCardId;
 }

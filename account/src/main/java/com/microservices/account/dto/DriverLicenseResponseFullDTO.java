@@ -17,6 +17,6 @@ import javax.validation.constraints.Positive;
 @EqualsAndHashCode(callSuper = true)
 public class DriverLicenseResponseFullDTO extends DriverLicenseRequestDTO {
 
-    @Positive(message = "Driver license id should be positive number")
+    @Positive(message = "'Driver license id' should be positive number")
     private Long driverLicenseId;
 }

@@ -30,8 +30,8 @@ CREATE TABLE IF NOT EXISTS parking_space
 (
     parking_space_id BIGSERIAL PRIMARY KEY,
     address          VARCHAR(256) NOT NULL,
-    level            VARCHAR(3)   NOT NULL,
-    number_space     VARCHAR(5)   NOT NULL,
+    level            VARCHAR(8)   NOT NULL,
+    number_space     VARCHAR(8)   NOT NULL,
     order_id         BIGINT       NOT NULL REFERENCES orders (order_id)
 );
 

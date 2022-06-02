@@ -22,35 +22,35 @@ import java.time.Instant;
 @AllArgsConstructor
 public class CreditCardRequestDTO {
 
-    @NotEmpty(message = "Credit card type should not be empty")
-    @Size(min = 2, max = 128, message = "Credit card type should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")
+    @NotEmpty(message = "'Credit card type' should not be empty")
+    @Size(min = 2, max = 128, message = "'Credit card type' should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")
     private CreditCardType creditCardType;
 
-    @NotEmpty(message = "Card number should not be empty")
-    @Pattern(regexp = "\\d{16}", message = "Card number should be valid")
+    @NotEmpty(message = "'Card number' should not be empty")
+    @Pattern(regexp = "\\d{16}", message = "'Card number' should be valid")
     private String cardNumber;
 
-    @NotEmpty(message = "Date of issue should not be empty")
-    @Past(message = "Date of issue should be before current")
+    @NotEmpty(message = "'Date of issue' should not be empty")
+    @Past(message = "'Date of issue' should be before current")
     private Instant dateOfIssue;
 
-    @NotEmpty(message = "Expiration date of birth should not be empty")
-    @Future(message = "Expiration date should be after current")
+    @NotEmpty(message = "'Expiration date' should not be empty")
+    @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
 
-    @NotEmpty(message = "CVV-code should not be empty")
-    @Pattern(regexp = "\\d{3}", message = "CVV-code should be valid")
+    @NotEmpty(message = "'CVV-code' should not be empty")
+    @Pattern(regexp = "\\d{3}", message = "'CVV-code' should be valid")
     private String cvvCode;
 
-    @NotEmpty(message = "Name card owner should not be empty")
-    @Size(min = 8, max = 256, message = "Name card owner should be between 8 and 32 characters")
+    @NotEmpty(message = "'Name card owner' should not be empty")
+    @Size(min = 8, max = 256, message = "'Name card owner' should be between 8 and 32 characters")
     private String nameCardOwner;
 
-    @NotEmpty(message = "Balance should not be empty")
-    @PositiveOrZero(message = "Balance should be positive number or 0")
+    @NotEmpty(message = "'Balance' should not be empty")
+    @PositiveOrZero(message = "'Balance' should be positive number or 0")
     private BigDecimal balance;
 
-    @NotEmpty(message = "Account id should not be empty")
-    @Positive(message = "Account id should be positive number")
+    @NotEmpty(message = "'Account id' should not be empty")
+    @Positive(message = "'Account id' should be positive number")
     private Long accountId;
 }

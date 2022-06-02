@@ -1,4 +1,4 @@
-package com.microservices.account.dto;
+package com.microservices.order.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class AccountResponseFullDTO extends AccountRequestDTO {
+public class InvoiceResponseFullDTO extends InvoiceRequestDTO {
 
-    @Positive(message = "'Account id' should be positive number")
-    private Long accountId;
+    @Positive(message = "'Invoice id' should be positive number")
+    private Long invoiceId;
 }

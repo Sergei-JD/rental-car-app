@@ -19,35 +19,35 @@ import java.time.Instant;
 @AllArgsConstructor
 public class UserRequestDTO {
 
-    @NotEmpty(message = "First name should not be empty")
-    @Size(min = 2, max = 256, message = "First name should be between 2 and 256 characters")
+    @NotEmpty(message = "'First name' should not be empty")
+    @Size(min = 2, max = 256, message = "'First name' should be between 2 and 256 characters")
     private String firstName;
 
-    @NotEmpty(message = "Last name should not be empty")
-    @Size(min = 2, max = 256, message = "Last name should be between 2 and 256 characters")
+    @NotEmpty(message = "'Last name' should not be empty")
+    @Size(min = 2, max = 256, message = "'Last name' should be between 2 and 256 characters")
     private String lastName;
 
-    @NotEmpty(message = "Date of birth should not be empty")
-    @Past(message = "Date of birth should be before current")
+    @NotEmpty(message = "'Date of birth' should not be empty")
+    @Past(message = "'Date of birth' should be before current")
     private Instant dateOfBirth;
 
-    @NotEmpty(message = "Passport number should not be empty")
-    @Size(min = 14, max = 14, message = "Passport number should have 14 characters")
+    @NotEmpty(message = "'Passport' number should not be empty")
+    @Size(min = 14, max = 14, message = "'Passport' number should have 14 characters")
     private String identityPassportNumber;
 
-    @NotEmpty(message = "Email should not be empty")
-    @Email(message = "Email should be valid")
+    @NotEmpty(message = "'Email' should not be empty")
+    @Email(message = "'Email' should be valid")
     private String email;
 
-    @NotEmpty(message = "Password should not be empty")
-    @Size(min = 2, max = 256, message = "Password should be between 2 and 256 characters")
+    @NotEmpty(message = "'Password' should not be empty")
+    @Size(min = 2, max = 256, message = "'Password' should be between 2 and 256 characters")
     private String password;
 
-    @NotEmpty(message = "Gender should not be empty")
-    @Size(min = 2, max = 64, message = "Gender should be 'MALE' or 'FEMALE'")
+    @NotEmpty(message = "'Gender' should not be empty")
+    @Size(min = 2, max = 64, message = "'Gender' should be 'MALE' or 'FEMALE'")
     private Gender gender;
 
-    @NotEmpty(message = "Role should not be empty")
-    @Size(min = 2, max = 64, message = "Role should be 'ADMIN' or 'CUSTOMER' or 'MECHANIC'")
+    @NotEmpty(message = "'Role' should not be empty")
+    @Size(min = 2, max = 64, message = "'Role' should be 'ADMIN' or 'CUSTOMER' or 'MECHANIC'")
     private Role role;
 }
