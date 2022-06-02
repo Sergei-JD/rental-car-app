@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class CreditCardResponseDTO extends CreditCardRequestDTO {
+public class DriverLicenseResponseFullDTO extends DriverLicenseRequestDTO {
 
     @Positive(message = "Driver license id should be positive number")
-    private Long creditCardId;
+    private Long driverLicenseId;
 }

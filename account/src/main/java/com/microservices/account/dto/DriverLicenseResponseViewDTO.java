@@ -16,11 +16,10 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseRequestDTO {
+public class DriverLicenseResponseViewDTO {
 
-    @NotEmpty(message = "Driver License Number should not be empty")
-    @Size(min = 8, max = 32, message = "Driver License Number should be between 8 and 32 characters")
-    private String driverLicenseNumber;
+    @Positive(message = "Driver license id should be positive number")
+    private Long driverLicenseId;
 
     @NotEmpty(message = "Category should not be empty")
     @Size(min = 8, max = 32, message = "Category should be between 8 and 32 characters")
@@ -33,8 +32,4 @@ public class DriverLicenseRequestDTO {
     @NotEmpty(message = "Expiration date should not be empty")
     @Future(message = "Expiration date should be after current")
     private Instant expirationDate;
-
-    @NotEmpty(message = "Account id should not be empty")
-    @Positive(message = "Account id should be positive number")
-    private Long accountId;
 }

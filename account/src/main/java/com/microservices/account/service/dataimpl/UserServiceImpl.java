@@ -1,7 +1,8 @@
 package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.UserRequestDTO;
-import com.microservices.account.dto.UserResponseDTO;
+import com.microservices.account.dto.UserResponseFullDTO;
+import com.microservices.account.dto.UserResponseViewDTO;
 import com.microservices.account.repository.UserRepository;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,22 +19,22 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+    public Page<UserResponseViewDTO> getAllUsers(Pageable pageable) {
         return null;
     }
 
     @Override
-    public Page<UserResponseDTO> getAllUsersByRole(String role, Pageable pageable) {
+    public Page<UserResponseViewDTO> getAllUsersByRole(String role, Pageable pageable) {
         return null;
     }
 
     @Override
-    public Optional<UserResponseDTO> getUserById(long doctorId) {
+    public Optional<UserResponseViewDTO> getUserById(long doctorId) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<UserResponseDTO> getUserByEmail(String email) {
+    public Optional<UserResponseFullDTO> getUserByEmail(String email) {
         return Optional.empty();
     }
 
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateUser(UserResponseDTO userResponseDTO) {
+    public UserResponseFullDTO updateUser(UserResponseFullDTO userResponseFullDTO) {
         return null;
     }
 

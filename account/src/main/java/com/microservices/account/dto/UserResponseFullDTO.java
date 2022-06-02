@@ -15,8 +15,8 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class AccountResponseDTO extends AccountRequestDTO {
+public class UserResponseFullDTO extends UserRequestDTO {
 
     @Positive(message = "User id should be positive number")
-    private Long accountId;
+    private Long userId;
 }
