@@ -56,7 +56,7 @@ public class CreditCard {
     @Column(name = "name_card_owner", nullable = false)
     private String nameCardOwner;
 
-    @Column(name = "balance")
+    @Column(name = "balance", nullable = false)
     private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.LAZY)

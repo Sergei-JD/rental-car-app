@@ -18,17 +18,17 @@ INSERT INTO users (user_id, first_name, last_name, date_of_birth, identity_passp
 -- Insert table account
 -- -----------------------------------------------------
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (1, 1, 'IvanavI', '1111', 456532342345);
+            VALUES (1, 1, 'IvanavI', '1111', '+375292342345');
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (2, 2, 'PetrteP', '2222', 674563235423);
+            VALUES (2, 2, 'PetrteP', '2222', '+375332342332');
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (3, 3, 'SergeyegreS', '3333', 623423454575);
+            VALUES (3, 3, 'SergeyegreS', '3333', '+375442342352');
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (4, 4, 'SvetatevS', '4444', 674563235423);
+            VALUES (4, 4, 'SvetatevS', '4444', '+375292348653');
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (5, 5, 'VariairaV', '5555', 234563567364);
+            VALUES (5, 5, 'VariairaV', '5555', +375332342354);
 INSERT INTO account (account_id, user_id, nick_name, password, phone_number)
-            VALUES (6, 6, 'ValentinanitnelaV', '6666', 674563235423);
+            VALUES (6, 6, 'ValentinanitnelaV', '6666', +375442349369);
 
 -- -----------------------------------------------------
 -- Insert table driver_license

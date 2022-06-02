@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS account
     user_id      BIGINT       NOT NULL UNIQUE references users (user_id),
     nick_name    VARCHAR(256) NOT NULL,
     password     VARCHAR(256) NOT NULL,
-    phone_number BIGINT       NOT NULL
+    phone_number VARCHAR(13)  NOT NULL
 );
 
 -- -----------------------------------------------------
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS credit_card
     expiration_date  TIMESTAMP    NOT NULL,
     cvv_code         VARCHAR(3)   NOT NULL,
     name_card_owner  VARCHAR(256) NOT NULL,
-    balance          NUMERIC,
+    balance          NUMERIC      NOT NULL,
     account_id       BIGINT       NOT NULL REFERENCES account (account_id)
 );
 

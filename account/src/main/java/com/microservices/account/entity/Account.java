@@ -42,5 +42,5 @@ public class Account {
     private String password;
 
     @Column(name = "phone_number", nullable = false)
-    private Long phoneNumber;
+    private String phoneNumber;
 }
