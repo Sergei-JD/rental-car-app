@@ -1,6 +1,5 @@
 package com.microservices.order.dto;
 
-import com.microservices.order.entity.Invoice;
 import com.microservices.order.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
