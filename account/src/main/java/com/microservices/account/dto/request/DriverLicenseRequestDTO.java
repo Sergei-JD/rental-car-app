@@ -1,5 +1,6 @@
 package com.microservices.account.dto.request;
 
+import com.microservices.account.entity.Account;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
@@ -38,5 +39,5 @@ public class DriverLicenseRequestDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
-    private Long accountId;
+    private Account accountId;
 }

@@ -1,5 +1,6 @@
 package com.microservices.account.dto.response;
 
+import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCardType;
 
 import lombok.Getter;
@@ -32,5 +33,5 @@ public class CreditCardResponseDTO {
 
     private BigDecimal balance;
 
-    private Long accountId;
+    private Account accountId;
 }

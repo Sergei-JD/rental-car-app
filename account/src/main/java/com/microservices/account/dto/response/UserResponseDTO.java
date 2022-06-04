@@ -3,6 +3,7 @@ package com.microservices.account.dto.response;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.Gender;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
-@Getter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

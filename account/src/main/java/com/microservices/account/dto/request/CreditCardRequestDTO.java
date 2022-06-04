@@ -1,6 +1,7 @@
 package com.microservices.account.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCardType;
 
 import lombok.Getter;
@@ -58,5 +59,5 @@ public class CreditCardRequestDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
-    private Long accountId;
+    private Account accountId;
 }

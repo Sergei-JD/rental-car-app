@@ -8,7 +8,6 @@ import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
 import com.microservices.account.repository.UserRepository;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,21 +22,18 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-//    private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
-//    private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
-    private final ModelMapper modelMapper;
+    private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
+    private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
 
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
-//        Page<User> pageUsers = userRepository.findAll(pageable);
-//
-//        List<UserResponseDTO> users = pageUsers.stream()
-//                .map(userToUserResponseDTOMapper::convert)
-//                .toList();
-//
-//        return new PageImpl<>(users);
+        Page<User> pageUsers = userRepository.findAll(pageable);
 
-        return null;
+        List<UserResponseDTO> users = pageUsers.stream()
+                .map(userToUserResponseDTOMapper::convert)
+                .toList();
+
+        return new PageImpl<>(users);
     }
 
     @Override
@@ -55,30 +51,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserResponseDTO> getUserById(long userId) {
-//        UserResponseDTO userResponseDTO = null;
-//
-//        Optional<User> user = userRepository.findById(userId);
-//        if (user.isPresent()) {
-//            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
-//        }
-//
-//        return Optional.ofNullable(userResponseDTO);
+        UserResponseDTO userResponseDTO = null;
 
-        return null;
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
+        }
+
+        return Optional.ofNullable(userResponseDTO);
     }
 
     @Override
     public Optional<UserResponseDTO> getUserByEmail(String email) {
-//        UserResponseDTO userResponseDTO = null;
-//
-//        Optional<User> user = userRepository.findUserByEmail(email);
-//        if (user.isPresent()) {
-//            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
-//        }
-//
-//        return Optional.ofNullable(userResponseDTO);
+        UserResponseDTO userResponseDTO = null;
 
-        return null;
+        Optional<User> user = userRepository.findUserByEmail(email);
+        if (user.isPresent()) {
+            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
+        }
+
+        return Optional.ofNullable(userResponseDTO);
     }
 
     @Override
