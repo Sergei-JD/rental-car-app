@@ -2,6 +2,7 @@ package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.request.UserRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
+import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.UserRequestDTOToUserMapper;
 import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
@@ -37,16 +38,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseDTO> getAllUsersByRole(String role, Pageable pageable) {
-//        Page<User> pageUsers = userRepository.findAllByRole(role);
-//
-//        List<UserResponseDTO> users = pageUsers.stream()
-//                .map(userToUserResponseDTOMapper::convert)
-//                .toList();
-//
-//        return new PageImpl<>(users);
+    public Page<UserResponseDTO> getAllUsersByRole(Role role, Pageable pageable) {
+        Page<User> pageUsers = userRepository.findAllByRole(role, pageable);
 
-        return null;
+        List<UserResponseDTO> users = pageUsers.stream()
+                .map(userToUserResponseDTOMapper::convert)
+                .toList();
+
+        return new PageImpl<>(users);
     }
 
     @Override
@@ -75,14 +74,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserRequestDTO createUser(UserRequestDTO userDTO) {
-        return null;
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+        User newUser = userRequestDTOToUserMapper.convert(userRequestDTO);
+
+        return userToUserResponseDTOMapper.convert(userRepository.save(newUser));
     }
+
 
     @Override
     @Transactional
-    public UserResponseDTO updateUser(UserResponseDTO userResponseDTO) {
-        return null;
+    public UserResponseDTO updateUser(Long userId, UserRequestDTO userRequestDTO) {
+        User user = userRequestDTOToUserMapper.convert(userRequestDTO);
+        user.setUserId(userId);
+
+        return userToUserResponseDTOMapper.convert(userRepository.save(user));
     }
 
     @Override

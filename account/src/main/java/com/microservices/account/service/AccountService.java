@@ -15,9 +15,9 @@ public interface AccountService {
 
     Optional<AccountResponseDTO> getAccountByNickName(String nickName);
 
-    AccountRequestDTO createAccount(AccountRequestDTO accountRequestDTO);
+    AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO);
 
-    AccountResponseDTO updateAccount(AccountResponseDTO accountResponseDTO);
+    AccountResponseDTO updateAccount(Long accountId, AccountRequestDTO accountRequestDTO);
 
     boolean deleteAccount(long accountId);
 }
