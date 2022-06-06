@@ -1,6 +1,7 @@
 package com.microservices.account.service;
 
 import com.microservices.account.dto.request.CreditCardRequestDTO;
+import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
 import com.microservices.account.dto.response.CreditCardResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface CreditCardService {
 
     CreditCardResponseDTO createCreditCard(CreditCardRequestDTO creditCardRequestDTO);
 
-    CreditCardResponseDTO updateCreditCard(Long creditCardId, CreditCardRequestDTO creditCardRequestDTO);
+    CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO);
 
     boolean deleteCreditCard(long creditCardId);
 }

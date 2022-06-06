@@ -1,14 +1,17 @@
 package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.request.UserRequestDTO;
+import com.microservices.account.dto.request.UserUpdateRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.UserRequestDTOToUserMapper;
+import com.microservices.account.mapper.request.UserUpdateRequestDTOToUserMapper;
 import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
 import com.microservices.account.repository.UserRepository;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
     private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
+    private final UserUpdateRequestDTOToUserMapper userUpdateRequestDTOToUserMapper;
 
     @Override
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
@@ -76,18 +81,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
         User newUser = userRequestDTOToUserMapper.convert(userRequestDTO);
+        User saveUser = userRepository.save(Objects.requireNonNull(newUser));
 
-        return userToUserResponseDTOMapper.convert(userRepository.save(newUser));
+        return userToUserResponseDTOMapper.convert(saveUser);
     }
 
 
     @Override
     @Transactional
-    public UserResponseDTO updateUser(Long userId, UserRequestDTO userRequestDTO) {
-        User user = userRequestDTOToUserMapper.convert(userRequestDTO);
-        user.setUserId(userId);
+    public UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO) {
+        userRepository.findById(userUpdateRequestDTO.getUserId())
+                .orElseThrow(() -> new ServiceException("Failed to update user no such user"));
 
-        return userToUserResponseDTOMapper.convert(userRepository.save(user));
+        User user = userUpdateRequestDTOToUserMapper.convert(userUpdateRequestDTO);
+        User updateUser = userRepository.save(Objects.requireNonNull(user));
+
+        return userToUserResponseDTOMapper.convert(updateUser);
     }
 
     @Override

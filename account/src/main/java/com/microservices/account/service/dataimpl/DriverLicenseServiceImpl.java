@@ -1,13 +1,16 @@
 package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.request.DriverLicenseRequestDTO;
+import com.microservices.account.dto.request.DriverLicenseUpdateRequestDTO;
 import com.microservices.account.dto.response.DriverLicenseResponseDTO;
 import com.microservices.account.entity.DriverLicense;
 import com.microservices.account.mapper.request.DriverLicenseRequestDTOToDriverLicenseMapper;
+import com.microservices.account.mapper.request.DriverLicenseUpdateRequestDTOToDriverLicenseMapper;
 import com.microservices.account.mapper.response.DriverLicenseToDriverLicenseResponseDTOMapper;
 import com.microservices.account.repository.DriverLicenseRepository;
 import com.microservices.account.service.DriverLicenseService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,6 +28,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     private final DriverLicenseRepository driverLicenseRepository;
     private final DriverLicenseRequestDTOToDriverLicenseMapper driverLicenseRequestDTOToDriverLicenseMapper;
     private final DriverLicenseToDriverLicenseResponseDTOMapper driverLicenseToDriverLicenseResponseDTOMapper;
+    private final DriverLicenseUpdateRequestDTOToDriverLicenseMapper driverLicenseUpdateRequestDTOToDriverLicenseMapper;
 
     @Override
     public Page<DriverLicenseResponseDTO> getAllDriverLicenses(Pageable pageable) {
@@ -64,17 +69,21 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     @Transactional
     public DriverLicenseResponseDTO createDriverLicense(DriverLicenseRequestDTO driverLicenseRequestDTO) {
         DriverLicense newDriverLicense = driverLicenseRequestDTOToDriverLicenseMapper.convert(driverLicenseRequestDTO);
+        DriverLicense saveDriverLicense = driverLicenseRepository.save(Objects.requireNonNull(newDriverLicense));
 
-        return driverLicenseToDriverLicenseResponseDTOMapper.convert(driverLicenseRepository.save(newDriverLicense));
+        return driverLicenseToDriverLicenseResponseDTOMapper.convert(saveDriverLicense);
     }
 
     @Override
     @Transactional
-    public DriverLicenseResponseDTO updateDriverLicense(Long driverLicenseId, DriverLicenseRequestDTO driverLicenseRequestDTO) {
-        DriverLicense driverLicense = driverLicenseRequestDTOToDriverLicenseMapper.convert(driverLicenseRequestDTO);
-        driverLicense.setDriverLicenseId(driverLicenseId);
+    public DriverLicenseResponseDTO updateDriverLicense(DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO) {
+        driverLicenseRepository.findById(driverLicenseUpdateRequestDTO.getDriverLicenseId())
+                .orElseThrow(() -> new ServiceException("Failed to update driver license no such driver license"));
 
-        return driverLicenseToDriverLicenseResponseDTOMapper.convert(driverLicenseRepository.save(driverLicense));
+        DriverLicense driverLicense = driverLicenseUpdateRequestDTOToDriverLicenseMapper.convert(driverLicenseUpdateRequestDTO);
+        DriverLicense updateDriverLicense = driverLicenseRepository.save(Objects.requireNonNull(driverLicense));
+
+        return driverLicenseToDriverLicenseResponseDTOMapper.convert(updateDriverLicense);
     }
 
     @Override

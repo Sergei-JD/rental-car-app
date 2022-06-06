@@ -1,13 +1,16 @@
 package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.request.AccountRequestDTO;
+import com.microservices.account.dto.request.AccountUpdateRequestDTO;
 import com.microservices.account.dto.response.AccountResponseDTO;
 import com.microservices.account.entity.Account;
 import com.microservices.account.mapper.request.AccountRequestDTOToAccountMapper;
+import com.microservices.account.mapper.request.AccountUpdateRequestDTOToAccountMapper;
 import com.microservices.account.mapper.response.AccountToAccountResponseDTOMapper;
 import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,6 +28,7 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
     private final AccountRequestDTOToAccountMapper accountRequestDTOToAccountMapper;
     private final AccountToAccountResponseDTOMapper accountToAccountResponseDTOMapper;
+    private final AccountUpdateRequestDTOToAccountMapper accountUpdateRequestDTOToAccountMapper;
 
     @Override
     public Page<AccountResponseDTO> getAllAccounts(Pageable pageable) {
@@ -64,17 +69,21 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO) {
         Account newAccount = accountRequestDTOToAccountMapper.convert(accountRequestDTO);
+        Account saveAccount = accountRepository.save(Objects.requireNonNull(newAccount));
 
-        return accountToAccountResponseDTOMapper.convert(accountRepository.save(newAccount));
+        return accountToAccountResponseDTOMapper.convert(saveAccount);
     }
 
     @Override
     @Transactional
-    public AccountResponseDTO updateAccount(Long accountId, AccountRequestDTO accountRequestDTO) {
-        Account account = accountRequestDTOToAccountMapper.convert(accountRequestDTO);
-        account.setAccountId(accountId);
+    public AccountResponseDTO updateAccount(AccountUpdateRequestDTO accountUpdateRequestDTO) {
+        accountRepository.findById(accountUpdateRequestDTO.getAccountId())
+                .orElseThrow(() -> new ServiceException("Failed to update account no such account"));
 
-        return accountToAccountResponseDTOMapper.convert(accountRepository.save(account));
+        Account account = accountUpdateRequestDTOToAccountMapper.convert(accountUpdateRequestDTO);
+        Account updateAccount = accountRepository.save(Objects.requireNonNull(account));
+
+        return accountToAccountResponseDTOMapper.convert(updateAccount);
     }
 
     @Override

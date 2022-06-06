@@ -1,13 +1,17 @@
 package com.microservices.account.service.dataimpl;
 
 import com.microservices.account.dto.request.CreditCardRequestDTO;
+import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
 import com.microservices.account.dto.response.CreditCardResponseDTO;
 import com.microservices.account.entity.CreditCard;
+import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.CreditCardRequestDTOToCreditCardMapper;
+import com.microservices.account.mapper.request.CreditCardUpdateRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.response.CreditCardToCreditCardResponseDTOMapper;
 import com.microservices.account.repository.CreditCardRepository;
 import com.microservices.account.service.CreditCardService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -24,6 +29,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final CreditCardRequestDTOToCreditCardMapper creditCardRequestDTOToCreditCardMapper;
     private final CreditCardToCreditCardResponseDTOMapper creditCardToCreditCardResponseDTOMapper;
+    private final CreditCardUpdateRequestDTOToCreditCardMapper creditCardUpdateRequestDTOToCreditCardMapper;
 
     @Override
     public Page<CreditCardResponseDTO> getAllCreditCards(Pageable pageable) {
@@ -64,17 +70,21 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Transactional
     public CreditCardResponseDTO createCreditCard(CreditCardRequestDTO creditCardRequestDTO) {
         CreditCard newCreditCard = creditCardRequestDTOToCreditCardMapper.convert(creditCardRequestDTO);
+        CreditCard saveCreditCard = creditCardRepository.save(Objects.requireNonNull(newCreditCard));
 
-        return creditCardToCreditCardResponseDTOMapper.convert(creditCardRepository.save(newCreditCard));
+        return creditCardToCreditCardResponseDTOMapper.convert(saveCreditCard);
     }
 
     @Override
     @Transactional
-    public CreditCardResponseDTO updateCreditCard(Long creditCardId, CreditCardRequestDTO creditCardRequestDTO) {
-        CreditCard creditCard = creditCardRequestDTOToCreditCardMapper.convert(creditCardRequestDTO);
-        creditCard.setCreditCardId(creditCardId);
+    public CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO) {
+        creditCardRepository.findById(creditCardUpdateRequestDTO.getCreditCardId())
+                .orElseThrow(() -> new ServiceException("Failed to update credit card no such credit card"));
 
-        return creditCardToCreditCardResponseDTOMapper.convert(creditCardRepository.save(creditCard));
+        CreditCard creditCard = creditCardUpdateRequestDTOToCreditCardMapper.convert(creditCardUpdateRequestDTO);
+        CreditCard updateCreditCard = creditCardRepository.save(Objects.requireNonNull(creditCard));
+
+        return creditCardToCreditCardResponseDTOMapper.convert(updateCreditCard);
     }
 
     @Override

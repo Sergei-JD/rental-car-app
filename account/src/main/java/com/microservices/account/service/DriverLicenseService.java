@@ -1,6 +1,7 @@
 package com.microservices.account.service;
 
 import com.microservices.account.dto.request.DriverLicenseRequestDTO;
+import com.microservices.account.dto.request.DriverLicenseUpdateRequestDTO;
 import com.microservices.account.dto.response.DriverLicenseResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,7 @@ public interface DriverLicenseService {
 
     DriverLicenseResponseDTO createDriverLicense(DriverLicenseRequestDTO driverLicenseRequestDTO);
 
-    DriverLicenseResponseDTO updateDriverLicense(Long driverLicenseId, DriverLicenseRequestDTO driverLicenseRequestDTO);
+    DriverLicenseResponseDTO updateDriverLicense(DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO);
 
     boolean deleteDriverLicense(long driverLicenseId);
 }

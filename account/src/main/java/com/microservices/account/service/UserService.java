@@ -1,6 +1,7 @@
 package com.microservices.account.service;
 
 import com.microservices.account.dto.request.UserRequestDTO;
+import com.microservices.account.dto.request.UserUpdateRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.entity.Role;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public interface UserService {
 
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
 
-    UserResponseDTO updateUser(Long userId, UserRequestDTO userRequestDTO);
+    UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO);
 
     boolean deleteUser(long userId);
 }

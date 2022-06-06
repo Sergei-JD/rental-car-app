@@ -1,6 +1,7 @@
 package com.microservices.account.service;
 
 import com.microservices.account.dto.request.AccountRequestDTO;
+import com.microservices.account.dto.request.AccountUpdateRequestDTO;
 import com.microservices.account.dto.response.AccountResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface AccountService {
 
     AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO);
 
-    AccountResponseDTO updateAccount(Long accountId, AccountRequestDTO accountRequestDTO);
+    AccountResponseDTO updateAccount(AccountUpdateRequestDTO accountUpdateRequestDTO);
 
     boolean deleteAccount(long accountId);
 }
