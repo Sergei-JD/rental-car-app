@@ -1,7 +1,9 @@
 package com.microservices.order.service;
 
 import com.microservices.order.dto.request.InvoiceRequestDTO;
+import com.microservices.order.dto.request.InvoiceUpdateRequestDTO;
 import com.microservices.order.dto.response.InvoiceResponseDTO;
+import com.microservices.order.entity.InvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,13 +13,13 @@ public interface InvoiceService {
 
     Page<InvoiceResponseDTO> getAllInvoices(Pageable pageable);
 
-    Page<InvoiceResponseDTO> getAllInvoicesStatus(String invoiceStatus, Pageable pageable);
+    Page<InvoiceResponseDTO> getAllInvoicesByStatus(InvoiceStatus invoiceStatus, Pageable pageable);
 
     Optional<InvoiceResponseDTO> getInvoiceById(long invoiceId);
 
-    InvoiceRequestDTO createInvoice(InvoiceRequestDTO accountRequestDTO);
+    InvoiceResponseDTO createInvoice(InvoiceRequestDTO invoiceRequestDTO);
 
-    InvoiceResponseDTO updateInvoice(InvoiceResponseDTO invoiceResponseDTO);
+    InvoiceResponseDTO updateInvoice(InvoiceUpdateRequestDTO invoiceUpdateRequestDTO);
 
     boolean deleteInvoice(long invoiceId);
 }

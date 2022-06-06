@@ -4,7 +4,6 @@ import com.microservices.account.dto.request.CreditCardRequestDTO;
 import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
 import com.microservices.account.dto.response.CreditCardResponseDTO;
 import com.microservices.account.entity.CreditCard;
-import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.CreditCardRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.request.CreditCardUpdateRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.response.CreditCardToCreditCardResponseDTOMapper;
@@ -43,15 +42,14 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public Optional<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId) {
-        CreditCardResponseDTO creditCardResponseDTO = null;
+    public Page<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable) {
+        Page<CreditCard> pageCreditCards = creditCardRepository.findCreditCardByAccountId(accountId, pageable);
 
-        Optional<CreditCard> creditCard = creditCardRepository.findCreditCardByAccountId(accountId);
-        if (creditCard.isPresent()) {
-            creditCardResponseDTO = creditCardToCreditCardResponseDTOMapper.convert(creditCard.get());
-        }
+        List<CreditCardResponseDTO> creditCards = pageCreditCards.stream()
+                .map(creditCardToCreditCardResponseDTOMapper::convert)
+                .toList();
 
-        return Optional.ofNullable(creditCardResponseDTO);
+        return new PageImpl<>(creditCards);
     }
 
     @Override

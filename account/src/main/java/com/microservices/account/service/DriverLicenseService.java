@@ -6,14 +6,13 @@ import com.microservices.account.dto.response.DriverLicenseResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface DriverLicenseService {
 
     Page<DriverLicenseResponseDTO> getAllDriverLicenses(Pageable pageable);
 
-    Optional<DriverLicenseResponseDTO> getAllDriverLicenseByAccountId(Long accountId);
+    Page<DriverLicenseResponseDTO> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable);
 
     Optional<DriverLicenseResponseDTO> getDriverLicenseById(long driverLicenseId);
 

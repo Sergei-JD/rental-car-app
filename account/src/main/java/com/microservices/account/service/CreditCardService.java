@@ -12,7 +12,7 @@ public interface CreditCardService {
 
     Page<CreditCardResponseDTO> getAllCreditCards(Pageable pageable);
 
-    Optional<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId);
+    Page<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
 
     Optional<CreditCardResponseDTO> getCreditCardById(long creditCardId);
 

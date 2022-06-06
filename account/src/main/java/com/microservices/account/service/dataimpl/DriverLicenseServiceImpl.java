@@ -42,15 +42,14 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     }
 
     @Override
-    public Optional<DriverLicenseResponseDTO> getAllDriverLicenseByAccountId(Long accountId) {
-        DriverLicenseResponseDTO driverLicenseResponseDTO = null;
+    public Page<DriverLicenseResponseDTO> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable) {
+        Page<DriverLicense> pageDriverLicenses = driverLicenseRepository.findDriverLicenseByAccountId(accountId, pageable);
 
-        Optional<DriverLicense> driverLicense = driverLicenseRepository.findDriverLicenseByAccountId(accountId);
-        if (driverLicense.isPresent()) {
-            driverLicenseResponseDTO = driverLicenseToDriverLicenseResponseDTOMapper.convert(driverLicense.get());
-        }
+        List<DriverLicenseResponseDTO> driverLicenses = pageDriverLicenses.stream()
+                .map(driverLicenseToDriverLicenseResponseDTOMapper::convert)
+                .toList();
 
-        return Optional.ofNullable(driverLicenseResponseDTO);
+        return new PageImpl<>(driverLicenses);
     }
 
     @Override

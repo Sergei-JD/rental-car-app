@@ -10,5 +10,5 @@ import org.springframework.core.convert.converter.Converter;
 public interface UserToUserResponseDTOMapper extends Converter<User, UserResponseDTO> {
 
     @Override
-    UserResponseDTO convert( User user);
+    UserResponseDTO convert(@NonNull User user);
 }
