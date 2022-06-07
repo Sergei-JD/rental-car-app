@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
         Order newOrder = orderRequestDTOToOrderMapper.convert(orderRequestDTO);
         Order saveOrder = orderRepository.save(Objects.requireNonNull(newOrder));
@@ -84,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public OrderResponseDTO updateOrder(OrderUpdateRequestDTO orderUpdateRequestDTO) {
         orderRepository.findById(orderUpdateRequestDTO.getOrderId())
                 .orElseThrow(() -> new ServiceException("Failed to update order no such order"));
@@ -95,6 +98,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public boolean deleteOrder(long orderId) {
         orderRepository.deleteById(orderId);
 

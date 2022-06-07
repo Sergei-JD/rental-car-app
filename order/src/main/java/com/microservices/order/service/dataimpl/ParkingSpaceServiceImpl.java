@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -64,6 +65,7 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     }
 
     @Override
+    @Transactional
     public ParkingSpaceResponseDTO createParkingSpace(ParkingSpaceRequestDTO parkingSpaceRequestDTO) {
         ParkingSpace newParkingSpace = parkingSpaceRequestDTOToParkingSpaceMapper.convert(parkingSpaceRequestDTO);
         ParkingSpace saveParkingSpace = parkingSpaceRepository.save(Objects.requireNonNull(newParkingSpace));
@@ -72,9 +74,10 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     }
 
     @Override
+    @Transactional
     public ParkingSpaceResponseDTO updateParkingSpace(ParkingSpaceUpdateRequestDTO parkingSpaceUpdateRequestDTO) {
         parkingSpaceRepository.findById(parkingSpaceUpdateRequestDTO.getParkingSpaceId())
-                .orElseThrow(() -> new ServiceException("Failed to update parking space no such parking space"));
+                .orElseThrow(() -> new ServiceException("Failed to update parkingSpace no such parkingSpace"));
 
         ParkingSpace parkingSpace = parkingSpaceUpdateRequestDTOToParkingSpaceMapper.convert(parkingSpaceUpdateRequestDTO);
         ParkingSpace updateParkingSpace = parkingSpaceRepository.save(Objects.requireNonNull(parkingSpace));
@@ -83,6 +86,7 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     }
 
     @Override
+    @Transactional
     public boolean deleteParkingSpace(long parkingSpaceId) {
         parkingSpaceRepository.deleteById(parkingSpaceId);
 

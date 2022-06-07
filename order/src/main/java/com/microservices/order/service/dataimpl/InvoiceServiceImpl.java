@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -65,6 +66,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public InvoiceResponseDTO createInvoice(InvoiceRequestDTO invoiceRequestDTO) {
         Invoice newInvoice = invoiceRequestDTOToInvoiceMapper.convert(invoiceRequestDTO);
         Invoice saveInvoice = invoiceRepository.save(Objects.requireNonNull(newInvoice));
@@ -73,6 +75,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public InvoiceResponseDTO updateInvoice(InvoiceUpdateRequestDTO invoiceUpdateRequestDTO) {
         invoiceRepository.findById(invoiceUpdateRequestDTO.getInvoiceId())
                 .orElseThrow(() -> new ServiceException("Failed to update invoice no such invoice"));
@@ -84,6 +87,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     }
 
     @Override
+    @Transactional
     public boolean deleteInvoice(long invoiceId) {
         invoiceRepository.deleteById(invoiceId);
 

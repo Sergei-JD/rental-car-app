@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -76,6 +77,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationResponseDTO createReservation(ReservationRequestDTO reservationRequestDTO) {
         Reservation newReservation = reservationRequestDTOToReservationMapper.convert(reservationRequestDTO);
         Reservation saveReservation = reservationRepository.save(Objects.requireNonNull(newReservation));
@@ -84,6 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public ReservationResponseDTO updateReservation(ReservationUpdateRequestDTO reservationUpdateRequestDTO) {
         reservationRepository.findById(reservationUpdateRequestDTO.getReservationId())
                 .orElseThrow(() -> new ServiceException("Failed to update reservation no such reservation"));
@@ -95,6 +98,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    @Transactional
     public boolean deleteReservation(long reservationId) {
         reservationRepository.deleteById(reservationId);
 

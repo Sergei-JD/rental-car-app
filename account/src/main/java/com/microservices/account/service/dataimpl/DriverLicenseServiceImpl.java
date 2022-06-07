@@ -77,7 +77,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     @Transactional
     public DriverLicenseResponseDTO updateDriverLicense(DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO) {
         driverLicenseRepository.findById(driverLicenseUpdateRequestDTO.getDriverLicenseId())
-                .orElseThrow(() -> new ServiceException("Failed to update driver license no such driver license"));
+                .orElseThrow(() -> new ServiceException("Failed to update driverLicense no such driverLicense"));
 
         DriverLicense driverLicense = driverLicenseUpdateRequestDTOToDriverLicenseMapper.convert(driverLicenseUpdateRequestDTO);
         DriverLicense updateDriverLicense = driverLicenseRepository.save(Objects.requireNonNull(driverLicense));

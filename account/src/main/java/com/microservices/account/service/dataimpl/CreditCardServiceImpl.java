@@ -77,7 +77,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Transactional
     public CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO) {
         creditCardRepository.findById(creditCardUpdateRequestDTO.getCreditCardId())
-                .orElseThrow(() -> new ServiceException("Failed to update credit card no such credit card"));
+                .orElseThrow(() -> new ServiceException("Failed to update creditCard no such creditCard"));
 
         CreditCard creditCard = creditCardUpdateRequestDTOToCreditCardMapper.convert(creditCardUpdateRequestDTO);
         CreditCard updateCreditCard = creditCardRepository.save(Objects.requireNonNull(creditCard));
