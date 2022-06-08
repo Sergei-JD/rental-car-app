@@ -15,7 +15,7 @@ public interface UserService {
 
     Page<UserResponseDTO>getAllUsersByRole(Role role, Pageable pageable);
 
-    Optional<UserResponseDTO> getUserById(long userId);
+    Optional<UserResponseDTO> getUserById(Long userId);
 
     Optional<UserResponseDTO> getUserByEmail(String email);
 
@@ -23,5 +23,5 @@ public interface UserService {
 
     UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO);
 
-    boolean deleteUser(long userId);
+    boolean deleteUser(Long userId);
 }

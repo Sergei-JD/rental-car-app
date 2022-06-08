@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<UserResponseDTO> getUserById(long userId) {
+    public Optional<UserResponseDTO> getUserById(Long userId) {
         UserResponseDTO userResponseDTO = null;
 
         Optional<User> user = userRepository.findById(userId);
@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean deleteUser(long userId) {
+    public boolean deleteUser(Long userId) {
         userRepository.deleteById(userId);
 
         return userRepository.findById(userId).isEmpty();
