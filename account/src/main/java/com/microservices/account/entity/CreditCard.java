@@ -27,15 +27,15 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"creditCardId", "creditCardType", "cardNumber", "dateOfIssue",
+        {"id", "creditCardType", "cardNumber", "dateOfIssue",
                 "expirationDate", "cvvCode", "nameCardOwner", "balance", "accountId"})
 @Table(name = "credit_card", schema = "PUBLIC")
 public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "credit_card_id", nullable = false)
-    private Long creditCardId;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "credit_card_type", nullable = false)
@@ -60,6 +60,6 @@ public class CreditCard {
     private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id", nullable = false)
-    private Account accountId;
+//    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 }

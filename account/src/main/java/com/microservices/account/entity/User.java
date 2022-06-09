@@ -27,14 +27,14 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"userId", "firstName", "lastName", "dateOfBirth", "identityPassportNumber", "email", "password", "gender", "role"})
+        {"id", "firstName", "lastName", "dateOfBirth", "identityPassportNumber", "email", "password", "gender", "role"})
 @Table(name = "users", schema = "PUBLIC")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -62,8 +62,8 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL,
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
             fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "account_id", referencedColumnName = "account_id")
-    private Account accountId;
+    private Account account;
 }

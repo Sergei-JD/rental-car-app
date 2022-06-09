@@ -24,14 +24,14 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"driverLicenseId", "driverLicenseNumber", "category", "dateOfIssue", "expirationDate", "accountId"})
+        {"id", "driverLicenseNumber", "category", "dateOfIssue", "expirationDate", "accountId"})
 @Table(name = "driver_license", schema = "PUBLIC")
 public class DriverLicense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "driver_license_id", nullable = false)
-    private Long driverLicenseId;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "driver_license_number", nullable = false)
     private String driverLicenseNumber;
@@ -47,5 +47,5 @@ public class DriverLicense {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", nullable = false)
-    private Account accountId;
+    private Account account;
 }

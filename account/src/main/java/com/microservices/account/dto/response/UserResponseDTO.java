@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class UserResponseDTO {
 
-    private Long userId;
+    private Long id;
 
     private String firstName;
 

@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO) {
-        userRepository.findById(userUpdateRequestDTO.getUserId())
+        userRepository.findById(userUpdateRequestDTO.getId())
                 .orElseThrow(() -> new ServiceException("Failed to update user no such user"));
 
         User user = userUpdateRequestDTOToUserMapper.convert(userUpdateRequestDTO);

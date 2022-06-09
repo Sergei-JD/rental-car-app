@@ -22,7 +22,7 @@ public class UserUpdateRequestDTO {
 
     @NotEmpty(message = "'User id' should not be empty")
     @Positive(message = "'User id' should be positive number")
-    private Long userId;
+    private Long id;
 
     @NotEmpty(message = "'First name' should not be empty")
     @Size(min = 2, max = 256, message = "'First name' should be between 2 and 256 characters")
