@@ -4,6 +4,7 @@ import com.microservices.account.dto.request.AccountRequestDTO;
 import com.microservices.account.dto.request.AccountUpdateRequestDTO;
 import com.microservices.account.dto.response.AccountResponseDTO;
 import com.microservices.account.entity.Account;
+import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.AccountRequestDTOToAccountMapper;
 import com.microservices.account.mapper.request.AccountUpdateRequestDTOToAccountMapper;
 import com.microservices.account.mapper.response.AccountToAccountResponseDTOMapper;
@@ -42,7 +43,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<AccountResponseDTO> getAccountById(long accountId) {
+    public Optional<AccountResponseDTO> getAccountById(Long accountId) {
         AccountResponseDTO accountResponseDTO = null;
 
         Optional<Account> account = accountRepository.findById(accountId);
@@ -77,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public AccountResponseDTO updateAccount(AccountUpdateRequestDTO accountUpdateRequestDTO) {
-        accountRepository.findById(accountUpdateRequestDTO.getAccountId())
+        accountRepository.findById(accountUpdateRequestDTO.getId())
                 .orElseThrow(() -> new ServiceException("Failed to update account no such account"));
 
         Account account = accountUpdateRequestDTOToAccountMapper.convert(accountUpdateRequestDTO);
@@ -88,9 +89,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     @Transactional
-    public boolean deleteAccount(long accountId) {
-        accountRepository.deleteById(accountId);
+    public boolean deleteAccount(Long accountId) {
+        Optional<Account> maybeAccount = accountRepository.findById(accountId);
+        maybeAccount.ifPresent(account -> accountRepository.deleteById(account.getId()));
 
-        return accountRepository.findById(accountId).isEmpty();
+        return maybeAccount.isPresent();
     }
 }

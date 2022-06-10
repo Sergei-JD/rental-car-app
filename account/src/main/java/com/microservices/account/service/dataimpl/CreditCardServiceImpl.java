@@ -4,6 +4,7 @@ import com.microservices.account.dto.request.CreditCardRequestDTO;
 import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
 import com.microservices.account.dto.response.CreditCardResponseDTO;
 import com.microservices.account.entity.CreditCard;
+import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.CreditCardRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.request.CreditCardUpdateRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.response.CreditCardToCreditCardResponseDTOMapper;
@@ -53,7 +54,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public Optional<CreditCardResponseDTO> getCreditCardById(long creditCardId) {
+    public Optional<CreditCardResponseDTO> getCreditCardById(Long creditCardId) {
         CreditCardResponseDTO creditCardResponseDTO = null;
 
         Optional<CreditCard> creditCard = creditCardRepository.findById(creditCardId);
@@ -76,7 +77,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     @Transactional
     public CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO) {
-        creditCardRepository.findById(creditCardUpdateRequestDTO.getCreditCardId())
+        creditCardRepository.findById(creditCardUpdateRequestDTO.getId())
                 .orElseThrow(() -> new ServiceException("Failed to update creditCard no such creditCard"));
 
         CreditCard creditCard = creditCardUpdateRequestDTOToCreditCardMapper.convert(creditCardUpdateRequestDTO);
@@ -87,9 +88,10 @@ public class CreditCardServiceImpl implements CreditCardService {
 
     @Override
     @Transactional
-    public boolean deleteCreditCard(long creditCardId) {
-        creditCardRepository.deleteById(creditCardId);
+    public boolean deleteCreditCard(Long creditCardId) {
+        Optional<CreditCard> maybeCreditCard = creditCardRepository.findById(creditCardId);
+        maybeCreditCard.ifPresent(creditCard -> creditCardRepository.deleteById(creditCard.getId()));
 
-        return creditCardRepository.findById(creditCardId).isEmpty();
+        return maybeCreditCard.isPresent();
     }
 }

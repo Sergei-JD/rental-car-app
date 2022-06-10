@@ -53,7 +53,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     }
 
     @Override
-    public Optional<DriverLicenseResponseDTO> getDriverLicenseById(long driverLicenseId) {
+    public Optional<DriverLicenseResponseDTO> getDriverLicenseById(Long driverLicenseId) {
         DriverLicenseResponseDTO driverLicenseResponseDTO = null;
 
         Optional<DriverLicense> driverLicense = driverLicenseRepository.findById(driverLicenseId);
@@ -76,7 +76,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     @Override
     @Transactional
     public DriverLicenseResponseDTO updateDriverLicense(DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO) {
-        driverLicenseRepository.findById(driverLicenseUpdateRequestDTO.getDriverLicenseId())
+        driverLicenseRepository.findById(driverLicenseUpdateRequestDTO.getId())
                 .orElseThrow(() -> new ServiceException("Failed to update driverLicense no such driverLicense"));
 
         DriverLicense driverLicense = driverLicenseUpdateRequestDTOToDriverLicenseMapper.convert(driverLicenseUpdateRequestDTO);
@@ -87,9 +87,10 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
 
     @Override
     @Transactional
-    public boolean deleteDriverLicense(long driverLicenseId) {
-        driverLicenseRepository.deleteById(driverLicenseId);
+    public boolean deleteDriverLicense(Long driverLicenseId) {
+        Optional<DriverLicense> maybeDriverLicense = driverLicenseRepository.findById(driverLicenseId);
+        maybeDriverLicense.ifPresent(driverLicense -> driverLicenseRepository.deleteById(driverLicense.getId()));
 
-        return driverLicenseRepository.findById(driverLicenseId).isEmpty();
+        return maybeDriverLicense.isPresent();
     }
 }

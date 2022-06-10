@@ -14,11 +14,11 @@ public interface DriverLicenseService {
 
     Page<DriverLicenseResponseDTO> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable);
 
-    Optional<DriverLicenseResponseDTO> getDriverLicenseById(long driverLicenseId);
+    Optional<DriverLicenseResponseDTO> getDriverLicenseById(Long driverLicenseId);
 
     DriverLicenseResponseDTO createDriverLicense(DriverLicenseRequestDTO driverLicenseRequestDTO);
 
     DriverLicenseResponseDTO updateDriverLicense(DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO);
 
-    boolean deleteDriverLicense(long driverLicenseId);
+    boolean deleteDriverLicense(Long driverLicenseId);
 }

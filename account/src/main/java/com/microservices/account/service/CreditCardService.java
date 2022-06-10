@@ -14,11 +14,11 @@ public interface CreditCardService {
 
     Page<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
 
-    Optional<CreditCardResponseDTO> getCreditCardById(long creditCardId);
+    Optional<CreditCardResponseDTO> getCreditCardById(Long creditCardId);
 
     CreditCardResponseDTO createCreditCard(CreditCardRequestDTO creditCardRequestDTO);
 
     CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO);
 
-    boolean deleteCreditCard(long creditCardId);
+    boolean deleteCreditCard(Long creditCardId);
 }

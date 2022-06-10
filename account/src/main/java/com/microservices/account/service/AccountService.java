@@ -12,7 +12,7 @@ public interface AccountService {
 
     Page<AccountResponseDTO> getAllAccounts(Pageable pageable);
 
-    Optional<AccountResponseDTO> getAccountById(long accountId);
+    Optional<AccountResponseDTO> getAccountById(Long accountId);
 
     Optional<AccountResponseDTO> getAccountByNickName(String nickName);
 
@@ -20,5 +20,5 @@ public interface AccountService {
 
     AccountResponseDTO updateAccount(AccountUpdateRequestDTO accountUpdateRequestDTO);
 
-    boolean deleteAccount(long accountId);
+    boolean deleteAccount(Long accountId);
 }
