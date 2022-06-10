@@ -15,7 +15,7 @@ public class AccountResponseDTO {
 
     private Long id;
 
-    private User userId;
+    private User user;
 
     private String nickName;
 
