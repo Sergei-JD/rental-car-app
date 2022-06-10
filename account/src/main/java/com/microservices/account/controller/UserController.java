@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.Optional;
 
-@RestController("/")
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/users")
+@RequestMapping("/v1/users")
 public class UserController {
 
     private final UserService userService;
@@ -35,7 +35,14 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/role")
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam (name = "role") String role, Pageable pageable) {
+        Page<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
         Optional<UserResponseDTO> userResponseDTO = userService.getUserById(id);
         return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
@@ -44,7 +51,7 @@ public class UserController {
                 );
     }
 
-    @GetMapping("email")
+    @GetMapping("/email")
     public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam(name = "email") String email) {
         Optional<UserResponseDTO> userResponseDTO = userService.getUserByEmail(email);
         return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
@@ -65,7 +72,7 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable(name = "id") Long id) {
         return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
     }

@@ -27,7 +27,7 @@ public class CreditCardUpdateRequestDTO {
 
     @NotEmpty(message = "'Credit card id' should not be empty")
     @Positive(message = "'credit card id' should be positive number")
-    private Long creditCardId;
+    private Long id;
 
     @NotEmpty(message = "'Credit card type' should not be empty")
     @Size(min = 2, max = 128, message = "'Credit card type' should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")

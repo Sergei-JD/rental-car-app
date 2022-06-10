@@ -43,8 +43,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserResponseDTO> getAllUsersByRole(Role role, Pageable pageable) {
-        Page<User> pageUsers = userRepository.findAllByRole(role, pageable);
+    public Page<UserResponseDTO> getAllUsersByRole(String role, Pageable pageable) {
+        Page<User> pageUsers = userRepository.findAllByRole(Role.valueOf(role), pageable);
 
         List<UserResponseDTO> users = pageUsers.stream()
                 .map(userToUserResponseDTOMapper::convert)

@@ -22,7 +22,7 @@ public class DriverLicenseUpdateRequestDTO {
 
     @NotEmpty(message = "'Driver license id' should not be empty")
     @Positive(message = "'Driver license id' should be positive number")
-    private Long driverLicenseId;
+    private Long id;
 
     @NotEmpty(message = "'Driver license lumber' should not be empty")
     @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")

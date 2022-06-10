@@ -14,7 +14,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class DriverLicenseResponseDTO {
 
-    private Long driverLicenseId;
+    private Long id;
 
     private String driverLicenseNumber;
 
@@ -24,5 +24,5 @@ public class DriverLicenseResponseDTO {
 
     private Instant expirationDate;
 
-    private Account accountId;
+    private Account account;
 }

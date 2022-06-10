@@ -20,7 +20,7 @@ public class AccountUpdateRequestDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
-    private Long accountId;
+    private Long id;
 
     @NotEmpty(message = "'Nick name' name should not be empty")
     @Size(min = 2, max = 256, message = "'Nick name' should be between 2 and 256 characters")

@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class AccountResponseDTO {
 
-    private Long accountId;
+    private Long id;
 
     private User userId;
 

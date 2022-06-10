@@ -39,5 +39,5 @@ public class DriverLicenseRequestDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
-    private Account accountId;
+    private Account account;
 }

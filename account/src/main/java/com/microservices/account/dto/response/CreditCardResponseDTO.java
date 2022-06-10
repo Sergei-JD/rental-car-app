@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class CreditCardResponseDTO {
 
-    private Long creditCardId;
+    private Long id;
 
     private CreditCardType creditCardType;
 
@@ -33,5 +33,5 @@ public class CreditCardResponseDTO {
 
     private BigDecimal balance;
 
-    private Account accountId;
+    private Account account;
 }

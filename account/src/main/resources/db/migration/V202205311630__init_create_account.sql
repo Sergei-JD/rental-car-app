@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS users
 CREATE TABLE IF NOT EXISTS account
 (
     id           BIGSERIAL PRIMARY KEY,
-    user_id      BIGINT       NOT NULL UNIQUE references users (id),
+    user_id      BIGINT       NOT NULL UNIQUE REFERENCES users (id),
     nick_name    VARCHAR(256) NOT NULL,
     password     VARCHAR(256) NOT NULL,
     phone_number VARCHAR(13)  NOT NULL
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS credit_card
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS driver_license
 (
-    id     BIGSERIAL PRIMARY KEY,
+    id                    BIGSERIAL PRIMARY KEY,
     driver_license_number VARCHAR(32) NOT NULL,
     category              VARCHAR(32) NOT NULL,
     date_of_issue         TIMESTAMP   NOT NULL,
