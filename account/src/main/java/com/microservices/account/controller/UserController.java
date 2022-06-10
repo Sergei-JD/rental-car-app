@@ -36,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam (name = "role") String role, Pageable pageable) {
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam(name = "role") String role, Pageable pageable) {
         Page<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -67,7 +67,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody UserUpdateRequestDTO userUpdateRequestDTO) {
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO) {
         UserResponseDTO updatedUser = userService.updateUser(userUpdateRequestDTO);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }

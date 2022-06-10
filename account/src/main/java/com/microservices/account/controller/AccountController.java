@@ -2,10 +2,7 @@ package com.microservices.account.controller;
 
 import com.microservices.account.dto.request.AccountRequestDTO;
 import com.microservices.account.dto.request.AccountUpdateRequestDTO;
-import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.request.UserUpdateRequestDTO;
 import com.microservices.account.dto.response.AccountResponseDTO;
-import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -63,7 +60,7 @@ public class AccountController {
     }
 
     @PutMapping
-    public ResponseEntity<AccountResponseDTO> updateAccount(@RequestBody AccountUpdateRequestDTO accountUpdateRequestDTO) {
+    public ResponseEntity<AccountResponseDTO> updateAccount(@RequestBody @Valid AccountUpdateRequestDTO accountUpdateRequestDTO) {
         AccountResponseDTO updatedAccount = accountService.updateAccount(accountUpdateRequestDTO);
         return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
     }

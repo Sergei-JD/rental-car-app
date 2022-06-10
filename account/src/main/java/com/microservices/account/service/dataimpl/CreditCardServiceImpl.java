@@ -4,7 +4,6 @@ import com.microservices.account.dto.request.CreditCardRequestDTO;
 import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
 import com.microservices.account.dto.response.CreditCardResponseDTO;
 import com.microservices.account.entity.CreditCard;
-import com.microservices.account.entity.User;
 import com.microservices.account.mapper.request.CreditCardRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.request.CreditCardUpdateRequestDTOToCreditCardMapper;
 import com.microservices.account.mapper.response.CreditCardToCreditCardResponseDTOMapper;
