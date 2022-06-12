@@ -3,6 +3,7 @@ package com.microservices.account.controller;
 import com.microservices.account.dto.request.UserRequestDTO;
 import com.microservices.account.dto.request.UserUpdateRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
+import com.microservices.account.entity.Role;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/role")
-    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam(name = "role") String role, Pageable pageable) {
+    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam(name = "role") Role role, Pageable pageable) {
         Page<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
