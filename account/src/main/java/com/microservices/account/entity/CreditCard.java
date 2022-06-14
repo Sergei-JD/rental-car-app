@@ -28,7 +28,7 @@ import java.time.Instant;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
         {"id", "creditCardType", "cardNumber", "dateOfIssue",
-                "expirationDate", "cvvCode", "nameCardOwner", "balance", "accountId"})
+                "expirationDate", "cvvCode", "nameCardOwner", "balance", "account"})
 @Table(name = "credit_card", schema = "PUBLIC")
 public class CreditCard {
 
@@ -60,6 +60,6 @@ public class CreditCard {
     private BigDecimal balance;
 
     @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "account_id", nullable = false)
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 }

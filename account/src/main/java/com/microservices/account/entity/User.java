@@ -27,7 +27,8 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"id", "firstName", "lastName", "dateOfBirth", "identityPassportNumber", "email", "password", "gender", "role"})
+        {"id", "firstName", "lastName", "dateOfBirth", "identityPassportNumber",
+                "email", "phoneNumber", "gender", "role"})
 @Table(name = "users", schema = "PUBLIC")
 public class User {
 
@@ -51,8 +52,8 @@ public class User {
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
-    private String password;
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
@@ -62,8 +63,8 @@ public class User {
     @Column(name = "role", nullable = false)
     private Role role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "account_id", referencedColumnName = "account_id")
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "account_id", unique = true)
     private Account account;
 }
