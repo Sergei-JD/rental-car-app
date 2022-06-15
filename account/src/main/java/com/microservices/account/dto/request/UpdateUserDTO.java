@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateRequestDTO {
+public class UpdateUserDTO {
 
     @NotEmpty(message = "'User id' should not be empty")
     @Positive(message = "'User id' should be positive number")

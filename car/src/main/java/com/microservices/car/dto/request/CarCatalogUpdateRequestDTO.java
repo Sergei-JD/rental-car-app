@@ -24,7 +24,7 @@ public class CarCatalogUpdateRequestDTO {
 
     @NotEmpty(message = "'Car catalog id' should not be empty")
     @Positive(message = "'Car catalog id' should be positive number")
-    private Long carCatalogId;
+    private Long id;
 
     @NotEmpty(message = "'Registration number' name should not be empty")
     @Pattern(regexp = "\\d{8}", message = "'Registration number' should be valid")

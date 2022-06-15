@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CarCatalogResponseDTO {
 
-    private Long carCatalogId;
+    private Long id;
 
     private String registrationNumber;
 

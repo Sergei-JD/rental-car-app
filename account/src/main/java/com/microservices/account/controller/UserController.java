@@ -1,7 +1,7 @@
 package com.microservices.account.controller;
 
+import com.microservices.account.dto.request.UpdateUserDTO;
 import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.request.UserUpdateRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
@@ -10,7 +10,6 @@ import com.microservices.account.mapper.request.UserUpdateRequestDTOToUserMapper
 import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,10 +51,10 @@ public class UserController {
                 .toList();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-
+//
 //    @GetMapping("/{id}")
 //    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
-//        Optional<UserResponseDTO> userResponseDTO = userService.getUserById(id);
+//        Optional<UserResponseDTO> userResponseDTO = userToUserResponseDTOMapper.convert(userService.getUserById(id));
 //        return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
 //                .orElseThrow(() -> new RuntimeException(
 //                        "User with this id: " + id + " does not exist")
@@ -72,25 +70,24 @@ public class UserController {
 //                );
 //    }
 //
+
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
         User user = userRequestDTOToUserMapper.convert(userRequestDTO);
-        UserResponseDTO addUser = userToUserResponseDTOMapper.convert(userService.createUser(user));
+        User createdUser = userService.createUser(user);
+        UserResponseDTO addUser = userToUserResponseDTOMapper.convert(createdUser);
 
         return new ResponseEntity<>(addUser, HttpStatus.CREATED);
     }
 
-//    @PostMapping
-//    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-//        UserResponseDTO addUser = userService.createUser(userRequestDTO);
-//        return new ResponseEntity<>(addUser, HttpStatus.CREATED);
-//    }
-//
-//    @PutMapping
-//    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO) {
-//        UserResponseDTO updatedUser = userService.updateUser(userUpdateRequestDTO);
-//        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-//    }
+    @PutMapping
+    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        User user = userUpdateRequestDTOToUserMapper.convert(updateUserDTO);
+        User updateUser = userService.updateUser(user);
+        UserResponseDTO updatedUser = userToUserResponseDTOMapper.convert(updateUser);
+
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable(name = "id") Long id) {

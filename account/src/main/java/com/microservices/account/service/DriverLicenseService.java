@@ -12,7 +12,7 @@ public interface DriverLicenseService {
 
     Page<DriverLicense> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable);
 
-    Optional<DriverLicense> getDriverLicenseById(Long driverLicenseId);
+    DriverLicense getDriverLicenseById(Long driverLicenseId);
 
     DriverLicense createDriverLicense(DriverLicense driverLicense);
 

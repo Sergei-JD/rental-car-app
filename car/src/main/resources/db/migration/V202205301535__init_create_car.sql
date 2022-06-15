@@ -3,7 +3,7 @@
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS car_catalog
 (
-    car_catalog_id      BIGSERIAL PRIMARY KEY,
+    id                  BIGSERIAL PRIMARY KEY,
     registration_number VARCHAR(8)   NOT NULL,
     car_type            VARCHAR(32)  NOT NULL,
     year_of_manufacture VARCHAR(4)   NOT NULL,

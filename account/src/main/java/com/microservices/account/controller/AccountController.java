@@ -46,14 +46,6 @@ public class AccountController {
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable(name = "id") Long id) {
-        Optional<Account> account = accountService.getAccountById(id);
-        return account.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "Account with this id: " + id + " does not exist")
-                );
-    }
 
 //    @GetMapping("/{id}")
 //    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable(name = "id") Long id) {

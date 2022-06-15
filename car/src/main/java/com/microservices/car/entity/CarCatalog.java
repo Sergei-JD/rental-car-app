@@ -23,15 +23,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"carCatalogId", "registrationNumber", "carType", "yearOfManufacture",
-                "make", "model", "colour", "price", "carStatus", "orderId"})
+        {"id", "registrationNumber", "carType", "yearOfManufacture",
+                "make", "model", "colour", "price", "carStatus"})
 @Table(name = "car_catalog", schema = "PUBLIC")
 public class CarCatalog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_catalog_id", nullable = false)
-    private Long carCatalogId;
+    private Long id;
 
     @Column(name = "registration_number", nullable = false)
     private String registrationNumber;

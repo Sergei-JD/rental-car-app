@@ -29,119 +29,59 @@ import java.util.Optional;
 public class CarCatalogServiceImpl implements CarCatalogService {
 
     private final CarCatalogRepository carCatalogRepository;
-    private final CarCatalogRequestDTOToCarCatalogMapper carCatalogRequestDTOToCarCatalogMapper;
-    private final CarCatalogToCarCatalogResponseDTOMapper carCatalogToCarCatalogResponseDTOMapper;
-    private final CarCatalogUpdateRequestDTOToCarCatalogMapper carCatalogUpdateRequestDTOToCarCatalogMapper;
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogs(Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAll(pageable);
-
-        List<CarCatalogResponseDTO> carCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(carCatalogs);
+    public Page<CarCatalog> getAllCarCatalogs(Pageable pageable) {
+        return carCatalogRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<CarCatalogResponseDTO> getAllCarCatalogByRegistrationNumber(String registrationNumber) {
-        CarCatalogResponseDTO carCatalogResponseDTO = null;
-
-        Optional<CarCatalog> carCatalog = carCatalogRepository.findByRegistrationNumber(registrationNumber);
-        if (carCatalog.isPresent()) {
-            carCatalogResponseDTO = carCatalogToCarCatalogResponseDTOMapper.convert(carCatalog.get());
-        }
-
-        return Optional.ofNullable(carCatalogResponseDTO);
+    public Optional<CarCatalog> getAllCarCatalogByRegistrationNumber(String registrationNumber) {
+        return carCatalogRepository.findByRegistrationNumber(registrationNumber);
     }
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogByCarType(CarType carType, Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByCarType(carType, pageable);
-
-        List<CarCatalogResponseDTO> creditCarCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(creditCarCatalogs);
+    public Page<CarCatalog> getAllCarCatalogByCarType(CarType carType, Pageable pageable) {
+        return carCatalogRepository.findAllByCarType(carType, pageable);
     }
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogByMake(String make, Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByMake(make, pageable);
-
-        List<CarCatalogResponseDTO> creditCarCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(creditCarCatalogs);
+    public Page<CarCatalog> getAllCarCatalogByMake(String make, Pageable pageable) {
+        return carCatalogRepository.findAllByMake(make, pageable);
     }
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogByModel(String model, Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByModel(model, pageable);
-
-        List<CarCatalogResponseDTO> creditCarCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(creditCarCatalogs);
+    public Page<CarCatalog> getAllCarCatalogByModel(String model, Pageable pageable) {
+        return carCatalogRepository.findAllByModel(model, pageable);
     }
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByPrice(price, pageable);
-
-        List<CarCatalogResponseDTO> creditCarCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(creditCarCatalogs);
+    public Page<CarCatalog> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable) {
+        return carCatalogRepository.findAllByPrice(price, pageable);
     }
 
     @Override
-    public Page<CarCatalogResponseDTO> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable) {
-        Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByCarStatus(carStatus, pageable);
-
-        List<CarCatalogResponseDTO> creditCarCatalogs = pageCarCatalogs.stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(creditCarCatalogs);
+    public Page<CarCatalog> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable) {
+        return carCatalogRepository.findAllByCarStatus(carStatus, pageable);
     }
 
     @Override
-    public Optional<CarCatalogResponseDTO> getCarCatalogById(long carCatalogId) {
-        CarCatalogResponseDTO carCatalogResponseDTO = null;
-
-        Optional<CarCatalog> carCatalog = carCatalogRepository.findById(carCatalogId);
-        if (carCatalog.isPresent()) {
-            carCatalogResponseDTO = carCatalogToCarCatalogResponseDTOMapper.convert(carCatalog.get());
-        }
-
-        return Optional.ofNullable(carCatalogResponseDTO);
+    public Optional<CarCatalog> getCarCatalogById(long carCatalogId) {
+        return carCatalogRepository.findById(carCatalogId);
     }
 
     @Override
     @Transactional
-    public CarCatalogResponseDTO createCarCatalog(CarCatalogRequestDTO carCatalogRequestDTO) {
-        CarCatalog newCarCatalog = carCatalogRequestDTOToCarCatalogMapper.convert(carCatalogRequestDTO);
-        CarCatalog saveCarCatalog = carCatalogRepository.save(Objects.requireNonNull(newCarCatalog));
-
-        return carCatalogToCarCatalogResponseDTOMapper.convert(saveCarCatalog);
+    public CarCatalog createCarCatalog(CarCatalog carCatalog) {
+        return carCatalogRepository.save(carCatalog);
     }
 
     @Override
     @Transactional
-    public CarCatalogResponseDTO updateCarCatalog(CarCatalogUpdateRequestDTO carCatalogUpdateRequestDTO) {
-        carCatalogRepository.findById(carCatalogUpdateRequestDTO.getCarCatalogId())
-                .orElseThrow(() -> new ServiceException("Failed to update carCatalog no such carCatalog"));
-
-        CarCatalog сarCatalog = carCatalogUpdateRequestDTOToCarCatalogMapper.convert(carCatalogUpdateRequestDTO);
-        CarCatalog updateCarCatalog = carCatalogRepository.save(Objects.requireNonNull(сarCatalog));
-
-        return carCatalogToCarCatalogResponseDTOMapper.convert(updateCarCatalog);
+    public CarCatalog updateCarCatalog(CarCatalog carCatalog) {
+        CarCatalog maybeCarCatalog = carCatalogRepository.findById(carCatalog.getId())
+                .orElseThrow(() -> new ServiceException("Failed to update CarCatalog no such CarCatalog"));
+        return carCatalogRepository.save(maybeCarCatalog);
     }
 
     @Override

@@ -10,7 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import static com.microservices.account.util.ServiceData.ACCOUNT_DELETE_EXCEPTION_MESSAGE;
+import static com.microservices.account.util.ServiceData.ACCOUNT_ID_EXCEPTION_MESSAGE;
+import static com.microservices.account.util.ServiceData.ACCOUNT_NICKNAME_EXCEPTION_MESSAGE;
+import static com.microservices.account.util.ServiceData.ACCOUNT_UPDATE_EXCEPTION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +27,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Optional<Account> getAccountById(Long accountId) {
-        return accountRepository.findById(accountId);
+    public Account getAccountById(Long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_ID_EXCEPTION_MESSAGE, accountId)));
     }
 
     @Override
-    public Optional<Account> getAccountByNickName(String nickName) {
-        return accountRepository.findAccountByNickName(nickName);
+    public Account getAccountByNickName(String nickName) {
+        return accountRepository.findAccountByNickName(nickName)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_NICKNAME_EXCEPTION_MESSAGE, nickName)));
     }
 
     @Override
@@ -43,16 +48,16 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public Account updateAccount(Account account) {
         Account maybeAccount = accountRepository.findById(account.getId())
-                .orElseThrow(() -> new ServiceException("Failed to update Account no such Account"));
+                .orElseThrow(() -> new ServiceException(ACCOUNT_UPDATE_EXCEPTION_MESSAGE));
         return accountRepository.save(maybeAccount);
     }
 
     @Override
     @Transactional
     public boolean deleteAccount(Long accountId) {
-        Optional<Account> maybeAccount = accountRepository.findById(accountId);
-        maybeAccount.ifPresent(account -> accountRepository.deleteById(account.getId()));
-
-        return maybeAccount.isPresent();
+        Account maybeAccount = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_DELETE_EXCEPTION_MESSAGE, accountId)));
+        accountRepository.deleteById(maybeAccount.getId());
+        return accountRepository.findById(accountId).isEmpty();
     }
 }
