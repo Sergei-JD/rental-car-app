@@ -3,6 +3,9 @@ package com.microservices.account.controller;
 import com.microservices.account.dto.request.DriverLicenseRequestDTO;
 import com.microservices.account.dto.request.DriverLicenseUpdateRequestDTO;
 import com.microservices.account.dto.response.DriverLicenseResponseDTO;
+import com.microservices.account.mapper.request.DriverLicenseRequestDTOToDriverLicenseMapper;
+import com.microservices.account.mapper.request.DriverLicenseUpdateRequestDTOToDriverLicenseMapper;
+import com.microservices.account.mapper.response.DriverLicenseToDriverLicenseResponseDTOMapper;
 import com.microservices.account.service.DriverLicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -27,39 +31,44 @@ import java.util.Optional;
 public class DriverLicenseController {
 
     private final DriverLicenseService driverLicenseService;
+    private final DriverLicenseRequestDTOToDriverLicenseMapper driverLicenseRequestDTOToDriverLicenseMapper;
+    private final DriverLicenseToDriverLicenseResponseDTOMapper driverLicenseToDriverLicenseResponseDTOMapper;
+    private final DriverLicenseUpdateRequestDTOToDriverLicenseMapper driverLicenseUpdateRequestDTOToDriverLicenseMapper;
 
     @GetMapping
-    public ResponseEntity<Page<DriverLicenseResponseDTO>> getAllDriverLicenses(Pageable pageable) {
-        Page<DriverLicenseResponseDTO> driverLicenses = driverLicenseService.getAllDriverLicenses(pageable);
+    public ResponseEntity<List<DriverLicenseResponseDTO>> getAllDriverLicenses(Pageable pageable) {
+        List<DriverLicenseResponseDTO> driverLicenses = driverLicenseService.getAllDriverLicenses(pageable).stream()
+                .map(driverLicenseToDriverLicenseResponseDTOMapper::convert)
+                .toList();
         return new ResponseEntity<>(driverLicenses, HttpStatus.OK);
     }
 
-    @GetMapping("/account/{id}")
-    public ResponseEntity<Page<DriverLicenseResponseDTO>> getAllDriverLicensesByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
-        Page<DriverLicenseResponseDTO> licenses = driverLicenseService.getAllDriverLicenseByAccountId(id, pageable);
-        return new ResponseEntity<>(licenses, HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<DriverLicenseResponseDTO> getDriverLicenseById(@PathVariable(name = "id") Long id) {
-        Optional<DriverLicenseResponseDTO> driverLicenseResponseDTO = driverLicenseService.getDriverLicenseById(id);
-        return driverLicenseResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "DriverLicense with this id: " + id + " does not exist")
-                );
-    }
-
-    @PostMapping
-    public ResponseEntity<DriverLicenseResponseDTO> createDriverLicense(@RequestBody @Valid DriverLicenseRequestDTO driverLicenseRequestDTO) {
-        DriverLicenseResponseDTO addDriverLicense = driverLicenseService.createDriverLicense(driverLicenseRequestDTO);
-        return new ResponseEntity<>(addDriverLicense, HttpStatus.CREATED);
-    }
-
-    @PutMapping
-    public ResponseEntity<DriverLicenseResponseDTO> updateDriverLicense(@RequestBody @Valid DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO) {
-        DriverLicenseResponseDTO updatedDriverLicense = driverLicenseService.updateDriverLicense(driverLicenseUpdateRequestDTO);
-        return new ResponseEntity<>(updatedDriverLicense, HttpStatus.OK);
-    }
+//    @GetMapping("/account/{id}")
+//    public ResponseEntity<Page<DriverLicenseResponseDTO>> getAllDriverLicensesByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
+//        Page<DriverLicenseResponseDTO> licenses = driverLicenseService.getAllDriverLicenseByAccountId(id, pageable);
+//        return new ResponseEntity<>(licenses, HttpStatus.OK);
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<DriverLicenseResponseDTO> getDriverLicenseById(@PathVariable(name = "id") Long id) {
+//        Optional<DriverLicenseResponseDTO> driverLicenseResponseDTO = driverLicenseService.getDriverLicenseById(id);
+//        return driverLicenseResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
+//                .orElseThrow(() -> new RuntimeException(
+//                        "DriverLicense with this id: " + id + " does not exist")
+//                );
+//    }
+//
+//    @PostMapping
+//    public ResponseEntity<DriverLicenseResponseDTO> createDriverLicense(@RequestBody @Valid DriverLicenseRequestDTO driverLicenseRequestDTO) {
+//        DriverLicenseResponseDTO addDriverLicense = driverLicenseService.createDriverLicense(driverLicenseRequestDTO);
+//        return new ResponseEntity<>(addDriverLicense, HttpStatus.CREATED);
+//    }
+//
+//    @PutMapping
+//    public ResponseEntity<DriverLicenseResponseDTO> updateDriverLicense(@RequestBody @Valid DriverLicenseUpdateRequestDTO driverLicenseUpdateRequestDTO) {
+//        DriverLicenseResponseDTO updatedDriverLicense = driverLicenseService.updateDriverLicense(driverLicenseUpdateRequestDTO);
+//        return new ResponseEntity<>(updatedDriverLicense, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteDriverLicense(@PathVariable(name = "id") Long id) {

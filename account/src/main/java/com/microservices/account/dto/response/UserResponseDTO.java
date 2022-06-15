@@ -1,12 +1,10 @@
 package com.microservices.account.dto.response;
 
-import com.microservices.account.entity.Role;
 import com.microservices.account.entity.Gender;
-
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.microservices.account.entity.Role;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
@@ -29,7 +27,7 @@ public class UserResponseDTO {
 
     private String email;
 
-    private String password;
+    private String phoneNumber;
 
     private Gender gender;
 

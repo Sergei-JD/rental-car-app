@@ -1,9 +1,8 @@
 package com.microservices.account.dto.response;
 
-import com.microservices.account.entity.Account;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
@@ -23,6 +22,4 @@ public class DriverLicenseResponseDTO {
     private Instant dateOfIssue;
 
     private Instant expirationDate;
-
-    private Account account;
 }

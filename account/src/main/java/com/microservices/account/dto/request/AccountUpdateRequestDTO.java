@@ -1,7 +1,6 @@
 package com.microservices.account.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microservices.account.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,10 +22,6 @@ public class AccountUpdateRequestDTO {
     @Positive(message = "'Account id' should be positive number")
     private Long id;
 
-    @NotEmpty(message = "'User id' should not be empty")
-    @Positive(message = "'User id' should be positive number")
-    private User user;
-
     @NotEmpty(message = "'Nick name' name should not be empty")
     @Size(min = 2, max = 256, message = "'Nick name' should be between 2 and 256 characters")
     private String nickName;
@@ -35,8 +30,4 @@ public class AccountUpdateRequestDTO {
     @NotEmpty(message = "'Password' should not be empty")
     @Size(min = 2, max = 256, message = "'Password' should be between 2 and 256 characters")
     private String password;
-
-    @NotEmpty(message = "'Phone number' should not be empty")
-    @Size(min = 13, max = 13, message = "'Phone number' should have 13 characters")
-    private String phoneNumber;
 }

@@ -1,23 +1,19 @@
 package com.microservices.account.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCardType;
-
-import lombok.Getter;
-import lombok.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Future;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
-
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -56,8 +52,4 @@ public class CreditCardRequestDTO {
     @NotEmpty(message = "'Balance' should not be empty")
     @PositiveOrZero(message = "'Balance' should be positive number or 0")
     private BigDecimal balance;
-
-    @NotEmpty(message = "'Account id' should not be empty")
-    @Positive(message = "'Account id' should be positive number")
-    private Account account;
 }

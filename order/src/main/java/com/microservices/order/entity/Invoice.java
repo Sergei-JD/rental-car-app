@@ -27,15 +27,15 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"invoiceId", "amount", "startDateRent", "endDateRent",
-                "rentalPeriod", "paymentDate", "invoiceStatus", "orderId"})
+        {"id", "amount", "startDateRent", "endDateRent",
+                "rentalPeriod", "paymentDate", "invoiceStatus", "order"})
 @Table(name = "invoice", schema = "PUBLIC")
 public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "invoice_id", nullable = false)
-    private Long invoiceId;
+    @Column(name = "id", nullable = false)
+    private Long id;
 
     @Column(name = "amount")
     private BigDecimal amount;
@@ -56,7 +56,6 @@ public class Invoice {
     @Column(name = "invoice_status", nullable = false)
     private InvoiceStatus invoiceStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
-    private Order orderId;
+    @OneToOne(mappedBy = "invoice")
+    private Order order;
 }

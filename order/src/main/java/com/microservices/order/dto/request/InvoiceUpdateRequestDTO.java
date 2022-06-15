@@ -24,7 +24,7 @@ public class InvoiceUpdateRequestDTO {
 
     @NotEmpty(message = "'Invoice id' should not be empty")
     @Positive(message = "'Invoice id' should be positive number")
-    private Long invoiceId;
+    private Long id;
 
     @NotEmpty(message = "'Amount' should not be empty")
     @PositiveOrZero(message = "'Amount' should be positive number or 0")

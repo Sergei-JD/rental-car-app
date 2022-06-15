@@ -17,7 +17,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class InvoiceResponseDTO {
 
-    private Long invoiceId;
+    private Long id;
 
     private BigDecimal amount;
 
@@ -31,5 +31,5 @@ public class InvoiceResponseDTO {
 
     private InvoiceStatus invoiceStatus;
 
-    private Order orderId;
+    private Order order;
 }

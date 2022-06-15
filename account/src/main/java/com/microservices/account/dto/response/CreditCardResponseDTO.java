@@ -1,11 +1,9 @@
 package com.microservices.account.dto.response;
 
-import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCardType;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
@@ -32,6 +30,4 @@ public class CreditCardResponseDTO {
     private String nameCardOwner;
 
     private BigDecimal balance;
-
-    private Account account;
 }

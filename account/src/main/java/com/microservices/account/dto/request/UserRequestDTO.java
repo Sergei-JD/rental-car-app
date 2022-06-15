@@ -1,20 +1,17 @@
 package com.microservices.account.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microservices.account.entity.Role;
 import com.microservices.account.entity.Gender;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+import com.microservices.account.entity.Role;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Size;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Setter
@@ -44,10 +41,9 @@ public class UserRequestDTO {
     @Email(message = "'Email' should be valid")
     private String email;
 
-    @JsonProperty("password")
-    @NotEmpty(message = "'Password' should not be empty")
-    @Size(min = 2, max = 256, message = "'Password' should be between 2 and 256 characters")
-    private String password;
+    @NotEmpty(message = "'Phone number' should not be empty")
+    @Size(min = 13, max = 13, message = "'Phone number' should have 13 characters")
+    private String phoneNumber;
 
     @NotEmpty(message = "'Gender' should not be empty")
     @Size(min = 2, max = 64, message = "'Gender' should be 'MALE' or 'FEMALE'")

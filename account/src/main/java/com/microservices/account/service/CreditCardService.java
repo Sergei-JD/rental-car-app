@@ -1,8 +1,6 @@
 package com.microservices.account.service;
 
-import com.microservices.account.dto.request.CreditCardRequestDTO;
-import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
-import com.microservices.account.dto.response.CreditCardResponseDTO;
+import com.microservices.account.entity.CreditCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,15 +8,15 @@ import java.util.Optional;
 
 public interface CreditCardService {
 
-    Page<CreditCardResponseDTO> getAllCreditCards(Pageable pageable);
+    Page<CreditCard> getAllCreditCards(Pageable pageable);
 
-    Page<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
+    Page<CreditCard> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
 
-    Optional<CreditCardResponseDTO> getCreditCardById(Long creditCardId);
+    Optional<CreditCard> getCreditCardById(Long creditCardId);
 
-    CreditCardResponseDTO createCreditCard(CreditCardRequestDTO creditCardRequestDTO);
+    CreditCard createCreditCard(CreditCard creditCard);
 
-    CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO);
+    CreditCard updateCreditCard(CreditCard creditCard);
 
     boolean deleteCreditCard(Long creditCardId);
 }

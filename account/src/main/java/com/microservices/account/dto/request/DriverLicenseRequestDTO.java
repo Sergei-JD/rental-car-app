@@ -1,17 +1,15 @@
 package com.microservices.account.dto.request;
 
-import com.microservices.account.entity.Account;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Past;
+
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
-
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Setter
@@ -36,8 +34,4 @@ public class DriverLicenseRequestDTO {
     @NotEmpty(message = "'Expiration date' should not be empty")
     @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
-
-    @NotEmpty(message = "'Account id' should not be empty")
-    @Positive(message = "'Account id' should be positive number")
-    private Account account;
 }

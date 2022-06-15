@@ -41,8 +41,7 @@ public class Account {
 
     @OneToOne(fetch = FetchType.LAZY,
             mappedBy = "account",
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
+            cascade = CascadeType.ALL)
     private User user;
 
     @OneToMany(fetch = FetchType.LAZY,

@@ -50,5 +50,5 @@ public class InvoiceRequestDTO {
 
     @NotEmpty(message = "'Order id' should not be empty")
     @Positive(message = "'Order id' should be positive number")
-    private Order orderId;
+    private Order order;
 }

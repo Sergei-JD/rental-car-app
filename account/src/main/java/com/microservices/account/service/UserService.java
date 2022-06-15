@@ -1,9 +1,7 @@
 package com.microservices.account.service;
 
-import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.request.UserUpdateRequestDTO;
-import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.entity.Role;
+import com.microservices.account.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -11,17 +9,17 @@ import java.util.Optional;
 
 public interface UserService {
 
-    Page<UserResponseDTO> getAllUsers(Pageable pageable);
+    Page<User> getAllUsers(Pageable pageable);
 
-    Page<UserResponseDTO> getAllUsersByRole(Role role, Pageable pageable);
+    Page<User> getAllUsersByRole(Role role, Pageable pageable);
 
-    Optional<UserResponseDTO> getUserById(Long userId);
+    Optional<User> getUserById(Long userId);
 
-    Optional<UserResponseDTO> getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
 
-    UserResponseDTO createUser(UserRequestDTO userRequestDTO);
+    User createUser(User user);
 
-    UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO);
+    User updateUser(User user);
 
     boolean deleteUser(Long userId);
 }

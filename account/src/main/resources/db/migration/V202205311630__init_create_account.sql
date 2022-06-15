@@ -1,4 +1,14 @@
 -- -----------------------------------------------------
+-- Table account
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS account
+(
+    id        BIGSERIAL PRIMARY KEY,
+    nick_name VARCHAR(256) UNIQUE NOT NULL,
+    password  VARCHAR(256)        NOT NULL
+);
+
+-- -----------------------------------------------------
 -- Table users
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS users
@@ -9,21 +19,10 @@ CREATE TABLE IF NOT EXISTS users
     date_of_birth            TIMESTAMP           NOT NULL,
     identity_passport_number VARCHAR(14)         NOT NULL,
     email                    VARCHAR(256) UNIQUE NOT NULL,
-    password                 VARCHAR(256)        NOT NULL,
+    phone_number             VARCHAR(13)         NOT NULL,
     gender                   VARCHAR(64)         NOT NULL,
-    role                     VARCHAR(64)         NOT NULL
-);
-
--- -----------------------------------------------------
--- Table account
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS account
-(
-    id           BIGSERIAL PRIMARY KEY,
-    user_id      BIGINT       NOT NULL UNIQUE REFERENCES users (id),
-    nick_name    VARCHAR(256) NOT NULL,
-    password     VARCHAR(256) NOT NULL,
-    phone_number VARCHAR(13)  NOT NULL
+    role                     VARCHAR(64)         NOT NULL,
+    account_id               BIGINT UNIQUE       NOT NULL
 );
 
 -- -----------------------------------------------------
