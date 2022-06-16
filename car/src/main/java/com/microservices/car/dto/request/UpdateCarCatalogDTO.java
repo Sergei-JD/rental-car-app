@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCatalogUpdateRequestDTO {
+public class UpdateCarCatalogDTO {
 
     @NotEmpty(message = "'Car catalog id' should not be empty")
     @Positive(message = "'Car catalog id' should be positive number")
