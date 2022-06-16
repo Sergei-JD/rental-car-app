@@ -23,7 +23,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCardUpdateRequestDTO {
+public class UpdateCreditCardDTO {
 
     @NotEmpty(message = "'Credit card id' should not be empty")
     @Positive(message = "'credit card id' should be positive number")

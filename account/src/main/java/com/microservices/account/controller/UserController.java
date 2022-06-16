@@ -5,8 +5,8 @@ import com.microservices.account.dto.request.UserRequestDTO;
 import com.microservices.account.dto.response.UserResponseDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
+import com.microservices.account.mapper.request.UpdateUserDTOToUserMapper;
 import com.microservices.account.mapper.request.UserRequestDTOToUserMapper;
-import com.microservices.account.mapper.request.UserUpdateRequestDTOToUserMapper;
 import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,13 +34,14 @@ public class UserController {
     private final UserService userService;
     private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
     private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
-    private final UserUpdateRequestDTOToUserMapper userUpdateRequestDTOToUserMapper;
+    private final UpdateUserDTOToUserMapper updateUserDTOToUserMapper;
 
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers(Pageable pageable) {
         List<UserResponseDTO> users = userService.getAllUsers(pageable).stream()
                 .map(userToUserResponseDTOMapper::convert)
                 .toList();
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
@@ -49,27 +50,25 @@ public class UserController {
         List<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable).stream()
                 .map(userToUserResponseDTOMapper::convert)
                 .toList();
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
-//        Optional<UserResponseDTO> userResponseDTO = userToUserResponseDTOMapper.convert(userService.getUserById(id));
-//        return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-//                .orElseThrow(() -> new RuntimeException(
-//                        "User with this id: " + id + " does not exist")
-//                );
-//    }
-//
-//    @GetMapping("/email")
-//    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam(name = "email") String email) {
-//        Optional<UserResponseDTO> userResponseDTO = userService.getUserByEmail(email);
-//        return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-//                .orElseThrow(() -> new RuntimeException(
-//                        "User with this email: " + email + " does not exist")
-//                );
-//    }
-//
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
+        User user = userService.getUserById(id);
+        UserResponseDTO userResponseDTO = userToUserResponseDTOMapper.convert(user);
+
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam(name = "email") String email) {
+        User user = userService.getUserByEmail(email);
+        UserResponseDTO userResponseDTO = userToUserResponseDTOMapper.convert(user);
+
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+    }
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
@@ -82,7 +81,7 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-        User user = userUpdateRequestDTOToUserMapper.convert(updateUserDTO);
+        User user = updateUserDTOToUserMapper.convert(updateUserDTO);
         User updateUser = userService.updateUser(user);
         UserResponseDTO updatedUser = userToUserResponseDTOMapper.convert(updateUser);
 
@@ -91,6 +90,8 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+        boolean deleteUser = userService.deleteUser(id);
+
+        return new ResponseEntity<>(deleteUser, HttpStatus.OK);
     }
 }

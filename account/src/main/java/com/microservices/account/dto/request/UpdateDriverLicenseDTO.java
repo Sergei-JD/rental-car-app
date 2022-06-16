@@ -18,7 +18,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseUpdateRequestDTO {
+public class UpdateDriverLicenseDTO {
 
     @NotEmpty(message = "'Driver license id' should not be empty")
     @Positive(message = "'Driver license id' should be positive number")

@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.springframework.core.convert.converter.Converter;
 
 @Mapper(componentModel = "spring")
-public interface UserUpdateRequestDTOToUserMapper extends Converter<UpdateUserDTO, User> {
+public interface UpdateUserDTOToUserMapper extends Converter<UpdateUserDTO, User> {
 
     @Override
     User convert(@NonNull UpdateUserDTO source);
