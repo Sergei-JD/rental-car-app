@@ -33,7 +33,6 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "account_id", nullable = false)
@@ -43,8 +42,9 @@ public class Order {
     @Column(name = "order_status", nullable = false)
     private OrderStatus orderStatus;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    @JoinColumn(name = "invoice_id", unique = true)
     private Invoice invoice;
 
     @OneToMany(fetch = FetchType.LAZY,

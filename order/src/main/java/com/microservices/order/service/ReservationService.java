@@ -1,27 +1,26 @@
 package com.microservices.order.service;
 
 import com.microservices.order.dto.request.ReservationRequestDTO;
-import com.microservices.order.dto.request.ReservationUpdateRequestDTO;
+import com.microservices.order.dto.request.UpdateReservationDTO;
 import com.microservices.order.dto.response.ReservationResponseDTO;
+import com.microservices.order.entity.Reservation;
 import com.microservices.order.entity.ReservationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 public interface ReservationService {
 
-    Page<ReservationResponseDTO> getAllReservations(Pageable pageable);
+    Page<Reservation> getAllReservations(Pageable pageable);
 
-    Page<ReservationResponseDTO> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable);
+    Page<Reservation> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable);
 
-    public Page<ReservationResponseDTO> getAllReservationByOrderId(Long orderId, Pageable pageable);
+    Page<Reservation> getAllReservationByOrderId(Long orderId, Pageable pageable);
 
-    Optional<ReservationResponseDTO> getReservationById(long reservationId);
+    Reservation getReservationById(long reservationId);
 
-    ReservationResponseDTO createReservation(ReservationRequestDTO reservationRequestDTO);
+    Reservation createReservation(Reservation reservation);
 
-    ReservationResponseDTO updateReservation(ReservationUpdateRequestDTO reservationUpdateRequestDTO);
+    Reservation updateReservation(Reservation reservation);
 
     boolean deleteReservation(long reservationId);
 }

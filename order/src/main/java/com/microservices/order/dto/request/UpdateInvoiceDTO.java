@@ -20,7 +20,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceUpdateRequestDTO {
+public class UpdateInvoiceDTO {
 
     @NotEmpty(message = "'Invoice id' should not be empty")
     @Positive(message = "'Invoice id' should be positive number")

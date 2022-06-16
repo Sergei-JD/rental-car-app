@@ -6,12 +6,12 @@ import lombok.experimental.UtilityClass;
 public class ServiceData {
 
     public static final String USER_ID_EXCEPTION_MESSAGE = "Unable to find 'user' with 'id': %d";
-    public static final String USER_EMAIL_EXCEPTION_MESSAGE = "Unable to find 'user' with 'email': %d";
+    public static final String USER_EMAIL_EXCEPTION_MESSAGE = "Unable to find 'user' with 'email': %s";
     public static final String USER_UPDATE_EXCEPTION_MESSAGE = "Failed to update 'user' no such 'user'";
     public static final String USER_DELETE_EXCEPTION_MESSAGE = "Failed to delete 'user' with 'id': %d";
 
     public static final String ACCOUNT_ID_EXCEPTION_MESSAGE = "Unable to find 'account' with 'id': %d";
-    public static final String ACCOUNT_NICKNAME_EXCEPTION_MESSAGE = "Unable to find 'account' with 'nickname': %d";
+    public static final String ACCOUNT_NICKNAME_EXCEPTION_MESSAGE = "Unable to find 'account' with 'nickname': %s";
     public static final String ACCOUNT_UPDATE_EXCEPTION_MESSAGE = "Failed to update 'account' no such account'";
     public static final String ACCOUNT_DELETE_EXCEPTION_MESSAGE = "Failed to delete 'account' with 'id': %d";
 

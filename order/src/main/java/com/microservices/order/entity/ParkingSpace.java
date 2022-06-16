@@ -29,7 +29,6 @@ public class ParkingSpace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "address", nullable = false)
@@ -41,7 +40,7 @@ public class ParkingSpace {
     @Column(name = "number_space", nullable = false)
     private String numberSpace;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 }

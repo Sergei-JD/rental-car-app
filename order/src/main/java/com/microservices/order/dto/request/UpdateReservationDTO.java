@@ -1,6 +1,5 @@
 package com.microservices.order.dto.request;
 
-import com.microservices.order.entity.Order;
 import com.microservices.order.entity.ReservationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,15 +17,11 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationUpdateRequestDTO {
+public class UpdateReservationDTO {
 
     @NotEmpty(message = "'Reservation id' should not be empty")
     @Positive(message = "'Reservation id' should be positive number")
-    private Long reservationId;
-
-    @NotEmpty(message = "'Order id' should not be empty")
-    @Positive(message = "'Order id' should be positive number")
-    private Order orderId;
+    private Long id;
 
     @NotEmpty(message = "'Car catalog id' should not be empty")
     @Positive(message = "'Car catalog id' should be positive number")

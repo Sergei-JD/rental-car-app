@@ -16,11 +16,11 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderUpdateRequestDTO {
+public class UpdateOrderDTO {
 
     @NotEmpty(message = "'Order id' should not be empty")
     @Positive(message = "'order id' should be positive number")
-    private Long orderId;
+    private Long id;
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
