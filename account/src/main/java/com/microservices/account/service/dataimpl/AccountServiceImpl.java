@@ -1,13 +1,10 @@
 package com.microservices.account.service.dataimpl;
 
-import com.microservices.account.dto.request.AccountRequestDTO;
-import com.microservices.account.dto.request.AccountUpdateRequestDTO;
-import com.microservices.account.dto.response.AccountResponseDTO;
+import com.microservices.account.dto.create.AccountCreateDTO;
+import com.microservices.account.dto.update.AccountUpdateDTO;
+import com.microservices.account.dto.view.AccountViewDTO;
 import com.microservices.account.entity.Account;
-import com.microservices.account.entity.User;
-import com.microservices.account.mapper.request.AccountRequestDTOToAccountMapper;
-import com.microservices.account.mapper.request.AccountUpdateRequestDTOToAccountMapper;
-import com.microservices.account.mapper.response.AccountToAccountResponseDTOMapper;
+import com.microservices.account.mapper.AccountMapper;
 import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -19,80 +16,72 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import static com.microservices.account.util.ServiceData.ACCOUNT_ID_EXCEPTION_MESSAGE;
+import static com.microservices.account.util.ServiceData.ACCOUNT_NICKNAME_EXCEPTION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final AccountRequestDTOToAccountMapper accountRequestDTOToAccountMapper;
-    private final AccountToAccountResponseDTOMapper accountToAccountResponseDTOMapper;
-    private final AccountUpdateRequestDTOToAccountMapper accountUpdateRequestDTOToAccountMapper;
 
     @Override
-    public Page<AccountResponseDTO> getAllAccounts(Pageable pageable) {
+    public Page<AccountViewDTO> getAllAccounts(Pageable pageable) {
         Page<Account> pageAccounts = accountRepository.findAll(pageable);
 
-        List<AccountResponseDTO> accounts = pageAccounts.stream()
-                .map(accountToAccountResponseDTOMapper::convert)
+        List<AccountViewDTO> accounts = pageAccounts.stream()
+                .map(AccountMapper::toAccountViewDTO)
                 .toList();
 
         return new PageImpl<>(accounts);
     }
 
     @Override
-    public Optional<AccountResponseDTO> getAccountById(Long accountId) {
-        AccountResponseDTO accountResponseDTO = null;
+    public AccountViewDTO getAccountById(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_ID_EXCEPTION_MESSAGE, accountId)));
 
-        Optional<Account> account = accountRepository.findById(accountId);
-        if (account.isPresent()) {
-            accountResponseDTO = accountToAccountResponseDTOMapper.convert(account.get());
-        }
-
-        return Optional.ofNullable(accountResponseDTO);
+        return AccountMapper.toAccountViewDTO(account);
     }
 
     @Override
-    public Optional<AccountResponseDTO> getAccountByNickName(String nickName) {
-        AccountResponseDTO accountResponseDTO = null;
+    public AccountViewDTO getAccountByNickName(String nickName) {
+        Account account = accountRepository.findAccountByNickName(nickName)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_NICKNAME_EXCEPTION_MESSAGE, nickName)));
 
-        Optional<Account> account = accountRepository.findAccountByNickName(nickName);
-        if (account.isPresent()) {
-            accountResponseDTO = accountToAccountResponseDTOMapper.convert(account.get());
-        }
-
-        return Optional.ofNullable(accountResponseDTO);
+        return AccountMapper.toAccountViewDTO(account);
     }
 
     @Override
     @Transactional
-    public AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO) {
-        Account newAccount = accountRequestDTOToAccountMapper.convert(accountRequestDTO);
-        Account saveAccount = accountRepository.save(Objects.requireNonNull(newAccount));
+    public AccountCreateDTO createAccount(AccountCreateDTO accountCreateDTO) {
+        Account newAccount = Account.builder()
+                .nickName(accountCreateDTO.getNickName())
+                .password(accountCreateDTO.getPassword())
+                .build();
 
-        return accountToAccountResponseDTOMapper.convert(saveAccount);
+        return AccountMapper.toAccountCreateDTO(accountRepository.save(newAccount));
     }
 
     @Override
     @Transactional
-    public AccountResponseDTO updateAccount(AccountUpdateRequestDTO accountUpdateRequestDTO) {
-        accountRepository.findById(accountUpdateRequestDTO.getId())
-                .orElseThrow(() -> new ServiceException("Failed to update account no such account"));
+    public AccountUpdateDTO updateAccount(Long accountId, AccountUpdateDTO accountUpdateDTO) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_ID_EXCEPTION_MESSAGE, accountId)));
+        account.setNickName(accountUpdateDTO.getNickName());
+        account.setPassword(accountUpdateDTO.getPassword());
 
-        Account account = accountUpdateRequestDTOToAccountMapper.convert(accountUpdateRequestDTO);
-        Account updateAccount = accountRepository.save(Objects.requireNonNull(account));
+        accountRepository.save(account);
 
-        return accountToAccountResponseDTOMapper.convert(updateAccount);
+        return AccountMapper.toAccountUpdateDTO(account);
     }
 
     @Override
     @Transactional
     public boolean deleteAccount(Long accountId) {
-        Optional<Account> maybeAccount = accountRepository.findById(accountId);
-        maybeAccount.ifPresent(account -> accountRepository.deleteById(account.getId()));
+        accountRepository.deleteById(accountId);
 
-        return maybeAccount.isPresent();
+        return accountRepository.findById(accountId).isEmpty();
     }
 }

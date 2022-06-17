@@ -1,16 +1,13 @@
 package com.microservices.order.dto.request;
 
-import com.microservices.order.entity.Order;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
@@ -30,8 +27,4 @@ public class ParkingSpaceRequestDTO {
     @NotEmpty(message = "'Number space' should not be empty")
     @Size(min = 1, message = "'Number space' should be at least one character")
     private String numberSpace;
-
-    @NotEmpty(message = "'Order id' should not be empty")
-    @Positive(message = "'Order id' should be positive number")
-    private Order orderId;
 }

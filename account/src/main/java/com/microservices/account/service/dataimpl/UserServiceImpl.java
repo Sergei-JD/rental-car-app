@@ -1,17 +1,15 @@
 package com.microservices.account.service.dataimpl;
 
-import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.request.UserUpdateRequestDTO;
-import com.microservices.account.dto.response.UserResponseDTO;
+import com.microservices.account.dto.create.UserCreateDTO;
+import com.microservices.account.dto.update.UserUpdateDTO;
+import com.microservices.account.dto.view.UserViewDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
-import com.microservices.account.mapper.request.UserRequestDTOToUserMapper;
-import com.microservices.account.mapper.request.UserUpdateRequestDTOToUserMapper;
-import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
+import com.microservices.account.exception.ServiceException;
+import com.microservices.account.mapper.UserMapper;
 import com.microservices.account.repository.UserRepository;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,92 +17,95 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+
+import static com.microservices.account.util.ServiceData.USER_EMAIL_EXCEPTION_MESSAGE;
+import static com.microservices.account.util.ServiceData.USER_ID_EXCEPTION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
-    private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
-    private final UserUpdateRequestDTOToUserMapper userUpdateRequestDTOToUserMapper;
 
     @Override
-    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+    public Page<UserViewDTO> getAllUsers(Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(pageable);
 
-        List<UserResponseDTO> users = pageUsers.stream()
-                .map(userToUserResponseDTOMapper::convert)
+        List<UserViewDTO> users = pageUsers.stream()
+                .map(UserMapper::toUserViewDTO)
                 .toList();
 
         return new PageImpl<>(users);
     }
 
     @Override
-    public Page<UserResponseDTO> getAllUsersByRole(String role, Pageable pageable) {
-        Page<User> pageUsers = userRepository.findAllByRole(Role.valueOf(role), pageable);
+    public Page<UserViewDTO> getAllUsersByRole(Role role, Pageable pageable) {
+        Page<User> pageUsers = userRepository.findAllByRole(role, pageable);
 
-        List<UserResponseDTO> users = pageUsers.stream()
-                .map(userToUserResponseDTOMapper::convert)
+        List<UserViewDTO> users = pageUsers.stream()
+                .map(UserMapper::toUserViewDTO)
                 .toList();
 
         return new PageImpl<>(users);
     }
 
     @Override
-    public Optional<UserResponseDTO> getUserById(Long userId) {
-        UserResponseDTO userResponseDTO = null;
+    public UserViewDTO getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException(String.format(USER_ID_EXCEPTION_MESSAGE, userId)));
 
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
-        }
-
-        return Optional.ofNullable(userResponseDTO);
+        return UserMapper.toUserViewDTO(user);
     }
 
     @Override
-    public Optional<UserResponseDTO> getUserByEmail(String email) {
-        UserResponseDTO userResponseDTO = null;
+    public UserViewDTO getUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new ServiceException(String.format(USER_EMAIL_EXCEPTION_MESSAGE, email)));
 
-        Optional<User> user = userRepository.findUserByEmail(email);
-        if (user.isPresent()) {
-            userResponseDTO = userToUserResponseDTOMapper.convert(user.get());
-        }
-
-        return Optional.ofNullable(userResponseDTO);
+        return UserMapper.toUserViewDTO(user);
     }
 
     @Override
     @Transactional
-    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
-        User newUser = userRequestDTOToUserMapper.convert(userRequestDTO);
-        User saveUser = userRepository.save(Objects.requireNonNull(newUser));
+    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+        User newUser = User.builder()
+                .firstName(userCreateDTO.getFirstName())
+                .lastName(userCreateDTO.getLastName())
+                .dateOfBirth(userCreateDTO.getDateOfBirth())
+                .identityPassportNumber(userCreateDTO.getIdentityPassportNumber())
+                .email(userCreateDTO.getEmail())
+                .phoneNumber(userCreateDTO.getPhoneNumber())
+                .gender(userCreateDTO.getGender())
+                .role(userCreateDTO.getRole())
+                .build();
 
-        return userToUserResponseDTOMapper.convert(saveUser);
+        return UserMapper.toUserCreateDTO(userRepository.save(newUser));
     }
-
 
     @Override
     @Transactional
-    public UserResponseDTO updateUser(UserUpdateRequestDTO userUpdateRequestDTO) {
-        userRepository.findById(userUpdateRequestDTO.getId())
-                .orElseThrow(() -> new ServiceException("Failed to update user no such user"));
+    public UserUpdateDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ServiceException(String.format(USER_ID_EXCEPTION_MESSAGE, userId)));
+        user.setFirstName(userUpdateDTO.getFirstName());
+        user.setLastName(userUpdateDTO.getLastName());
+        user.setDateOfBirth(userUpdateDTO.getDateOfBirth());
+        user.setIdentityPassportNumber(userUpdateDTO.getIdentityPassportNumber());
+        user.setEmail(userUpdateDTO.getEmail());
+        user.setPhoneNumber(userUpdateDTO.getPhoneNumber());
+        user.setGender(userUpdateDTO.getGender());
+        user.setRole(userUpdateDTO.getRole());
 
-        User user = userUpdateRequestDTOToUserMapper.convert(userUpdateRequestDTO);
-        User updateUser = userRepository.save(Objects.requireNonNull(user));
+        userRepository.save(user);
 
-        return userToUserResponseDTOMapper.convert(updateUser);
+        return UserMapper.toUserUpdateDTO(user);
     }
 
     @Override
     @Transactional
     public boolean deleteUser(Long userId) {
-        Optional<User> maybeUser = userRepository.findById(userId);
-        maybeUser.ifPresent(user -> userRepository.deleteById(user.getId()));
+        userRepository.deleteById(userId);
 
-        return maybeUser.isPresent();
+        return userRepository.findById(userId).isEmpty();
     }
 }

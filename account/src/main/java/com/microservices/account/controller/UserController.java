@@ -1,8 +1,9 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.request.UserUpdateRequestDTO;
-import com.microservices.account.dto.response.UserResponseDTO;
+import com.microservices.account.dto.create.UserCreateDTO;
+import com.microservices.account.dto.update.UserUpdateDTO;
+import com.microservices.account.dto.view.UserViewDTO;
+import com.microservices.account.entity.Role;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,50 +30,51 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable) {
-        Page<UserResponseDTO> users = userService.getAllUsers(pageable);
+    public ResponseEntity<Page<UserViewDTO>> getAllUsers(Pageable pageable) {
+        Page<UserViewDTO> users = userService.getAllUsers(pageable);
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/role")
-    public ResponseEntity<Page<UserResponseDTO>> getAllUsersByRole(@RequestParam(name = "role") String role, Pageable pageable) {
-        Page<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable);
+    public ResponseEntity<Page<UserViewDTO>> getAllUsersByRole(@RequestParam(name = "role") Role role, Pageable pageable) {
+        Page<UserViewDTO> users = userService.getAllUsersByRole(role, pageable);
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
-        Optional<UserResponseDTO> userResponseDTO = userService.getUserById(id);
-        return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "User with this id: " + id + " does not exist")
-                );
+    public ResponseEntity<UserViewDTO> getUserById(@PathVariable(name = "id") Long id) {
+        UserViewDTO userViewDTO = userService.getUserById(id);
+
+        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam(name = "email") String email) {
-        Optional<UserResponseDTO> userResponseDTO = userService.getUserByEmail(email);
-        return userResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "User with this email: " + email + " does not exist")
-                );
+    public ResponseEntity<UserViewDTO> getUserByEmail(@RequestParam(name = "email") String email) {
+        UserViewDTO userViewDTO = userService.getUserByEmail(email);
+
+        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        UserResponseDTO addUser = userService.createUser(userRequestDTO);
+    public ResponseEntity<UserCreateDTO> createUser(@RequestBody @Valid UserCreateDTO userCreateDTO) {
+        UserCreateDTO addUser = userService.createUser(userCreateDTO);
+
         return new ResponseEntity<>(addUser, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UserUpdateRequestDTO userUpdateRequestDTO) {
-        UserResponseDTO updatedUser = userService.updateUser(userUpdateRequestDTO);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserUpdateDTO> updateUser(@PathVariable(name = "id") Long id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+        UserUpdateDTO updateUser = userService.updateUser(id, userUpdateDTO);
+
+        return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(userService.deleteUser(id), HttpStatus.OK);
+        boolean deleteUser = userService.deleteUser(id);
+
+        return new ResponseEntity<>(deleteUser, HttpStatus.OK);
     }
 }

@@ -24,13 +24,12 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"id", "driverLicenseNumber", "category", "dateOfIssue", "expirationDate", "accountId"})
+        {"id", "driverLicenseNumber", "category", "dateOfIssue", "expirationDate", "account"})
 @Table(name = "driver_license", schema = "PUBLIC")
 public class DriverLicense {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "driver_license_number", nullable = false)

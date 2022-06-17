@@ -1,8 +1,8 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.request.CreditCardRequestDTO;
-import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
-import com.microservices.account.dto.response.CreditCardResponseDTO;
+import com.microservices.account.dto.create.CreditCardCreateDTO;
+import com.microservices.account.dto.update.CreditCardUpdateDTO;
+import com.microservices.account.dto.view.CreditCardViewDTO;
 import com.microservices.account.service.CreditCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,40 +28,45 @@ public class CreditCardController {
     private final CreditCardService creditCardService;
 
     @GetMapping
-    public ResponseEntity<Page<CreditCardResponseDTO>> getAllCreditCards(Pageable pageable) {
-        Page<CreditCardResponseDTO> cards = creditCardService.getAllCreditCards(pageable);
-        return new ResponseEntity<>(cards, HttpStatus.OK);
+    public ResponseEntity<Page<CreditCardViewDTO>> getAllCreditCards(Pageable pageable) {
+        Page<CreditCardViewDTO> creditCards = creditCardService.getAllCreditCards(pageable);
+
+        return new ResponseEntity<>(creditCards, HttpStatus.OK);
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<Page<CreditCardResponseDTO>> getAllCreditCardsByAccountId(@PathVariable(name = "id") Long id,Pageable pageable) {
-        Page<CreditCardResponseDTO> cards = creditCardService.getAllCreditCardsByAccountId(id, pageable);
-        return new ResponseEntity<>(cards, HttpStatus.OK);
+    public ResponseEntity<Page<CreditCardViewDTO>> getAllCreditCardsByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
+        Page<CreditCardViewDTO> creditCards = creditCardService.getAllCreditCardsByAccountId(id, pageable);
+
+        return new ResponseEntity<>(creditCards, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CreditCardResponseDTO> getCreditCardById(@PathVariable(name = "id") Long id) {
-        Optional<CreditCardResponseDTO> creditCardResponseDTO = creditCardService.getCreditCardById(id);
-        return creditCardResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "CreditCard with this id: " + id + " does not exist")
-                );
+    public ResponseEntity<CreditCardViewDTO> getCreditCardById(@PathVariable(name = "id") Long id) {
+        CreditCardViewDTO creditCardViewDTO = creditCardService.getCreditCardById(id);
+
+        return new ResponseEntity<>(creditCardViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CreditCardResponseDTO> createCreditCard(@RequestBody @Valid CreditCardRequestDTO creditCardRequestDTO) {
-        CreditCardResponseDTO addCreditCard = creditCardService.createCreditCard(creditCardRequestDTO);
+    public ResponseEntity<CreditCardCreateDTO> createCreditCard(@RequestBody @Valid CreditCardCreateDTO creditCardCreateDTO) {
+        CreditCardCreateDTO addCreditCard = creditCardService.createCreditCard(creditCardCreateDTO);
+
         return new ResponseEntity<>(addCreditCard, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<CreditCardResponseDTO> updateCreditCard(@RequestBody @Valid CreditCardUpdateRequestDTO creditCardUpdateRequestDTO) {
-        CreditCardResponseDTO updatedCreditCard = creditCardService.updateCreditCard(creditCardUpdateRequestDTO);
-        return new ResponseEntity<>(updatedCreditCard, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<CreditCardUpdateDTO> updateCreditCard(@PathVariable(name = "id") Long id,
+                                                                @RequestBody @Valid CreditCardUpdateDTO creditCardUpdateDTO) {
+        CreditCardUpdateDTO updateCreditCard = creditCardService.updateCreditCard(id, creditCardUpdateDTO);
+
+        return new ResponseEntity<>(updateCreditCard, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCreditCard(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(creditCardService.deleteCreditCard(id), HttpStatus.OK);
+        boolean deleteCreditCard = creditCardService.deleteCreditCard(id);
+
+        return new ResponseEntity<>(deleteCreditCard, HttpStatus.OK);
     }
 }

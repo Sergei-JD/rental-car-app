@@ -1,8 +1,8 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.request.AccountRequestDTO;
-import com.microservices.account.dto.request.AccountUpdateRequestDTO;
-import com.microservices.account.dto.response.AccountResponseDTO;
+import com.microservices.account.dto.create.AccountCreateDTO;
+import com.microservices.account.dto.update.AccountUpdateDTO;
+import com.microservices.account.dto.view.AccountViewDTO;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,43 +29,45 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<Page<AccountResponseDTO>> getAllAccounts(Pageable pageable) {
-        Page<AccountResponseDTO> accounts = accountService.getAllAccounts(pageable);
+    public ResponseEntity<Page<AccountViewDTO>> getAllAccounts(Pageable pageable) {
+        Page<AccountViewDTO> accounts = accountService.getAllAccounts(pageable);
+
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountResponseDTO> getAccountById(@PathVariable(name = "id") Long id) {
-        Optional<AccountResponseDTO> accountResponseDTO = accountService.getAccountById(id);
-        return accountResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "Account with this id: " + id + " does not exist")
-                );
+    public ResponseEntity<AccountViewDTO> getAccountById(@PathVariable(name = "id") Long id) {
+        AccountViewDTO accountViewDTO = accountService.getAccountById(id);
+
+        return new ResponseEntity<>(accountViewDTO, HttpStatus.OK);
     }
 
     @GetMapping("/nickname")
-    public ResponseEntity<AccountResponseDTO> getAccountByNickName(@RequestParam(name = "nickname") String nickName) {
-        Optional<AccountResponseDTO> accountResponseDTO = accountService.getAccountByNickName(nickName);
-        return accountResponseDTO.map(responseDTO -> new ResponseEntity<>(responseDTO, HttpStatus.OK))
-                .orElseThrow(() -> new RuntimeException(
-                        "Account with this nickName: " + nickName + " does not exist")
-                );
+    public ResponseEntity<AccountViewDTO> getAccountByNickName(@RequestParam(name = "nickname") String nickName) {
+        AccountViewDTO accountViewDTO = accountService.getAccountByNickName(nickName);
+
+        return new ResponseEntity<>(accountViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<AccountResponseDTO> createAccount(@RequestBody @Valid AccountRequestDTO accountRequestDTO) {
-        AccountResponseDTO addAccount = accountService.createAccount(accountRequestDTO);
+    public ResponseEntity<AccountCreateDTO> createAccount(@RequestBody @Valid AccountCreateDTO accountCreateDTO) {
+        AccountCreateDTO addAccount = accountService.createAccount(accountCreateDTO);
+
         return new ResponseEntity<>(addAccount, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<AccountResponseDTO> updateAccount(@RequestBody @Valid AccountUpdateRequestDTO accountUpdateRequestDTO) {
-        AccountResponseDTO updatedAccount = accountService.updateAccount(accountUpdateRequestDTO);
-        return new ResponseEntity<>(updatedAccount, HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<AccountUpdateDTO> updateAccount(@PathVariable(name = "id") Long id,
+                                                          @RequestBody @Valid AccountUpdateDTO accountUpdateDTO) {
+        AccountUpdateDTO updateAccount = accountService.updateAccount(id, accountUpdateDTO);
+
+        return new ResponseEntity<>(updateAccount, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteAccount(@PathVariable(name = "id") Long id) {
-        return new ResponseEntity<>(accountService.deleteAccount(id), HttpStatus.OK);
+        boolean deleteAccount = accountService.deleteAccount(id);
+
+        return new ResponseEntity<>(deleteAccount, HttpStatus.OK);
     }
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,15 +28,14 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"invoiceId", "amount", "startDateRent", "endDateRent",
-                "rentalPeriod", "paymentDate", "invoiceStatus", "orderId"})
+        {"id", "amount", "startDateRent", "endDateRent",
+                "rentalPeriod", "paymentDate", "invoiceStatus"})
 @Table(name = "invoice", schema = "PUBLIC")
 public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "invoice_id", nullable = false)
-    private Long invoiceId;
+    private Long id;
 
     @Column(name = "amount")
     private BigDecimal amount;
@@ -56,7 +56,8 @@ public class Invoice {
     @Column(name = "invoice_status", nullable = false)
     private InvoiceStatus invoiceStatus;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "order_id", nullable = false)
-    private Order orderId;
+    @OneToOne(fetch = FetchType.LAZY,
+            mappedBy = "invoice",
+            cascade = CascadeType.ALL)
+    private Order order;
 }

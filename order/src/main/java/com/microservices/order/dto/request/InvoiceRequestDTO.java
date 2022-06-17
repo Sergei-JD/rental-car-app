@@ -1,12 +1,10 @@
 package com.microservices.order.dto.request;
 
-import com.microservices.order.entity.Order;
 import com.microservices.order.entity.InvoiceStatus;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.Future;
@@ -14,7 +12,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -47,8 +44,4 @@ public class InvoiceRequestDTO {
     @NotEmpty(message = "'Invoice status' should not be empty")
     @Size(min = 2, max = 64, message = "'Invoice status' should be 'CREATED' or 'SENT' or 'PAID'")
     private InvoiceStatus invoiceStatus;
-
-    @NotEmpty(message = "'Order id' should not be empty")
-    @Positive(message = "'Order id' should be positive number")
-    private Order orderId;
 }

@@ -1,11 +1,9 @@
 package com.microservices.order.dto.response;
 
-import com.microservices.order.entity.Order;
 import com.microservices.order.entity.InvoiceStatus;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
@@ -17,7 +15,7 @@ import java.time.Instant;
 @AllArgsConstructor
 public class InvoiceResponseDTO {
 
-    private Long invoiceId;
+    private Long id;
 
     private BigDecimal amount;
 
@@ -30,6 +28,4 @@ public class InvoiceResponseDTO {
     private Instant paymentDate;
 
     private InvoiceStatus invoiceStatus;
-
-    private Order orderId;
 }

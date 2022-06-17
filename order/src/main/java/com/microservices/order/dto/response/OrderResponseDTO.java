@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class OrderResponseDTO {
 
-    private Long orderId;
+    private Long id;
 
     private Long accountId;
 

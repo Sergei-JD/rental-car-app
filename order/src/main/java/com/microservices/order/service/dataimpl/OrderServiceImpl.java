@@ -1,107 +1,67 @@
 package com.microservices.order.service.dataimpl;
 
-import com.microservices.order.dto.request.OrderRequestDTO;
-import com.microservices.order.dto.request.OrderUpdateRequestDTO;
-import com.microservices.order.dto.response.OrderResponseDTO;
 import com.microservices.order.entity.Order;
 import com.microservices.order.entity.OrderStatus;
-import com.microservices.order.mapper.request.OrderRequestDTOToOrderMapper;
-import com.microservices.order.mapper.request.OrderUpdateRequestDTOToOrderMapper;
-import com.microservices.order.mapper.response.OrderToOrderResponseDTOMapper;
 import com.microservices.order.repository.OrderRepository;
 import com.microservices.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import static com.microservices.order.util.ServiceData.ORDER_DELETE_EXCEPTION_MESSAGE;
+import static com.microservices.order.util.ServiceData.ORDER_ID_EXCEPTION_MESSAGE;
+import static com.microservices.order.util.ServiceData.ORDER_UPDATE_EXCEPTION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderRequestDTOToOrderMapper orderRequestDTOToOrderMapper;
-    private final OrderToOrderResponseDTOMapper orderToOrderResponseDTOMapper;
-    private final OrderUpdateRequestDTOToOrderMapper orderUpdateRequestDTOToOrderMapper;
 
     @Override
-    public Page<OrderResponseDTO> getAllOrders(Pageable pageable) {
-        Page<Order> pageOrders = orderRepository.findAll(pageable);
-
-        List<OrderResponseDTO> orders = pageOrders.stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(orders);
+    public Page<Order> getAllOrders(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     @Override
-    public Page<OrderResponseDTO> getAllOrdersByAccountId(Long accountId, Pageable pageable) {
-        Page<Order> pageOrders = orderRepository.findByAccountId(accountId, pageable);
-
-        List<OrderResponseDTO> orders = pageOrders.stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(orders);
+    public Page<Order> getAllOrdersByAccountId(Long accountId, Pageable pageable) {
+        return orderRepository.findByAccountId(accountId, pageable);
     }
 
     @Override
-    public Page<OrderResponseDTO> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
-        Page<Order> pageOrders = orderRepository.findAllByOrderStatus(orderStatus, pageable);
-
-        List<OrderResponseDTO> orders = pageOrders.stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
-
-        return new PageImpl<>(orders);
+    public Page<Order> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+        return orderRepository.findAllByOrderStatus(orderStatus, pageable);
     }
 
     @Override
-    public Optional<OrderResponseDTO> getOrderById(long orderId) {
-        OrderResponseDTO orderResponseDTO = null;
-
-        Optional<Order> order = orderRepository.findById(orderId);
-        if (order.isPresent()) {
-            orderResponseDTO = orderToOrderResponseDTOMapper.convert(order.get());
-        }
-
-        return Optional.ofNullable(orderResponseDTO);
+    public Order getOrderById(long orderId) {
+        return orderRepository.findById(orderId)
+                .orElseThrow(() -> new ServiceException(String.format(ORDER_ID_EXCEPTION_MESSAGE, orderId)));
     }
 
     @Override
     @Transactional
-    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
-        Order newOrder = orderRequestDTOToOrderMapper.convert(orderRequestDTO);
-        Order saveOrder = orderRepository.save(Objects.requireNonNull(newOrder));
-
-        return orderToOrderResponseDTOMapper.convert(saveOrder);
+    public Order createOrder(Order order) {
+        return orderRepository.save(order);
     }
 
     @Override
     @Transactional
-    public OrderResponseDTO updateOrder(OrderUpdateRequestDTO orderUpdateRequestDTO) {
-        orderRepository.findById(orderUpdateRequestDTO.getOrderId())
-                .orElseThrow(() -> new ServiceException("Failed to update order no such order"));
-
-        Order order = orderUpdateRequestDTOToOrderMapper.convert(orderUpdateRequestDTO);
-        Order updateOrder = orderRepository.save(Objects.requireNonNull(order));
-
-        return orderToOrderResponseDTOMapper.convert(updateOrder);
+    public Order updateOrder(Order order) {
+        Order maybeOrder = orderRepository.findById(order.getId())
+                .orElseThrow(() -> new ServiceException(ORDER_UPDATE_EXCEPTION_MESSAGE));
+        return orderRepository.save(maybeOrder);
     }
 
     @Override
     @Transactional
     public boolean deleteOrder(long orderId) {
-        orderRepository.deleteById(orderId);
-
+        Order maybeOrder = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ServiceException(String.format(ORDER_DELETE_EXCEPTION_MESSAGE, orderId)));
+        orderRepository.deleteById(maybeOrder.getId());
         return orderRepository.findById(orderId).isEmpty();
     }
 }

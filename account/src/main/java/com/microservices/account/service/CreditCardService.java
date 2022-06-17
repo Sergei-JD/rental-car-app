@@ -1,24 +1,22 @@
 package com.microservices.account.service;
 
-import com.microservices.account.dto.request.CreditCardRequestDTO;
-import com.microservices.account.dto.request.CreditCardUpdateRequestDTO;
-import com.microservices.account.dto.response.CreditCardResponseDTO;
+import com.microservices.account.dto.create.CreditCardCreateDTO;
+import com.microservices.account.dto.update.CreditCardUpdateDTO;
+import com.microservices.account.dto.view.CreditCardViewDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
-
 public interface CreditCardService {
 
-    Page<CreditCardResponseDTO> getAllCreditCards(Pageable pageable);
+    Page<CreditCardViewDTO> getAllCreditCards(Pageable pageable);
 
-    Page<CreditCardResponseDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
+    Page<CreditCardViewDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable);
 
-    Optional<CreditCardResponseDTO> getCreditCardById(Long creditCardId);
+    CreditCardViewDTO getCreditCardById(Long creditCardId);
 
-    CreditCardResponseDTO createCreditCard(CreditCardRequestDTO creditCardRequestDTO);
+    CreditCardCreateDTO createCreditCard(CreditCardCreateDTO creditCardCreateDTO);
 
-    CreditCardResponseDTO updateCreditCard(CreditCardUpdateRequestDTO creditCardUpdateRequestDTO);
+    CreditCardUpdateDTO updateCreditCard(Long creditCardId, CreditCardUpdateDTO creditCardUpdateDTO);
 
     boolean deleteCreditCard(Long creditCardId);
 }

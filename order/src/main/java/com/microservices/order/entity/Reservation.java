@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,18 +27,17 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
-        {"reservationId", "orderId", "carCatalogId", "pickUpDateTime", "dropOffDateTime", "reservationStatus"})
+        {"id", "order", "carCatalogId", "pickUpDateTime", "dropOffDateTime", "reservationStatus"})
 @Table(name = "reservation", schema = "PUBLIC")
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reservation_id", nullable = false)
-    private Long reservationId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order orderId;
+    private Order order;
 
     @Column(name = "car_catalog_id", nullable = false)
     private Long carCatalogId;
