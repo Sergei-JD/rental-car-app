@@ -1,15 +1,12 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.request.UpdateUserDTO;
-import com.microservices.account.dto.request.UserRequestDTO;
-import com.microservices.account.dto.response.UserResponseDTO;
+import com.microservices.account.dto.create.UserCreateDTO;
+import com.microservices.account.dto.update.UserUpdateDTO;
+import com.microservices.account.dto.view.UserViewDTO;
 import com.microservices.account.entity.Role;
-import com.microservices.account.entity.User;
-import com.microservices.account.mapper.request.UpdateUserDTOToUserMapper;
-import com.microservices.account.mapper.request.UserRequestDTOToUserMapper;
-import com.microservices.account.mapper.response.UserToUserResponseDTOMapper;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,60 +28,47 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final UserRequestDTOToUserMapper userRequestDTOToUserMapper;
-    private final UserToUserResponseDTOMapper userToUserResponseDTOMapper;
-    private final UpdateUserDTOToUserMapper updateUserDTOToUserMapper;
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(Pageable pageable) {
-        List<UserResponseDTO> users = userService.getAllUsers(pageable).stream()
-                .map(userToUserResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<UserViewDTO>> getAllUsers(Pageable pageable) {
+        Page<UserViewDTO> users = userService.getAllUsers(pageable);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/role")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsersByRole(@RequestParam(name = "role") Role role, Pageable pageable) {
-        List<UserResponseDTO> users = userService.getAllUsersByRole(role, pageable).stream()
-                .map(userToUserResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<UserViewDTO>> getAllUsersByRole(@RequestParam(name = "role") Role role, Pageable pageable) {
+        Page<UserViewDTO> users = userService.getAllUsersByRole(role, pageable);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable(name = "id") Long id) {
-        User user = userService.getUserById(id);
-        UserResponseDTO userResponseDTO = userToUserResponseDTOMapper.convert(user);
+    public ResponseEntity<UserViewDTO> getUserById(@PathVariable(name = "id") Long id) {
+        UserViewDTO userViewDTO = userService.getUserById(id);
 
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<UserResponseDTO> getUserByEmail(@RequestParam(name = "email") String email) {
-        User user = userService.getUserByEmail(email);
-        UserResponseDTO userResponseDTO = userToUserResponseDTOMapper.convert(user);
+    public ResponseEntity<UserViewDTO> getUserByEmail(@RequestParam(name = "email") String email) {
+        UserViewDTO userViewDTO = userService.getUserByEmail(email);
 
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
-        User user = userRequestDTOToUserMapper.convert(userRequestDTO);
-        User createdUser = userService.createUser(user);
-        UserResponseDTO addUser = userToUserResponseDTOMapper.convert(createdUser);
+    public ResponseEntity<UserCreateDTO> createUser(@RequestBody @Valid UserCreateDTO userCreateDTO) {
+        UserCreateDTO addUser = userService.createUser(userCreateDTO);
 
         return new ResponseEntity<>(addUser, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<UserResponseDTO> updateUser(@RequestBody @Valid UpdateUserDTO updateUserDTO) {
-        User user = updateUserDTOToUserMapper.convert(updateUserDTO);
-        User updateUser = userService.updateUser(user);
-        UserResponseDTO updatedUser = userToUserResponseDTOMapper.convert(updateUser);
+    @PutMapping("/{id}")
+    public ResponseEntity<UserUpdateDTO> updateUser(@PathVariable(name = "id") Long id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
+        UserUpdateDTO updateUser = userService.updateUser(id, userUpdateDTO);
 
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        return new ResponseEntity<>(updateUser, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

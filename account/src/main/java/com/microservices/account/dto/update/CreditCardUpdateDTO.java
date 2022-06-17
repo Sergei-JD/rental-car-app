@@ -1,6 +1,5 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.update;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.microservices.account.entity.CreditCardType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +11,6 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -23,11 +21,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateCreditCardDTO {
-
-    @NotEmpty(message = "'Credit card id' should not be empty")
-    @Positive(message = "'credit card id' should be positive number")
-    private Long id;
+public class CreditCardUpdateDTO {
 
     @NotEmpty(message = "'Credit card type' should not be empty")
     @Size(min = 2, max = 128, message = "'Credit card type' should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")
@@ -45,7 +39,6 @@ public class UpdateCreditCardDTO {
     @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
 
-    @JsonProperty("password")
     @NotEmpty(message = "'CVV-code' should not be empty")
     @Pattern(regexp = "\\d{3}", message = "'CVV-code' should be valid")
     private String cvvCode;

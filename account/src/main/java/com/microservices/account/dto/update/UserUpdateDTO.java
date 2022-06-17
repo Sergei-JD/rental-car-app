@@ -1,4 +1,4 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.update;
 
 import com.microservices.account.entity.Gender;
 import com.microservices.account.entity.Role;
@@ -19,7 +19,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDTO {
+public class UserUpdateDTO {
 
     @NotEmpty(message = "'First name' should not be empty")
     @Size(min = 2, max = 256, message = "'First name' should be between 2 and 256 characters")

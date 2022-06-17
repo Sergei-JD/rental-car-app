@@ -1,4 +1,4 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.create;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.microservices.account.entity.CreditCardType;
@@ -22,7 +22,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCardRequestDTO {
+public class CreditCardCreateDTO {
 
     @NotEmpty(message = "'Credit card type' should not be empty")
     @Size(min = 2, max = 128, message = "'Credit card type' should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")

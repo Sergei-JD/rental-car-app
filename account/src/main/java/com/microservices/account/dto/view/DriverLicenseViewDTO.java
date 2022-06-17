@@ -1,4 +1,4 @@
-package com.microservices.account.dto.response;
+package com.microservices.account.dto.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseResponseDTO {
+public class DriverLicenseViewDTO {
 
     private Long id;
 

@@ -1,23 +1,25 @@
 package com.microservices.account.service;
 
+import com.microservices.account.dto.create.UserCreateDTO;
+import com.microservices.account.dto.update.UserUpdateDTO;
+import com.microservices.account.dto.view.UserViewDTO;
 import com.microservices.account.entity.Role;
-import com.microservices.account.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserService {
 
-    Page<User> getAllUsers(Pageable pageable);
+    Page<UserViewDTO> getAllUsers(Pageable pageable);
 
-    Page<User> getAllUsersByRole(Role role, Pageable pageable);
+    Page<UserViewDTO> getAllUsersByRole(Role role, Pageable pageable);
 
-    User getUserById(Long userId);
+    UserViewDTO getUserById(Long userId);
 
-    User getUserByEmail(String email);
+    UserViewDTO getUserByEmail(String email);
 
-    User createUser(User user);
+    UserCreateDTO createUser(UserCreateDTO userCreateDTO);
 
-    User updateUser(User user);
+    UserUpdateDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO);
 
     boolean deleteUser(Long userId);
 }

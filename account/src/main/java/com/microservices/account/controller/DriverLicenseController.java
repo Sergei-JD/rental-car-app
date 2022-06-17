@@ -1,14 +1,11 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.request.DriverLicenseRequestDTO;
-import com.microservices.account.dto.request.UpdateDriverLicenseDTO;
-import com.microservices.account.dto.response.DriverLicenseResponseDTO;
-import com.microservices.account.entity.DriverLicense;
-import com.microservices.account.mapper.request.DriverLicenseRequestDTOToDriverLicenseMapper;
-import com.microservices.account.mapper.request.UpdateDriverLicenseDTOToDriverLicenseMapper;
-import com.microservices.account.mapper.response.DriverLicenseToDriverLicenseResponseDTOMapper;
+import com.microservices.account.dto.create.DriverLicenseCreateDTO;
+import com.microservices.account.dto.update.DriverLicenseUpdateDTO;
+import com.microservices.account.dto.view.DriverLicenseViewDTO;
 import com.microservices.account.service.DriverLicenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,52 +26,41 @@ import java.util.List;
 public class DriverLicenseController {
 
     private final DriverLicenseService driverLicenseService;
-    private final DriverLicenseRequestDTOToDriverLicenseMapper driverLicenseRequestDTOToDriverLicenseMapper;
-    private final DriverLicenseToDriverLicenseResponseDTOMapper driverLicenseToDriverLicenseResponseDTOMapper;
-    private final UpdateDriverLicenseDTOToDriverLicenseMapper updateDriverLicenseDTOToDriverLicenseMapper;
 
     @GetMapping
-    public ResponseEntity<List<DriverLicenseResponseDTO>> getAllDriverLicenses(Pageable pageable) {
-        List<DriverLicenseResponseDTO> driverLicenses = driverLicenseService.getAllDriverLicenses(pageable).stream()
-                .map(driverLicenseToDriverLicenseResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<DriverLicenseViewDTO>> getAllDriverLicenses(Pageable pageable) {
+        Page<DriverLicenseViewDTO> driverLicenses = driverLicenseService.getAllDriverLicenses(pageable);
 
         return new ResponseEntity<>(driverLicenses, HttpStatus.OK);
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<List<DriverLicenseResponseDTO>> getAllDriverLicensesByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
-        List<DriverLicenseResponseDTO> licences = driverLicenseService.getAllDriverLicenseByAccountId(id, pageable).stream()
-                .map(driverLicenseToDriverLicenseResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<DriverLicenseViewDTO>> getAllDriverLicensesByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
+        Page<DriverLicenseViewDTO> driverLicenses = driverLicenseService.getAllDriverLicenseByAccountId(id, pageable);
 
-        return new ResponseEntity<>(licences, HttpStatus.OK);
+        return new ResponseEntity<>(driverLicenses, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DriverLicenseResponseDTO> getDriverLicenseById(@PathVariable(name = "id") Long id) {
-        DriverLicense driverLicense = driverLicenseService.getDriverLicenseById(id);
-        DriverLicenseResponseDTO driverLicenseResponseDTO = driverLicenseToDriverLicenseResponseDTOMapper.convert(driverLicense);
+    public ResponseEntity<DriverLicenseViewDTO> getDriverLicenseById(@PathVariable(name = "id") Long id) {
+        DriverLicenseViewDTO driverLicenseViewDTO = driverLicenseService.getDriverLicenseById(id);
 
-        return new ResponseEntity<>(driverLicenseResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(driverLicenseViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<DriverLicenseResponseDTO> createDriverLicense(@RequestBody @Valid DriverLicenseRequestDTO driverLicenseRequestDTO) {
-        DriverLicense driverLicense = driverLicenseRequestDTOToDriverLicenseMapper.convert(driverLicenseRequestDTO);
-        DriverLicense createdDriverLicense = driverLicenseService.createDriverLicense(driverLicense);
-        DriverLicenseResponseDTO addDriverLicense = driverLicenseToDriverLicenseResponseDTOMapper.convert(createdDriverLicense);
+    public ResponseEntity<DriverLicenseCreateDTO> createDriverLicense(@RequestBody @Valid DriverLicenseCreateDTO driverLicenseCreateDTO) {
+        DriverLicenseCreateDTO addDriverLicense = driverLicenseService.createDriverLicense(driverLicenseCreateDTO);
 
         return new ResponseEntity<>(addDriverLicense, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<DriverLicenseResponseDTO> updateDriverLicense(@RequestBody @Valid UpdateDriverLicenseDTO updateDriverLicenseDTO) {
-        DriverLicense driverLicense = updateDriverLicenseDTOToDriverLicenseMapper.convert(updateDriverLicenseDTO);
-        DriverLicense updateDriverLicense = driverLicenseService.updateDriverLicense(driverLicense);
-        DriverLicenseResponseDTO updatedDriverLicense = driverLicenseToDriverLicenseResponseDTOMapper.convert(updateDriverLicense);
+    @PutMapping("/{id}")
+    public ResponseEntity<DriverLicenseUpdateDTO> updateDriverLicense(@PathVariable(name = "id") Long id,
+                                                                      @RequestBody @Valid DriverLicenseUpdateDTO driverLicenseUpdateDTO) {
+        DriverLicenseUpdateDTO updateDriverLicense = driverLicenseService.updateDriverLicense(id, driverLicenseUpdateDTO);
 
-        return new ResponseEntity<>(updatedDriverLicense, HttpStatus.OK);
+        return new ResponseEntity<>(updateDriverLicense, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

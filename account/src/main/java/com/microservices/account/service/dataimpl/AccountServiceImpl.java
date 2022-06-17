@@ -1,19 +1,24 @@
 package com.microservices.account.service.dataimpl;
 
+import com.microservices.account.dto.create.AccountCreateDTO;
+import com.microservices.account.dto.update.AccountUpdateDTO;
+import com.microservices.account.dto.view.AccountViewDTO;
 import com.microservices.account.entity.Account;
+import com.microservices.account.mapper.AccountMapper;
 import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.microservices.account.util.ServiceData.ACCOUNT_DELETE_EXCEPTION_MESSAGE;
+import java.util.List;
+
 import static com.microservices.account.util.ServiceData.ACCOUNT_ID_EXCEPTION_MESSAGE;
 import static com.microservices.account.util.ServiceData.ACCOUNT_NICKNAME_EXCEPTION_MESSAGE;
-import static com.microservices.account.util.ServiceData.ACCOUNT_UPDATE_EXCEPTION_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -22,42 +27,61 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
 
     @Override
-    public Page<Account> getAllAccounts(Pageable pageable) {
-        return accountRepository.findAll(pageable);
+    public Page<AccountViewDTO> getAllAccounts(Pageable pageable) {
+        Page<Account> pageAccounts = accountRepository.findAll(pageable);
+
+        List<AccountViewDTO> accounts = pageAccounts.stream()
+                .map(AccountMapper::toAccountViewDTO)
+                .toList();
+
+        return new PageImpl<>(accounts);
     }
 
     @Override
-    public Account getAccountById(Long accountId) {
-        return accountRepository.findById(accountId)
+    public AccountViewDTO getAccountById(Long accountId) {
+        Account account = accountRepository.findById(accountId)
                 .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_ID_EXCEPTION_MESSAGE, accountId)));
+
+        return AccountMapper.toAccountViewDTO(account);
     }
 
     @Override
-    public Account getAccountByNickName(String nickName) {
-        return accountRepository.findAccountByNickName(nickName)
+    public AccountViewDTO getAccountByNickName(String nickName) {
+        Account account = accountRepository.findAccountByNickName(nickName)
                 .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_NICKNAME_EXCEPTION_MESSAGE, nickName)));
+
+        return AccountMapper.toAccountViewDTO(account);
     }
 
     @Override
     @Transactional
-    public Account createAccount(Account account) {
-        return accountRepository.save(account);
+    public AccountCreateDTO createAccount(AccountCreateDTO accountCreateDTO) {
+        Account newAccount = Account.builder()
+                .nickName(accountCreateDTO.getNickName())
+                .password(accountCreateDTO.getPassword())
+                .build();
+
+        return AccountMapper.toAccountCreateDTO(accountRepository.save(newAccount));
     }
 
     @Override
     @Transactional
-    public Account updateAccount(Account account) {
-        Account maybeAccount = accountRepository.findById(account.getId())
-                .orElseThrow(() -> new ServiceException(ACCOUNT_UPDATE_EXCEPTION_MESSAGE));
-        return accountRepository.save(maybeAccount);
+    public AccountUpdateDTO updateAccount(Long accountId, AccountUpdateDTO accountUpdateDTO) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_ID_EXCEPTION_MESSAGE, accountId)));
+        account.setNickName(accountUpdateDTO.getNickName());
+        account.setPassword(accountUpdateDTO.getPassword());
+
+        accountRepository.save(account);
+
+        return AccountMapper.toAccountUpdateDTO(account);
     }
 
     @Override
     @Transactional
     public boolean deleteAccount(Long accountId) {
-        Account maybeAccount = accountRepository.findById(accountId)
-                .orElseThrow(() -> new ServiceException(String.format(ACCOUNT_DELETE_EXCEPTION_MESSAGE, accountId)));
-        accountRepository.deleteById(maybeAccount.getId());
+        accountRepository.deleteById(accountId);
+
         return accountRepository.findById(accountId).isEmpty();
     }
 }

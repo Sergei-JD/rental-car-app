@@ -1,4 +1,4 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.update;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountRequestDTO {
+public class AccountUpdateDTO {
 
     @NotEmpty(message = "'Nick name' name should not be empty")
     @Size(min = 2, max = 256, message = "'Nick name' should be between 2 and 256 characters")

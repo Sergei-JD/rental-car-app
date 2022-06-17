@@ -1,4 +1,4 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.create;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseRequestDTO {
+public class DriverLicenseCreateDTO {
 
     @NotEmpty(message = "'Driver license lumber' should not be empty")
     @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")

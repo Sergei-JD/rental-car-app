@@ -1,4 +1,4 @@
-package com.microservices.account.dto.request;
+package com.microservices.account.dto.update;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,11 +18,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateDriverLicenseDTO {
-
-    @NotEmpty(message = "'Driver license id' should not be empty")
-    @Positive(message = "'Driver license id' should be positive number")
-    private Long id;
+public class DriverLicenseUpdateDTO {
 
     @NotEmpty(message = "'Driver license lumber' should not be empty")
     @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")

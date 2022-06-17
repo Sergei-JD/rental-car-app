@@ -1,4 +1,4 @@
-package com.microservices.account.dto.response;
+package com.microservices.account.dto.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountResponseDTO {
+public class AccountViewDTO {
 
     private Long id;
 

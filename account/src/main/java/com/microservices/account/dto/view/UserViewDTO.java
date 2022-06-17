@@ -1,19 +1,19 @@
-package com.microservices.account.dto.response;
+package com.microservices.account.dto.view;
 
 import com.microservices.account.entity.Gender;
 import com.microservices.account.entity.Role;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.Instant;
 
-@Data
+@Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDTO {
+public class UserViewDTO {
 
     private Long id;
 

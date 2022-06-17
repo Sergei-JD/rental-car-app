@@ -46,14 +46,12 @@ public class Account {
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "account",
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH},
-            orphanRemoval = true)
+                    CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<CreditCard> creditCards;
 
     @OneToMany(fetch = FetchType.LAZY,
             mappedBy = "account",
             cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH},
-            orphanRemoval = true)
+                    CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<DriverLicense> driverLicenses;
 }

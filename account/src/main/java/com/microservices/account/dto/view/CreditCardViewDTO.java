@@ -1,4 +1,4 @@
-package com.microservices.account.dto.response;
+package com.microservices.account.dto.view;
 
 import com.microservices.account.entity.CreditCardType;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCardResponseDTO {
+public class CreditCardViewDTO {
 
     private Long id;
 
