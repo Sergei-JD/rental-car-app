@@ -1,6 +1,8 @@
 package com.microservices.car.service;
 
-import com.microservices.car.entity.CarCatalog;
+import com.microservices.car.dto.create.CarCatalogCreateDTO;
+import com.microservices.car.dto.update.CarCatalogUpdateDTO;
+import com.microservices.car.dto.view.CarCatalogViewDTO;
 import com.microservices.car.entity.CarStatus;
 import com.microservices.car.entity.CarType;
 import org.springframework.data.domain.Page;
@@ -10,25 +12,25 @@ import java.math.BigDecimal;
 
 public interface CarCatalogService {
 
-    Page<CarCatalog> getAllCarCatalogs(Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogs(Pageable pageable);
 
-    CarCatalog getAllCarCatalogByRegistrationNumber(String registrationNumber);
+    CarCatalogViewDTO getAllCarCatalogByRegistrationNumber(String registrationNumber);
 
-    Page<CarCatalog> getAllCarCatalogByCarType(CarType carType, Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogByCarType(CarType carType, Pageable pageable);
 
-    Page<CarCatalog> getAllCarCatalogByMake(String make, Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogByMake(String make, Pageable pageable);
 
-    Page<CarCatalog> getAllCarCatalogByModel(String model, Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogByModel(String model, Pageable pageable);
 
-    Page<CarCatalog> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable);
 
-    Page<CarCatalog> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable);
+    Page<CarCatalogViewDTO> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable);
 
-    CarCatalog getCarCatalogById(long carCatalogId);
+    CarCatalogViewDTO getCarCatalogById(Long carCatalogId);
 
-    CarCatalog createCarCatalog(CarCatalog carCatalog);
+    CarCatalogCreateDTO createCarCatalog(CarCatalogCreateDTO carCatalogCreateDTO);
 
-    CarCatalog updateCarCatalog(CarCatalog carCatalog);
+    CarCatalogUpdateDTO updateCarCatalog(Long carCatalogId, CarCatalogUpdateDTO carCatalogUpdateDTO);
 
     boolean deleteCarCatalog(long carCatalogId);
 }

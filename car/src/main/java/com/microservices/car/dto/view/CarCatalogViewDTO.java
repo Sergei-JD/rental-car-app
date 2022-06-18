@@ -1,11 +1,10 @@
-package com.microservices.car.dto.response;
+package com.microservices.car.dto.view;
 
-import com.microservices.car.entity.CarType;
 import com.microservices.car.entity.CarStatus;
-
+import com.microservices.car.entity.CarType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
@@ -14,7 +13,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCatalogResponseDTO {
+public class CarCatalogViewDTO {
 
     private Long id;
 

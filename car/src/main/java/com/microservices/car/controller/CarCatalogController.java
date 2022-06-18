@@ -1,16 +1,13 @@
 package com.microservices.car.controller;
 
-import com.microservices.car.dto.request.CarCatalogRequestDTO;
-import com.microservices.car.dto.request.UpdateCarCatalogDTO;
-import com.microservices.car.dto.response.CarCatalogResponseDTO;
-import com.microservices.car.entity.CarCatalog;
+import com.microservices.car.dto.create.CarCatalogCreateDTO;
+import com.microservices.car.dto.update.CarCatalogUpdateDTO;
+import com.microservices.car.dto.view.CarCatalogViewDTO;
 import com.microservices.car.entity.CarStatus;
 import com.microservices.car.entity.CarType;
-import com.microservices.car.mapper.request.CarCatalogRequestDTOToCarCatalogMapper;
-import com.microservices.car.mapper.request.UpdateCarCatalogDTOToCarCatalogMapper;
-import com.microservices.car.mapper.response.CarCatalogToCarCatalogResponseDTOMapper;
 import com.microservices.car.service.CarCatalogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,95 +30,75 @@ import java.util.List;
 public class CarCatalogController {
 
     private final CarCatalogService carCatalogService;
-    private final CarCatalogRequestDTOToCarCatalogMapper carCatalogRequestDTOToCarCatalogMapper;
-    private final CarCatalogToCarCatalogResponseDTOMapper carCatalogToCarCatalogResponseDTOMapper;
-    private final UpdateCarCatalogDTOToCarCatalogMapper updateCarCatalogDTOToCarCatalogMapper;
 
     @GetMapping
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogs(Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogs(pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogs(Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogs(pageable);
+
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CarCatalogResponseDTO> getCarCatalogById(@PathVariable(name = "id") Long id) {
-        CarCatalog carCatalog = carCatalogService.getCarCatalogById(id);
-        CarCatalogResponseDTO carCatalogResponseDTO = carCatalogToCarCatalogResponseDTOMapper.convert(carCatalog);
+    public ResponseEntity<CarCatalogViewDTO> getCarCatalogById(@PathVariable(name = "id") Long id) {
+        CarCatalogViewDTO carCatalogViewDTO = carCatalogService.getCarCatalogById(id);
 
-        return new ResponseEntity<>(carCatalogResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogViewDTO, HttpStatus.OK);
     }
 
     @GetMapping("/reg-num")
-    public ResponseEntity<CarCatalogResponseDTO> getAllCarCatalogByRegistrationNumber(@RequestParam(name = "reg-num") String registrationNumber) {
-        CarCatalog carCatalog = carCatalogService.getAllCarCatalogByRegistrationNumber(registrationNumber);
-        CarCatalogResponseDTO carCatalogResponseDTO = carCatalogToCarCatalogResponseDTOMapper.convert(carCatalog);
+    public ResponseEntity<CarCatalogViewDTO> getAllCarCatalogByRegistrationNumber(@RequestParam(name = "reg-num") String registrationNumber) {
+        CarCatalogViewDTO carCatalogViewDTO = carCatalogService.getAllCarCatalogByRegistrationNumber(registrationNumber);
 
-        return new ResponseEntity<>(carCatalogResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogViewDTO, HttpStatus.OK);
     }
 
     @GetMapping("/type")
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogByCarType(@RequestParam(name = "type") CarType carType, Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogByCarType(carType, pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogByCarType(@RequestParam(name = "type") CarType carType, Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogByCarType(carType, pageable);
 
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @GetMapping("/make")
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogByMake(@RequestParam(name = "make") String make, Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogByMake(make, pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogByMake(@RequestParam(name = "make") String make, Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogByMake(make, pageable);
 
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @GetMapping("/model")
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogByModel(@RequestParam(name = "model") String model, Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogByModel(model, pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogByModel(@RequestParam(name = "model") String model, Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogByModel(model, pageable);
 
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @GetMapping("/price")
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogByPrice(@RequestParam(name = "price") BigDecimal price, Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogByPrice(price, pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogByPrice(@RequestParam(name = "price") BigDecimal price, Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogByPrice(price, pageable);
 
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<CarCatalogResponseDTO>> getAllCarCatalogCarStatus(@RequestParam(name = "status") CarStatus carStatus, Pageable pageable) {
-        List<CarCatalogResponseDTO> cars = carCatalogService.getAllCarCatalogCarStatus(carStatus, pageable).stream()
-                .map(carCatalogToCarCatalogResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<CarCatalogViewDTO>> getAllCarCatalogCarStatus(@RequestParam(name = "status") CarStatus carStatus, Pageable pageable) {
+        Page<CarCatalogViewDTO> carCatalogs = carCatalogService.getAllCarCatalogCarStatus(carStatus, pageable);
 
-        return new ResponseEntity<>(cars, HttpStatus.OK);
+        return new ResponseEntity<>(carCatalogs, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CarCatalogResponseDTO> createCarCatalog(@RequestBody @Valid CarCatalogRequestDTO carCatalogRequestDTO) {
-        CarCatalog carCatalog = carCatalogRequestDTOToCarCatalogMapper.convert(carCatalogRequestDTO);
-        CarCatalog createdCarCatalog = carCatalogService.createCarCatalog(carCatalog);
-        CarCatalogResponseDTO addCarCatalog = carCatalogToCarCatalogResponseDTOMapper.convert(createdCarCatalog);
+    public ResponseEntity<CarCatalogCreateDTO> createCarCatalog(@RequestBody @Valid CarCatalogCreateDTO carCatalogCreateDTO) {
+        CarCatalogCreateDTO addCarCatalog = carCatalogService.createCarCatalog(carCatalogCreateDTO);
 
         return new ResponseEntity<>(addCarCatalog, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<CarCatalogResponseDTO> updateCarCatalog(@RequestBody UpdateCarCatalogDTO updateCarCatalogDTO) {
-        CarCatalog carCatalog = updateCarCatalogDTOToCarCatalogMapper.convert(updateCarCatalogDTO);
-        CarCatalog updateCarCatalog = carCatalogService.updateCarCatalog(carCatalog);
-        CarCatalogResponseDTO updatedCarCatalog = carCatalogToCarCatalogResponseDTOMapper.convert(updateCarCatalog);
+    @PutMapping("/{id}")
+    public ResponseEntity<CarCatalogUpdateDTO> updateCarCatalog(@PathVariable(name = "id") Long id, @RequestBody CarCatalogUpdateDTO CarCatalogUpdateDTO) {
+        CarCatalogUpdateDTO updateCarCatalog = carCatalogService.updateCarCatalog(id, CarCatalogUpdateDTO);
 
-        return new ResponseEntity<>(updatedCarCatalog, HttpStatus.OK);
+        return new ResponseEntity<>(updateCarCatalog, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

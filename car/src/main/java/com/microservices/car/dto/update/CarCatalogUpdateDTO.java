@@ -1,19 +1,17 @@
-package com.microservices.car.dto.request;
+package com.microservices.car.dto.update;
 
-import com.microservices.car.entity.CarType;
 import com.microservices.car.entity.CarStatus;
-
+import com.microservices.car.entity.CarType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
-
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
 @Setter
@@ -21,7 +19,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCatalogRequestDTO {
+public class CarCatalogUpdateDTO {
 
     @NotEmpty(message = "'Registration number' name should not be empty")
     @Pattern(regexp = "\\d{8}", message = "'Registration number' should be valid")
