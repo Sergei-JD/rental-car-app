@@ -1,17 +1,16 @@
-package com.microservices.order.dto.response;
+package com.microservices.order.dto.view;
 
 import com.microservices.order.entity.OrderStatus;
-
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderResponseDTO {
+public class OrderViewDTO {
 
     private Long id;
 

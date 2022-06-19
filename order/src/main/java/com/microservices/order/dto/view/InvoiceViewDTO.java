@@ -1,4 +1,4 @@
-package com.microservices.order.dto.response;
+package com.microservices.order.dto.view;
 
 import com.microservices.order.entity.InvoiceStatus;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceResponseDTO {
+public class InvoiceViewDTO {
 
     private Long id;
 

@@ -1,15 +1,12 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.request.ReservationRequestDTO;
-import com.microservices.order.dto.request.UpdateReservationDTO;
-import com.microservices.order.dto.response.ReservationResponseDTO;
-import com.microservices.order.entity.Reservation;
+import com.microservices.order.dto.create.ReservationCreateDTO;
+import com.microservices.order.dto.update.ReservationUpdateDTO;
+import com.microservices.order.dto.view.ReservationViewDTO;
 import com.microservices.order.entity.ReservationStatus;
-import com.microservices.order.mapper.request.ReservationRequestDTOToReservationMapper;
-import com.microservices.order.mapper.request.UpdateReservationDTOToReservationMapper;
-import com.microservices.order.mapper.response.ReservationToReservationResponseDTOMapper;
 import com.microservices.order.service.ReservationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,65 +28,58 @@ import java.util.List;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final ReservationRequestDTOToReservationMapper reservationRequestDTOToReservationMapper;
-    private final ReservationToReservationResponseDTOMapper reservationToReservationResponseDTOMapper;
-    private final UpdateReservationDTOToReservationMapper updateReservationDTOToReservationMapper;
 
     @GetMapping
-    public ResponseEntity<List<ReservationResponseDTO>> getAllReservations(Pageable pageable) {
-        List<ReservationResponseDTO> reservations = reservationService.getAllReservations(pageable).stream()
-                .map(reservationToReservationResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<ReservationViewDTO>> getAllReservations(Pageable pageable) {
+        Page<ReservationViewDTO> reservations = reservationService.getAllReservations(pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<ReservationResponseDTO>> getAllReservationsStatus(@RequestParam(name = "status") ReservationStatus reservationStatus, Pageable pageable) {
-        List<ReservationResponseDTO> reservations = reservationService.getAllReservationsStatus(reservationStatus, pageable).stream()
-                .map(reservationToReservationResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<ReservationViewDTO>> getAllReservationsStatus(
+            @RequestParam(name = "status") ReservationStatus reservationStatus, Pageable pageable) {
+        Page<ReservationViewDTO> reservations = reservationService.getAllReservationsStatus(reservationStatus, pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<List<ReservationResponseDTO>> getAllReservationByOrderId(@PathVariable(name = "id") Long id, Pageable pageable) {
-        List<ReservationResponseDTO> reservations = reservationService.getAllReservationByOrderId(id, pageable).stream()
-                .map(reservationToReservationResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<ReservationViewDTO>> getAllReservationByOrderId(
+            @PathVariable(name = "id") Long id, Pageable pageable) {
+        Page<ReservationViewDTO> reservations = reservationService.getAllReservationByOrderId(id, pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponseDTO> getReservationById(@PathVariable(name = "id") Long id) {
-        Reservation reservation = reservationService.getReservationById(id);
-        ReservationResponseDTO reservationResponseDTO = reservationToReservationResponseDTOMapper.convert(reservation);
+    public ResponseEntity<ReservationViewDTO> getReservationById(
+            @PathVariable(name = "id") Long id) {
+        ReservationViewDTO reservationViewDTO = reservationService.getReservationById(id);
 
-        return new ResponseEntity<>(reservationResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(reservationViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponseDTO> createReservation(@RequestBody @Valid ReservationRequestDTO reservationRequestDTO) {
-        Reservation reservation = reservationRequestDTOToReservationMapper.convert(reservationRequestDTO);
-        Reservation createdReservation = reservationService.createReservation(reservation);
-        ReservationResponseDTO addReservation = reservationToReservationResponseDTOMapper.convert(createdReservation);
+    public ResponseEntity<ReservationCreateDTO> createReservation(
+            @RequestBody @Valid ReservationCreateDTO reservationCreateDTO) {
+        ReservationCreateDTO addReservation = reservationService.createReservation(reservationCreateDTO);
 
         return new ResponseEntity<>(addReservation, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ReservationResponseDTO> updateReservation(@RequestBody @Valid UpdateReservationDTO updateReservationDTO) {
-        Reservation reservation = updateReservationDTOToReservationMapper.convert(updateReservationDTO);
-        Reservation updateReservation = reservationService.updateReservation(reservation);
-        ReservationResponseDTO updatedReservation = reservationToReservationResponseDTOMapper.convert(updateReservation);
+    @PutMapping("/{id}")
+    public ResponseEntity<ReservationUpdateDTO> updateReservation(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid ReservationUpdateDTO reservationUpdateDTO) {
+        ReservationUpdateDTO updateReservation = reservationService.updateReservation(id, reservationUpdateDTO);
 
-        return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
+        return new ResponseEntity<>(updateReservation, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteReservation(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Boolean> deleteReservation(
+            @PathVariable(name = "id") Long id) {
         boolean deleteReservation = reservationService.deleteReservation(id);
 
         return new ResponseEntity<>(deleteReservation, HttpStatus.OK);

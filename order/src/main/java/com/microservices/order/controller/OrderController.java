@@ -1,15 +1,12 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.request.OrderRequestDTO;
-import com.microservices.order.dto.request.UpdateOrderDTO;
-import com.microservices.order.dto.response.OrderResponseDTO;
-import com.microservices.order.entity.Order;
+import com.microservices.order.dto.create.OrderCreateDTO;
+import com.microservices.order.dto.update.OrderUpdateDTO;
+import com.microservices.order.dto.view.OrderViewDTO;
 import com.microservices.order.entity.OrderStatus;
-import com.microservices.order.mapper.request.OrderRequestDTOToOrderMapper;
-import com.microservices.order.mapper.request.UpdateOrderDTOToOrderMapper;
-import com.microservices.order.mapper.response.OrderToOrderResponseDTOMapper;
 import com.microservices.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,65 +28,58 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderRequestDTOToOrderMapper orderRequestDTOToOrderMapper;
-    private final OrderToOrderResponseDTOMapper orderToOrderResponseDTOMapper;
-    private final UpdateOrderDTOToOrderMapper updateOrderDTOToOrderMapper;
 
     @GetMapping
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrders(Pageable pageable) {
-        List<OrderResponseDTO> orders = orderService.getAllOrders(pageable).stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<OrderViewDTO>> getAllOrders(Pageable pageable) {
+        Page<OrderViewDTO> creditOrders = orderService.getAllOrders(pageable);
 
-        return new ResponseEntity<>(orders, HttpStatus.OK);
+        return new ResponseEntity<>(creditOrders, HttpStatus.OK);
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrdersByAccountId(@PathVariable(name = "id") Long id, Pageable pageable) {
-        List<OrderResponseDTO> orders = orderService.getAllOrdersByAccountId(id, pageable).stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<OrderViewDTO>> getAllOrdersByAccountId(
+            @PathVariable(name = "id") Long id, Pageable pageable) {
+        Page<OrderViewDTO> orders = orderService.getAllOrdersByAccountId(id, pageable);
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<OrderResponseDTO>> getAllOrdersByStatus(@RequestParam(name = "status") OrderStatus orderStatus, Pageable pageable) {
-        List<OrderResponseDTO> orders = orderService.getAllOrdersByStatus(orderStatus, pageable).stream()
-                .map(orderToOrderResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<OrderViewDTO>> getAllOrdersByStatus(
+            @RequestParam(name = "status") OrderStatus orderStatus, Pageable pageable) {
+        Page<OrderViewDTO> orders = orderService.getAllOrdersByStatus(orderStatus, pageable);
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDTO> getOrderById(@PathVariable(name = "id") Long id) {
-        Order order = orderService.getOrderById(id);
-        OrderResponseDTO orderResponseDTO = orderToOrderResponseDTOMapper.convert(order);
+    public ResponseEntity<OrderViewDTO> getOrderById(
+            @PathVariable(name = "id") Long id) {
+        OrderViewDTO orderViewDTO = orderService.getOrderById(id);
 
-        return new ResponseEntity<>(orderResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(orderViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDTO> createOrder(@RequestBody @Valid OrderRequestDTO orderRequestDTO) {
-        Order order = orderRequestDTOToOrderMapper.convert(orderRequestDTO);
-        Order createdOrder = orderService.createOrder(order);
-        OrderResponseDTO addOrder = orderToOrderResponseDTOMapper.convert(createdOrder);
+    public ResponseEntity<OrderCreateDTO> createOrder(
+            @RequestBody @Valid OrderCreateDTO orderCreateDTO) {
+        OrderCreateDTO addOrder = orderService.createOrder(orderCreateDTO);
 
         return new ResponseEntity<>(addOrder, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<OrderResponseDTO> updateOrder(@RequestBody @Valid UpdateOrderDTO updateOrderDTO) {
-        Order order = updateOrderDTOToOrderMapper.convert(updateOrderDTO);
-        Order updateOrder = orderService.updateOrder(order);
-        OrderResponseDTO updatedOrder = orderToOrderResponseDTOMapper.convert(updateOrder);
+    @PutMapping("/{id}")
+    public ResponseEntity<OrderUpdateDTO> updateOrder(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid OrderUpdateDTO orderUpdateDTO) {
+        OrderUpdateDTO updateOrder = orderService.updateOrder(id, orderUpdateDTO);
 
-        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
+        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteOrder(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Boolean> deleteOrder(
+            @PathVariable(name = "id") Long id) {
         boolean deleteOrder = orderService.deleteOrder(id);
 
         return new ResponseEntity<>(deleteOrder, HttpStatus.OK);

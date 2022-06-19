@@ -1,26 +1,25 @@
 package com.microservices.order.service;
 
-import com.microservices.order.dto.request.ReservationRequestDTO;
-import com.microservices.order.dto.request.UpdateReservationDTO;
-import com.microservices.order.dto.response.ReservationResponseDTO;
-import com.microservices.order.entity.Reservation;
+import com.microservices.order.dto.create.ReservationCreateDTO;
+import com.microservices.order.dto.update.ReservationUpdateDTO;
+import com.microservices.order.dto.view.ReservationViewDTO;
 import com.microservices.order.entity.ReservationStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ReservationService {
 
-    Page<Reservation> getAllReservations(Pageable pageable);
+    Page<ReservationViewDTO> getAllReservations(Pageable pageable);
 
-    Page<Reservation> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable);
+    Page<ReservationViewDTO> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable);
 
-    Page<Reservation> getAllReservationByOrderId(Long orderId, Pageable pageable);
+    Page<ReservationViewDTO> getAllReservationByOrderId(Long orderId, Pageable pageable);
 
-    Reservation getReservationById(long reservationId);
+    ReservationViewDTO getReservationById(Long reservationId);
 
-    Reservation createReservation(Reservation reservation);
+    ReservationCreateDTO createReservation(ReservationCreateDTO reservationCreateDTO);
 
-    Reservation updateReservation(Reservation reservation);
+    ReservationUpdateDTO updateReservation(Long reservationId, ReservationUpdateDTO reservationUpdateDTO);
 
-    boolean deleteReservation(long reservationId);
+    boolean deleteReservation(Long reservationId);
 }

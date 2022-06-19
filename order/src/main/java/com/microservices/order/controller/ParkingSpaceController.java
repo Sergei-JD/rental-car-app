@@ -1,14 +1,11 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.request.ParkingSpaceRequestDTO;
-import com.microservices.order.dto.request.UpdateParkingSpaceDTO;
-import com.microservices.order.dto.response.ParkingSpaceResponseDTO;
-import com.microservices.order.entity.ParkingSpace;
-import com.microservices.order.mapper.request.ParkingSpaceRequestDTOToParkingSpaceMapper;
-import com.microservices.order.mapper.request.UpdateParkingSpaceDTOToParkingSpaceMapper;
-import com.microservices.order.mapper.response.ParkingSpaceToParkingSpaceResponseDTOMapper;
+import com.microservices.order.dto.create.ParkingSpaceCreateDTO;
+import com.microservices.order.dto.update.ParkingSpaceUpdateDTO;
+import com.microservices.order.dto.view.ParkingSpaceViewDTO;
 import com.microservices.order.service.ParkingSpaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,56 +26,50 @@ import java.util.List;
 public class ParkingSpaceController {
 
     private final ParkingSpaceService parkingSpaceService;
-    private final ParkingSpaceRequestDTOToParkingSpaceMapper parkingSpaceRequestDTOToParkingSpaceMapper;
-    private final ParkingSpaceToParkingSpaceResponseDTOMapper parkingSpaceToParkingSpaceResponseDTOMapper;
-    private final UpdateParkingSpaceDTOToParkingSpaceMapper updateParkingSpaceDTOToParkingSpaceMapper;
 
     @GetMapping
-    public ResponseEntity<List<ParkingSpaceResponseDTO>> getAllParkingSpaces(Pageable pageable) {
-        List<ParkingSpaceResponseDTO> spaces = parkingSpaceService.getAllParkingSpaces(pageable).stream()
-                .map(parkingSpaceToParkingSpaceResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<ParkingSpaceViewDTO>> getAllParkingSpaces(Pageable pageable) {
+        Page<ParkingSpaceViewDTO> creditParkingSpaces = parkingSpaceService.getAllParkingSpaces(pageable);
 
-        return new ResponseEntity<>(spaces, HttpStatus.OK);
+        return new ResponseEntity<>(creditParkingSpaces, HttpStatus.OK);
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<List<ParkingSpaceResponseDTO>> getAllParkingSpaceByOrderId(@PathVariable(name = "id") Long id, Pageable pageable) {
-        List<ParkingSpaceResponseDTO> spaces = parkingSpaceService.getAllParkingSpaceByOrderId(id, pageable).stream()
-                .map(parkingSpaceToParkingSpaceResponseDTOMapper::convert)
-                .toList();
+    public ResponseEntity<Page<ParkingSpaceViewDTO>> getAllParkingSpaceByOrderId(
+            @PathVariable(name = "id") Long id, Pageable pageable) {
+        Page<ParkingSpaceViewDTO> parkingSpaces = parkingSpaceService.getAllParkingSpaceByOrderId(id, pageable);
 
-        return new ResponseEntity<>(spaces, HttpStatus.OK);
+        return new ResponseEntity<>(parkingSpaces, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ParkingSpaceResponseDTO> getParkingSpaceById(@PathVariable(name = "id") Long id) {
-        ParkingSpace parkingSpace = parkingSpaceService.getParkingSpaceById(id);
-        ParkingSpaceResponseDTO parkingSpaceResponseDTO = parkingSpaceToParkingSpaceResponseDTOMapper.convert(parkingSpace);
+    public ResponseEntity<ParkingSpaceViewDTO> getParkingSpaceById(
+            @PathVariable(name = "id") Long id) {
+        ParkingSpaceViewDTO parkingSpaceViewDTO = parkingSpaceService.getParkingSpaceById(id);
 
-        return new ResponseEntity<>(parkingSpaceResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(parkingSpaceViewDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ParkingSpaceResponseDTO> createParkingSpace(@RequestBody @Valid ParkingSpaceRequestDTO parkingSpaceRequestDTO) {
-        ParkingSpace parkingSpace = parkingSpaceRequestDTOToParkingSpaceMapper.convert(parkingSpaceRequestDTO);
-        ParkingSpace createdParkingSpace = parkingSpaceService.createParkingSpace(parkingSpace);
-        ParkingSpaceResponseDTO addParkingSpace = parkingSpaceToParkingSpaceResponseDTOMapper.convert(createdParkingSpace);
+    public ResponseEntity<ParkingSpaceCreateDTO> createParkingSpace(
+            @RequestBody @Valid ParkingSpaceCreateDTO parkingSpaceCreateDTO) {
+        ParkingSpaceCreateDTO addParkingSpace = parkingSpaceService.createParkingSpace(parkingSpaceCreateDTO);
 
         return new ResponseEntity<>(addParkingSpace, HttpStatus.CREATED);
     }
 
-    @PutMapping
-    public ResponseEntity<ParkingSpaceResponseDTO> updateParkingSpace(@RequestBody @Valid UpdateParkingSpaceDTO updateParkingSpaceDTO) {
-        ParkingSpace parkingSpace = updateParkingSpaceDTOToParkingSpaceMapper.convert(updateParkingSpaceDTO);
-        ParkingSpace updateParkingSpace = parkingSpaceService.updateParkingSpace(parkingSpace);
-        ParkingSpaceResponseDTO updatedParkingSpace = parkingSpaceToParkingSpaceResponseDTOMapper.convert(updateParkingSpace);
+    @PutMapping("/{id}")
+    public ResponseEntity<ParkingSpaceUpdateDTO> updateParkingSpace(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid ParkingSpaceUpdateDTO parkingSpaceUpdateDTO) {
+        ParkingSpaceUpdateDTO updateParkingSpace = parkingSpaceService.updateParkingSpace(id, parkingSpaceUpdateDTO);
 
-        return new ResponseEntity<>(updatedParkingSpace, HttpStatus.OK);
+        return new ResponseEntity<>(updateParkingSpace, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteParkingSpace(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Boolean> deleteParkingSpace(
+            @PathVariable(name = "id") Long id) {
         boolean deleteParkingSpace = parkingSpaceService.deleteParkingSpace(id);
 
         return new ResponseEntity<>(deleteParkingSpace, HttpStatus.OK);

@@ -1,4 +1,4 @@
-package com.microservices.order.dto.response;
+package com.microservices.order.dto.view;
 
 import com.microservices.order.entity.ReservationStatus;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationResponseDTO {
+public class ReservationViewDTO {
 
     private Long id;
 

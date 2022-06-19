@@ -1,4 +1,4 @@
-package com.microservices.order.dto.response;
+package com.microservices.order.dto.view;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingSpaceResponseDTO {
+public class ParkingSpaceViewDTO {
 
     private Long id;
 

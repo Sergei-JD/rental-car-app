@@ -1,20 +1,22 @@
 package com.microservices.order.service;
 
-import com.microservices.order.entity.ParkingSpace;
+import com.microservices.order.dto.create.ParkingSpaceCreateDTO;
+import com.microservices.order.dto.update.ParkingSpaceUpdateDTO;
+import com.microservices.order.dto.view.ParkingSpaceViewDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ParkingSpaceService {
 
-    Page<ParkingSpace> getAllParkingSpaces(Pageable pageable);
+    Page<ParkingSpaceViewDTO> getAllParkingSpaces(Pageable pageable);
 
-    Page<ParkingSpace> getAllParkingSpaceByOrderId(Long orderId, Pageable pageable);
+    Page<ParkingSpaceViewDTO> getAllParkingSpaceByOrderId(Long orderId, Pageable pageable);
 
-    ParkingSpace getParkingSpaceById(long parkingSpaceId);
+    ParkingSpaceViewDTO getParkingSpaceById(Long parkingSpaceId);
 
-    ParkingSpace createParkingSpace(ParkingSpace parkingSpace);
+    ParkingSpaceCreateDTO createParkingSpace(ParkingSpaceCreateDTO parkingSpaceCreateDTO);
 
-    ParkingSpace updateParkingSpace(ParkingSpace parkingSpace);
+    ParkingSpaceUpdateDTO updateParkingSpace(Long parkingSpaceId, ParkingSpaceUpdateDTO parkingSpaceUpdateDTO);
 
-    boolean deleteParkingSpace(long parkingSpaceId);
+    boolean deleteParkingSpace(Long parkingSpaceId);
 }

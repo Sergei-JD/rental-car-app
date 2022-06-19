@@ -1,4 +1,4 @@
-package com.microservices.order.dto.request;
+package com.microservices.order.dto.create;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingSpaceRequestDTO {
+public class ParkingSpaceCreateDTO {
 
     @NotEmpty(message = "'Address' should not be empty")
     @Size(min = 2, max = 256, message = "'Address' should be between 2 and 256 characters")

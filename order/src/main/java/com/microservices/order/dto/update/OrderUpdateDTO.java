@@ -1,23 +1,22 @@
-package com.microservices.order.dto.request;
+package com.microservices.order.dto.update;
 
 import com.microservices.order.entity.OrderStatus;
-
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Size;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderRequestDTO {
+public class OrderUpdateDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")
