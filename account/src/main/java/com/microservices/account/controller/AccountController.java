@@ -1,8 +1,10 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.create.AccountCreateDTO;
-import com.microservices.account.dto.update.AccountUpdateDTO;
-import com.microservices.account.dto.view.AccountViewDTO;
+import com.microservices.account.dto.create.CreateAccountDTO;
+import com.microservices.account.dto.update.UpdateAccountDTO;
+import com.microservices.account.dto.view.ViewAccountDTO;
+import com.microservices.account.entity.Account;
+import com.microservices.account.mapper.AccountMapper;
 import com.microservices.account.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,39 +31,45 @@ public class AccountController {
     private final AccountService accountService;
 
     @GetMapping
-    public ResponseEntity<Page<AccountViewDTO>> getAllAccounts(Pageable pageable) {
-        Page<AccountViewDTO> accounts = accountService.getAllAccounts(pageable);
+    public ResponseEntity<Page<ViewAccountDTO>> getAllAccounts(Pageable pageable) {
+        Page<ViewAccountDTO> accounts = accountService.getAllAccounts(pageable);
 
         return new ResponseEntity<>(accounts, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountViewDTO> getAccountById(@PathVariable(name = "id") Long id) {
-        AccountViewDTO accountViewDTO = accountService.getAccountById(id);
+    public ResponseEntity<ViewAccountDTO> getAccountById(
+            @PathVariable(name = "id") Long id) {
+        Account account = accountService.getAccountById(id);
+        ViewAccountDTO viewAccountDTO = AccountMapper.toViewAccountDTO(account);
 
-        return new ResponseEntity<>(accountViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewAccountDTO, HttpStatus.OK);
     }
 
     @GetMapping("/nickname")
-    public ResponseEntity<AccountViewDTO> getAccountByNickName(@RequestParam(name = "nickname") String nickName) {
-        AccountViewDTO accountViewDTO = accountService.getAccountByNickName(nickName);
+    public ResponseEntity<ViewAccountDTO> getAccountByNickName(
+            @RequestParam(name = "nickname") String nickName) {
+        Account account = accountService.getAccountByNickName(nickName);
+        ViewAccountDTO viewAccountDTO = AccountMapper.toViewAccountDTO(account);
 
-        return new ResponseEntity<>(accountViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewAccountDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<AccountCreateDTO> createAccount(@RequestBody @Valid AccountCreateDTO accountCreateDTO) {
-        AccountCreateDTO addAccount = accountService.createAccount(accountCreateDTO);
+    public ResponseEntity<Long> createAccount(
+            @RequestBody @Valid CreateAccountDTO createAccountDTO) {
+        Long addAccount = accountService.createAccount(createAccountDTO);
 
         return new ResponseEntity<>(addAccount, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AccountUpdateDTO> updateAccount(@PathVariable(name = "id") Long id,
-                                                          @RequestBody @Valid AccountUpdateDTO accountUpdateDTO) {
-        AccountUpdateDTO updateAccount = accountService.updateAccount(id, accountUpdateDTO);
+    public ResponseEntity<Void> updateAccount(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid UpdateAccountDTO updateAccountDTO) {
+        accountService.updateAccount(id, updateAccountDTO);
 
-        return new ResponseEntity<>(updateAccount, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Past;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
@@ -18,7 +17,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseUpdateDTO {
+public class UpdateDriverLicenseDTO {
 
     @NotEmpty(message = "'Driver license lumber' should not be empty")
     @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")

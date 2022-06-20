@@ -28,7 +28,7 @@ import java.time.Instant;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(callSuper = false, of =
         {"id", "firstName", "lastName", "dateOfBirth", "identityPassportNumber",
-                "email", "phoneNumber", "gender", "role"})
+                "email", "phoneNumber", "gender", "role", "account"})
 @Table(name = "users", schema = "PUBLIC")
 public class User {
 

@@ -1,22 +1,23 @@
 package com.microservices.account.service;
 
-import com.microservices.account.dto.create.AccountCreateDTO;
-import com.microservices.account.dto.update.AccountUpdateDTO;
-import com.microservices.account.dto.view.AccountViewDTO;
+import com.microservices.account.dto.create.CreateAccountDTO;
+import com.microservices.account.dto.update.UpdateAccountDTO;
+import com.microservices.account.dto.view.ViewAccountDTO;
+import com.microservices.account.entity.Account;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface AccountService {
 
-    Page<AccountViewDTO> getAllAccounts(Pageable pageable);
+    Page<ViewAccountDTO> getAllAccounts(Pageable pageable);
 
-    AccountViewDTO getAccountById(Long accountId);
+    Account getAccountById(Long accountId);
 
-    AccountViewDTO getAccountByNickName(String nickName);
+    Account getAccountByNickName(String nickName);
 
-    AccountCreateDTO createAccount(AccountCreateDTO accountCreateDTO);
+    Long createAccount(CreateAccountDTO createAccountDTO);
 
-    AccountUpdateDTO updateAccount(Long accountId, AccountUpdateDTO accountUpdateDTO);
+    void updateAccount(Long accountId, UpdateAccountDTO updateAccountDTO);
 
     boolean deleteAccount(Long accountId);
 }

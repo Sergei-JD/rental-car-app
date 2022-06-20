@@ -13,7 +13,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserViewDTO {
+public class ViewUserDTO {
 
     private Long id;
 
@@ -32,4 +32,6 @@ public class UserViewDTO {
     private Gender gender;
 
     private Role role;
+
+//    private Account accountId;
 }

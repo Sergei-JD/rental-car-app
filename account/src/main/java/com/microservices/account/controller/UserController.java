@@ -1,9 +1,11 @@
 package com.microservices.account.controller;
 
-import com.microservices.account.dto.create.UserCreateDTO;
-import com.microservices.account.dto.update.UserUpdateDTO;
-import com.microservices.account.dto.view.UserViewDTO;
+import com.microservices.account.dto.create.CreateUserDTO;
+import com.microservices.account.dto.update.UpdateUserDTO;
+import com.microservices.account.dto.view.ViewUserDTO;
 import com.microservices.account.entity.Role;
+import com.microservices.account.entity.User;
+import com.microservices.account.mapper.UserMapper;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,49 +32,58 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<Page<UserViewDTO>> getAllUsers(Pageable pageable) {
-        Page<UserViewDTO> users = userService.getAllUsers(pageable);
+    public ResponseEntity<Page<ViewUserDTO>> getAllUsers(Pageable pageable) {
+        Page<ViewUserDTO> users = userService.getAllUsers(pageable);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/role")
-    public ResponseEntity<Page<UserViewDTO>> getAllUsersByRole(@RequestParam(name = "role") Role role, Pageable pageable) {
-        Page<UserViewDTO> users = userService.getAllUsersByRole(role, pageable);
+    public ResponseEntity<Page<ViewUserDTO>> getAllUsersByRole(
+            @RequestParam(name = "role") Role role, Pageable pageable) {
+        Page<ViewUserDTO> users = userService.getAllUsersByRole(role, pageable);
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserViewDTO> getUserById(@PathVariable(name = "id") Long id) {
-        UserViewDTO userViewDTO = userService.getUserById(id);
+    public ResponseEntity<ViewUserDTO> getUserById(
+            @PathVariable(name = "id") Long id) {
+        User user = userService.getUserById(id);
+        ViewUserDTO viewUserDTO = UserMapper.toUserViewDTO(user);
 
-        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewUserDTO, HttpStatus.OK);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<UserViewDTO> getUserByEmail(@RequestParam(name = "email") String email) {
-        UserViewDTO userViewDTO = userService.getUserByEmail(email);
+    public ResponseEntity<ViewUserDTO> getUserByEmail(
+            @RequestParam(name = "email") String email) {
+        User user = userService.getUserByEmail(email);
+        ViewUserDTO viewUserDTO = UserMapper.toUserViewDTO(user);
 
-        return new ResponseEntity<>(userViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewUserDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<UserCreateDTO> createUser(@RequestBody @Valid UserCreateDTO userCreateDTO) {
-        UserCreateDTO addUser = userService.createUser(userCreateDTO);
+    public ResponseEntity<Long> createUser(
+            @RequestBody @Valid CreateUserDTO createUserDTO) {
+        Long addUser = userService.createUser(createUserDTO);
 
         return new ResponseEntity<>(addUser, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserUpdateDTO> updateUser(@PathVariable(name = "id") Long id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
-        UserUpdateDTO updateUser = userService.updateUser(id, userUpdateDTO);
+    public ResponseEntity<Void> updateUser(
+            @PathVariable(name = "id") Long id,
+            @RequestBody @Valid UpdateUserDTO updateUserDTO) {
+        userService.updateUser(id, updateUserDTO);
 
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<Boolean> deleteUser(
+            @PathVariable(name = "id") Long id) {
         boolean deleteUser = userService.deleteUser(id);
 
         return new ResponseEntity<>(deleteUser, HttpStatus.OK);

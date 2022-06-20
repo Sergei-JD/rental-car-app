@@ -17,7 +17,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DriverLicenseCreateDTO {
+public class CreateDriverLicenseDTO {
 
     @NotEmpty(message = "'Driver license lumber' should not be empty")
     @Size(min = 8, max = 32, message = "'Driver license number' should be between 8 and 32 characters")

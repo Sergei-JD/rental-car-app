@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountViewDTO {
+public class ViewAccountDTO {
 
     private Long id;
 

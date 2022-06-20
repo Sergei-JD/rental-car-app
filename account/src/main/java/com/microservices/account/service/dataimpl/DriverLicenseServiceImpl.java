@@ -1,8 +1,8 @@
 package com.microservices.account.service.dataimpl;
 
-import com.microservices.account.dto.create.DriverLicenseCreateDTO;
-import com.microservices.account.dto.update.DriverLicenseUpdateDTO;
-import com.microservices.account.dto.view.DriverLicenseViewDTO;
+import com.microservices.account.dto.create.CreateDriverLicenseDTO;
+import com.microservices.account.dto.update.UpdateDriverLicenseDTO;
+import com.microservices.account.dto.view.ViewDriverLicenseDTO;
 import com.microservices.account.entity.DriverLicense;
 import com.microservices.account.mapper.DriverLicenseMapper;
 import com.microservices.account.repository.DriverLicenseRepository;
@@ -26,10 +26,10 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     private final DriverLicenseRepository driverLicenseRepository;
 
     @Override
-    public Page<DriverLicenseViewDTO> getAllDriverLicenses(Pageable pageable) {
+    public Page<ViewDriverLicenseDTO> getAllDriverLicenses(Pageable pageable) {
         Page<DriverLicense> pageDriverLicenses = driverLicenseRepository.findAll(pageable);
 
-        List<DriverLicenseViewDTO> driverLicenses = pageDriverLicenses.stream()
+        List<ViewDriverLicenseDTO> driverLicenses = pageDriverLicenses.stream()
                 .map(DriverLicenseMapper::toDriverLicenseViewDTO)
                 .toList();
 
@@ -37,10 +37,10 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     }
 
     @Override
-    public Page<DriverLicenseViewDTO> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable) {
+    public Page<ViewDriverLicenseDTO> getAllDriverLicenseByAccountId(Long accountId, Pageable pageable) {
         Page<DriverLicense> pageDriverLicenses = driverLicenseRepository.findDriverLicenseByAccountId(accountId, pageable);
 
-        List<DriverLicenseViewDTO> driverLicenses = pageDriverLicenses.stream()
+        List<ViewDriverLicenseDTO> driverLicenses = pageDriverLicenses.stream()
                 .map(DriverLicenseMapper::toDriverLicenseViewDTO)
                 .toList();
 
@@ -48,39 +48,37 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     }
 
     @Override
-    public DriverLicenseViewDTO getDriverLicenseById(Long driverLicenseId) {
-        DriverLicense driverLicense = driverLicenseRepository.findById(driverLicenseId)
+    public DriverLicense getDriverLicenseById(Long driverLicenseId) {
+        return driverLicenseRepository.findById(driverLicenseId)
                 .orElseThrow(() -> new ServiceException(String.format(DRIVER_LICENSE_ID_EXCEPTION_MESSAGE, driverLicenseId)));
-
-        return DriverLicenseMapper.toDriverLicenseViewDTO(driverLicense);
     }
 
     @Override
     @Transactional
-    public DriverLicenseCreateDTO createDriverLicense(DriverLicenseCreateDTO driverLicenseCreateDTO) {
+    public Long createDriverLicense(CreateDriverLicenseDTO createDriverLicenseDTO) {
         DriverLicense newDriverLicense = DriverLicense.builder()
-                .driverLicenseNumber(driverLicenseCreateDTO.getDriverLicenseNumber())
-                .category(driverLicenseCreateDTO.getCategory())
-                .dateOfIssue(driverLicenseCreateDTO.getDateOfIssue())
-                .expirationDate(driverLicenseCreateDTO.getExpirationDate())
+                .driverLicenseNumber(createDriverLicenseDTO.getDriverLicenseNumber())
+                .category(createDriverLicenseDTO.getCategory())
+                .dateOfIssue(createDriverLicenseDTO.getDateOfIssue())
+                .expirationDate(createDriverLicenseDTO.getExpirationDate())
                 .build();
 
-        return DriverLicenseMapper.toDriverLicenseCreateDTO(driverLicenseRepository.save(newDriverLicense));
+        DriverLicense savedDriverLicense = driverLicenseRepository.save(newDriverLicense);
+
+        return savedDriverLicense.getId();
     }
 
     @Override
     @Transactional
-    public DriverLicenseUpdateDTO updateDriverLicense(Long driverLicenseId, DriverLicenseUpdateDTO driverLicenseUpdateDTO) {
+    public void updateDriverLicense(Long driverLicenseId, UpdateDriverLicenseDTO updateDriverLicenseDTO) {
         DriverLicense driverLicense = driverLicenseRepository.findById(driverLicenseId)
                 .orElseThrow(() -> new ServiceException(String.format(DRIVER_LICENSE_ID_EXCEPTION_MESSAGE, driverLicenseId)));
-        driverLicense.setDriverLicenseNumber(driverLicenseUpdateDTO.getDriverLicenseNumber());
-        driverLicense.setCategory(driverLicenseUpdateDTO.getCategory());
-        driverLicense.setDateOfIssue(driverLicenseUpdateDTO.getDateOfIssue());
-        driverLicense.setExpirationDate(driverLicenseUpdateDTO.getExpirationDate());
+        driverLicense.setDriverLicenseNumber(updateDriverLicenseDTO.getDriverLicenseNumber());
+        driverLicense.setCategory(updateDriverLicenseDTO.getCategory());
+        driverLicense.setDateOfIssue(updateDriverLicenseDTO.getDateOfIssue());
+        driverLicense.setExpirationDate(updateDriverLicenseDTO.getExpirationDate());
 
         driverLicenseRepository.save(driverLicense);
-
-        return DriverLicenseMapper.toDriverLicenseUpdateDTO(driverLicense);
     }
 
     @Override

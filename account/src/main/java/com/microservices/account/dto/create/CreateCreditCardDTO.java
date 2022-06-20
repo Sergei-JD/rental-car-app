@@ -22,7 +22,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreditCardCreateDTO {
+public class CreateCreditCardDTO {
 
     @NotEmpty(message = "'Credit card type' should not be empty")
     @Size(min = 2, max = 128, message = "'Credit card type' should be 'VISA' or 'MASTERCARD' or 'AMERICAN_EXPRESS'")

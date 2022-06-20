@@ -1,8 +1,8 @@
 package com.microservices.account.service.dataimpl;
 
-import com.microservices.account.dto.create.CreditCardCreateDTO;
-import com.microservices.account.dto.update.CreditCardUpdateDTO;
-import com.microservices.account.dto.view.CreditCardViewDTO;
+import com.microservices.account.dto.create.CreateCreditCardDTO;
+import com.microservices.account.dto.update.UpdateCreditCardDTO;
+import com.microservices.account.dto.view.ViewCreditCardDTO;
 import com.microservices.account.entity.CreditCard;
 import com.microservices.account.mapper.CreditCardMapper;
 import com.microservices.account.repository.CreditCardRepository;
@@ -26,10 +26,10 @@ public class CreditCardServiceImpl implements CreditCardService {
     private final CreditCardRepository creditCardRepository;
 
     @Override
-    public Page<CreditCardViewDTO> getAllCreditCards(Pageable pageable) {
+    public Page<ViewCreditCardDTO> getAllCreditCards(Pageable pageable) {
         Page<CreditCard> pageCreditCards = creditCardRepository.findAll(pageable);
 
-        List<CreditCardViewDTO> creditCards = pageCreditCards.stream()
+        List<ViewCreditCardDTO> creditCards = pageCreditCards.stream()
                 .map(CreditCardMapper::toCreditCardViewDTO)
                 .toList();
 
@@ -37,10 +37,10 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public Page<CreditCardViewDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable) {
+    public Page<ViewCreditCardDTO> getAllCreditCardsByAccountId(Long accountId, Pageable pageable) {
         Page<CreditCard> pageCreditCards = creditCardRepository.findCreditCardByAccountId(accountId, pageable);
 
-        List<CreditCardViewDTO> creditCards = pageCreditCards.stream()
+        List<ViewCreditCardDTO> creditCards = pageCreditCards.stream()
                 .map(CreditCardMapper::toCreditCardViewDTO)
                 .toList();
 
@@ -48,45 +48,43 @@ public class CreditCardServiceImpl implements CreditCardService {
     }
 
     @Override
-    public CreditCardViewDTO getCreditCardById(Long creditCardId) {
-        CreditCard creditCard = creditCardRepository.findById(creditCardId)
+    public CreditCard getCreditCardById(Long creditCardId) {
+        return creditCardRepository.findById(creditCardId)
                 .orElseThrow(() -> new ServiceException(String.format(CREDIT_CARD_ID_EXCEPTION_MESSAGE, creditCardId)));
-
-        return CreditCardMapper.toCreditCardViewDTO(creditCard);
     }
 
     @Override
     @Transactional
-    public CreditCardCreateDTO createCreditCard(CreditCardCreateDTO creditCardCreateDTO) {
+    public Long createCreditCard(CreateCreditCardDTO createCreditCardDTO) {
         CreditCard newCreditCard = CreditCard.builder()
-                .creditCardType(creditCardCreateDTO.getCreditCardType())
-                .cardNumber(creditCardCreateDTO.getCardNumber())
-                .dateOfIssue(creditCardCreateDTO.getDateOfIssue())
-                .expirationDate(creditCardCreateDTO.getExpirationDate())
-                .cvvCode(creditCardCreateDTO.getCvvCode())
-                .nameCardOwner(creditCardCreateDTO.getNameCardOwner())
-                .balance(creditCardCreateDTO.getBalance())
+                .creditCardType(createCreditCardDTO.getCreditCardType())
+                .cardNumber(createCreditCardDTO.getCardNumber())
+                .dateOfIssue(createCreditCardDTO.getDateOfIssue())
+                .expirationDate(createCreditCardDTO.getExpirationDate())
+                .cvvCode(createCreditCardDTO.getCvvCode())
+                .nameCardOwner(createCreditCardDTO.getNameCardOwner())
+                .balance(createCreditCardDTO.getBalance())
                 .build();
 
-        return CreditCardMapper.toCreditCardCreateDTO(creditCardRepository.save(newCreditCard));
+        CreditCard savedCreditCard = creditCardRepository.save(newCreditCard);
+
+        return savedCreditCard.getId();
     }
 
     @Override
     @Transactional
-    public CreditCardUpdateDTO updateCreditCard(Long creditCardId, CreditCardUpdateDTO creditCardUpdateDTO) {
+    public void updateCreditCard(Long creditCardId, UpdateCreditCardDTO updateCreditCardDTO) {
         CreditCard creditCard = creditCardRepository.findById(creditCardId)
                 .orElseThrow(() -> new ServiceException(String.format(CREDIT_CARD_ID_EXCEPTION_MESSAGE, creditCardId)));
-        creditCard.setCreditCardType(creditCardUpdateDTO.getCreditCardType());
-        creditCard.setCardNumber(creditCardUpdateDTO.getCardNumber());
-        creditCard.setDateOfIssue(creditCardUpdateDTO.getDateOfIssue());
-        creditCard.setExpirationDate(creditCardUpdateDTO.getExpirationDate());
-        creditCard.setCvvCode(creditCardUpdateDTO.getCvvCode());
-        creditCard.setNameCardOwner(creditCardUpdateDTO.getNameCardOwner());
-        creditCard.setBalance(creditCardUpdateDTO.getBalance());
+        creditCard.setCreditCardType(updateCreditCardDTO.getCreditCardType());
+        creditCard.setCardNumber(updateCreditCardDTO.getCardNumber());
+        creditCard.setDateOfIssue(updateCreditCardDTO.getDateOfIssue());
+        creditCard.setExpirationDate(updateCreditCardDTO.getExpirationDate());
+        creditCard.setCvvCode(updateCreditCardDTO.getCvvCode());
+        creditCard.setNameCardOwner(updateCreditCardDTO.getNameCardOwner());
+        creditCard.setBalance(updateCreditCardDTO.getBalance());
 
         creditCardRepository.save(creditCard);
-
-        return CreditCardMapper.toCreditCardUpdateDTO(creditCard);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.microservices.account.mapper;
 
-import com.microservices.account.dto.create.DriverLicenseCreateDTO;
-import com.microservices.account.dto.update.DriverLicenseUpdateDTO;
-import com.microservices.account.dto.view.DriverLicenseViewDTO;
+import com.microservices.account.dto.create.CreateDriverLicenseDTO;
+import com.microservices.account.dto.update.UpdateDriverLicenseDTO;
+import com.microservices.account.dto.view.ViewDriverLicenseDTO;
 import com.microservices.account.entity.DriverLicense;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriverLicenseMapper {
 
-    public static DriverLicenseViewDTO toDriverLicenseViewDTO(DriverLicense driverLicense) {
+    public static ViewDriverLicenseDTO toDriverLicenseViewDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
-                .map(existDriverLicense -> DriverLicenseViewDTO.builder()
+                .map(existDriverLicense -> ViewDriverLicenseDTO.builder()
                         .id(driverLicense.getId())
                         .driverLicenseNumber(driverLicense.getDriverLicenseNumber())
                         .category(driverLicense.getCategory())
@@ -24,9 +24,9 @@ public class DriverLicenseMapper {
                 .orElse(null);
     }
 
-    public static DriverLicenseCreateDTO toDriverLicenseCreateDTO(DriverLicense driverLicense) {
+    public static CreateDriverLicenseDTO toDriverLicenseCreateDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
-                .map(existDriverLicense -> DriverLicenseCreateDTO.builder()
+                .map(existDriverLicense -> CreateDriverLicenseDTO.builder()
                         .driverLicenseNumber(driverLicense.getDriverLicenseNumber())
                         .category(driverLicense.getCategory())
                         .dateOfIssue(driverLicense.getDateOfIssue())
@@ -35,9 +35,9 @@ public class DriverLicenseMapper {
                 .orElse(null);
     }
 
-    public static DriverLicenseUpdateDTO toDriverLicenseUpdateDTO(DriverLicense driverLicense) {
+    public static UpdateDriverLicenseDTO toDriverLicenseUpdateDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
-                .map(existDriverLicense -> DriverLicenseUpdateDTO.builder()
+                .map(existDriverLicense -> UpdateDriverLicenseDTO.builder()
                         .driverLicenseNumber(driverLicense.getDriverLicenseNumber())
                         .category(driverLicense.getCategory())
                         .dateOfIssue(driverLicense.getDateOfIssue())

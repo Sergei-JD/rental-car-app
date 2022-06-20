@@ -19,7 +19,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateDTO {
+public class CreateUserDTO {
 
     @NotEmpty(message = "'First name' should not be empty")
     @Size(min = 2, max = 256, message = "'First name' should be between 2 and 256 characters")
@@ -52,4 +52,7 @@ public class UserCreateDTO {
     @NotEmpty(message = "'Role' should not be empty")
     @Size(min = 2, max = 64, message = "'Role' should be 'ADMIN' or 'CUSTOMER' or 'MECHANIC'")
     private Role role;
+
+//    @NotEmpty(message = "'Account id' should not be empty")
+//    private Account accountId;
 }

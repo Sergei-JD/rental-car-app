@@ -1,8 +1,8 @@
 package com.microservices.account.service.dataimpl;
 
-import com.microservices.account.dto.create.UserCreateDTO;
-import com.microservices.account.dto.update.UserUpdateDTO;
-import com.microservices.account.dto.view.UserViewDTO;
+import com.microservices.account.dto.create.CreateUserDTO;
+import com.microservices.account.dto.update.UpdateUserDTO;
+import com.microservices.account.dto.view.ViewUserDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
 import com.microservices.account.exception.ServiceException;
@@ -28,10 +28,10 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Page<UserViewDTO> getAllUsers(Pageable pageable) {
+    public Page<ViewUserDTO> getAllUsers(Pageable pageable) {
         Page<User> pageUsers = userRepository.findAll(pageable);
 
-        List<UserViewDTO> users = pageUsers.stream()
+        List<ViewUserDTO> users = pageUsers.stream()
                 .map(UserMapper::toUserViewDTO)
                 .toList();
 
@@ -39,10 +39,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserViewDTO> getAllUsersByRole(Role role, Pageable pageable) {
+    public Page<ViewUserDTO> getAllUsersByRole(Role role, Pageable pageable) {
         Page<User> pageUsers = userRepository.findAllByRole(role, pageable);
 
-        List<UserViewDTO> users = pageUsers.stream()
+        List<ViewUserDTO> users = pageUsers.stream()
                 .map(UserMapper::toUserViewDTO)
                 .toList();
 
@@ -50,55 +50,52 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserViewDTO getUserById(Long userId) {
-        User user = userRepository.findById(userId)
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceException(String.format(USER_ID_EXCEPTION_MESSAGE, userId)));
-
-        return UserMapper.toUserViewDTO(user);
     }
 
     @Override
-    public UserViewDTO getUserByEmail(String email) {
-        User user = userRepository.findUserByEmail(email)
+    public User getUserByEmail(String email) {
+        return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ServiceException(String.format(USER_EMAIL_EXCEPTION_MESSAGE, email)));
-
-        return UserMapper.toUserViewDTO(user);
     }
 
     @Override
     @Transactional
-    public UserCreateDTO createUser(UserCreateDTO userCreateDTO) {
+    public Long createUser(CreateUserDTO createUserDTO) {
         User newUser = User.builder()
-                .firstName(userCreateDTO.getFirstName())
-                .lastName(userCreateDTO.getLastName())
-                .dateOfBirth(userCreateDTO.getDateOfBirth())
-                .identityPassportNumber(userCreateDTO.getIdentityPassportNumber())
-                .email(userCreateDTO.getEmail())
-                .phoneNumber(userCreateDTO.getPhoneNumber())
-                .gender(userCreateDTO.getGender())
-                .role(userCreateDTO.getRole())
+                .firstName(createUserDTO.getFirstName())
+                .lastName(createUserDTO.getLastName())
+                .dateOfBirth(createUserDTO.getDateOfBirth())
+                .identityPassportNumber(createUserDTO.getIdentityPassportNumber())
+                .email(createUserDTO.getEmail())
+                .phoneNumber(createUserDTO.getPhoneNumber())
+                .gender(createUserDTO.getGender())
+                .role(createUserDTO.getRole())
+//                .account(userCreateDTO.getAccountId())
                 .build();
 
-        return UserMapper.toUserCreateDTO(userRepository.save(newUser));
+        User savedUser = userRepository.save(newUser);
+
+        return savedUser.getId();
     }
 
     @Override
     @Transactional
-    public UserUpdateDTO updateUser(Long userId, UserUpdateDTO userUpdateDTO) {
+    public void updateUser(Long userId, UpdateUserDTO updateUserDTO) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ServiceException(String.format(USER_ID_EXCEPTION_MESSAGE, userId)));
-        user.setFirstName(userUpdateDTO.getFirstName());
-        user.setLastName(userUpdateDTO.getLastName());
-        user.setDateOfBirth(userUpdateDTO.getDateOfBirth());
-        user.setIdentityPassportNumber(userUpdateDTO.getIdentityPassportNumber());
-        user.setEmail(userUpdateDTO.getEmail());
-        user.setPhoneNumber(userUpdateDTO.getPhoneNumber());
-        user.setGender(userUpdateDTO.getGender());
-        user.setRole(userUpdateDTO.getRole());
+        user.setFirstName(updateUserDTO.getFirstName());
+        user.setLastName(updateUserDTO.getLastName());
+        user.setDateOfBirth(updateUserDTO.getDateOfBirth());
+        user.setIdentityPassportNumber(updateUserDTO.getIdentityPassportNumber());
+        user.setEmail(updateUserDTO.getEmail());
+        user.setPhoneNumber(updateUserDTO.getPhoneNumber());
+        user.setGender(updateUserDTO.getGender());
+        user.setRole(updateUserDTO.getRole());
 
         userRepository.save(user);
-
-        return UserMapper.toUserUpdateDTO(user);
     }
 
     @Override

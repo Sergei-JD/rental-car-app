@@ -19,7 +19,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateDTO {
+public class UpdateUserDTO {
 
     @NotEmpty(message = "'First name' should not be empty")
     @Size(min = 2, max = 256, message = "'First name' should be between 2 and 256 characters")
