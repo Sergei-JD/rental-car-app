@@ -1,8 +1,8 @@
 package com.microservices.order.service.dataimpl;
 
-import com.microservices.order.dto.create.ReservationCreateDTO;
-import com.microservices.order.dto.update.ReservationUpdateDTO;
-import com.microservices.order.dto.view.ReservationViewDTO;
+import com.microservices.order.dto.create.CreateReservationDTO;
+import com.microservices.order.dto.update.UpdateReservationDTO;
+import com.microservices.order.dto.view.ViewReservationDTO;
 import com.microservices.order.entity.Reservation;
 import com.microservices.order.entity.ReservationStatus;
 import com.microservices.order.mapper.ReservationMapper;
@@ -27,72 +27,70 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     @Override
-    public Page<ReservationViewDTO> getAllReservations(Pageable pageable) {
+    public Page<ViewReservationDTO> getAllReservations(Pageable pageable) {
         Page<Reservation> pageReservations = reservationRepository.findAll(pageable);
 
-        List<ReservationViewDTO> reservations = pageReservations.stream()
-                .map(ReservationMapper::toReservationViewDTO)
+        List<ViewReservationDTO> reservations = pageReservations.stream()
+                .map(ReservationMapper::toViewReservationDTO)
                 .toList();
 
         return new PageImpl<>(reservations);
     }
 
     @Override
-    public Page<ReservationViewDTO> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable) {
+    public Page<ViewReservationDTO> getAllReservationsStatus(ReservationStatus reservationStatus, Pageable pageable) {
         Page<Reservation> pageReservations = reservationRepository.findAllByReservationStatus(reservationStatus, pageable);
 
-        List<ReservationViewDTO> reservations = pageReservations.stream()
-                .map(ReservationMapper::toReservationViewDTO)
+        List<ViewReservationDTO> reservations = pageReservations.stream()
+                .map(ReservationMapper::toViewReservationDTO)
                 .toList();
 
         return new PageImpl<>(reservations);
     }
 
     @Override
-    public Page<ReservationViewDTO> getAllReservationByOrderId(Long orderId, Pageable pageable) {
+    public Page<ViewReservationDTO> getAllReservationByOrderId(Long orderId, Pageable pageable) {
         Page<Reservation> pageReservations = reservationRepository.findReservationByOrderId(orderId, pageable);
 
-        List<ReservationViewDTO> reservations = pageReservations.stream()
-                .map(ReservationMapper::toReservationViewDTO)
+        List<ViewReservationDTO> reservations = pageReservations.stream()
+                .map(ReservationMapper::toViewReservationDTO)
                 .toList();
 
         return new PageImpl<>(reservations);
     }
 
     @Override
-    public ReservationViewDTO getReservationById(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
+    public Reservation getReservationById(Long reservationId) {
+        return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ServiceException(String.format(RESERVATION_ID_EXCEPTION_MESSAGE, reservationId)));
-
-        return ReservationMapper.toReservationViewDTO(reservation);
     }
 
     @Override
     @Transactional
-    public ReservationCreateDTO createReservation(ReservationCreateDTO reservationCreateDTO) {
+    public Long createReservation(CreateReservationDTO createReservationDTO) {
         Reservation newReservation = Reservation.builder()
-                .carCatalogId(reservationCreateDTO.getCarCatalogId())
-                .pickUpDateTime(reservationCreateDTO.getPickUpDateTime())
-                .dropOffDateTime(reservationCreateDTO.getDropOffDateTime())
-                .reservationStatus(reservationCreateDTO.getReservationStatus())
+                .carCatalogId(createReservationDTO.getCarCatalogId())
+                .pickUpDateTime(createReservationDTO.getPickUpDateTime())
+                .dropOffDateTime(createReservationDTO.getDropOffDateTime())
+                .reservationStatus(createReservationDTO.getReservationStatus())
                 .build();
 
-        return ReservationMapper.toReservationCreateDTO(reservationRepository.save(newReservation));
+        Reservation savedReservation = reservationRepository.save(newReservation);
+
+        return savedReservation.getId();
     }
 
     @Override
     @Transactional
-    public ReservationUpdateDTO updateReservation(Long reservationId, ReservationUpdateDTO reservationUpdateDTO) {
+    public void updateReservation(Long reservationId, UpdateReservationDTO updateReservationDTO) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ServiceException(String.format(RESERVATION_ID_EXCEPTION_MESSAGE, reservationId)));
-        reservation.setCarCatalogId(reservationUpdateDTO.getCarCatalogId());
-        reservation.setPickUpDateTime(reservationUpdateDTO.getPickUpDateTime());
-        reservation.setDropOffDateTime(reservationUpdateDTO.getDropOffDateTime());
-        reservation.setReservationStatus(reservationUpdateDTO.getReservationStatus());
+        reservation.setCarCatalogId(updateReservationDTO.getCarCatalogId());
+        reservation.setPickUpDateTime(updateReservationDTO.getPickUpDateTime());
+        reservation.setDropOffDateTime(updateReservationDTO.getDropOffDateTime());
+        reservation.setReservationStatus(updateReservationDTO.getReservationStatus());
 
         reservationRepository.save(reservation);
-
-        return ReservationMapper.toReservationUpdateDTO(reservation);
     }
 
     @Override

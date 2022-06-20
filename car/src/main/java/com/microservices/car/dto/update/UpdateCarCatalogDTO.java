@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCatalogUpdateDTO {
+public class UpdateCarCatalogDTO {
 
     @NotEmpty(message = "'Registration number' name should not be empty")
     @Pattern(regexp = "\\d{8}", message = "'Registration number' should be valid")

@@ -1,8 +1,8 @@
 package com.microservices.car.service.dataimpl;
 
-import com.microservices.car.dto.create.CarCatalogCreateDTO;
-import com.microservices.car.dto.update.CarCatalogUpdateDTO;
-import com.microservices.car.dto.view.CarCatalogViewDTO;
+import com.microservices.car.dto.create.CreateCarCatalogDTO;
+import com.microservices.car.dto.update.UpdateCarCatalogDTO;
+import com.microservices.car.dto.view.ViewCarCatalogDTO;
 import com.microservices.car.entity.CarCatalog;
 import com.microservices.car.entity.CarStatus;
 import com.microservices.car.entity.CarType;
@@ -30,121 +30,119 @@ public class CarCatalogServiceImpl implements CarCatalogService {
     private final CarCatalogRepository carCatalogRepository;
 
     @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogs(Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogs(Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAll(pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public CarCatalogViewDTO getAllCarCatalogByRegistrationNumber(String registrationNumber) {
-        CarCatalog carCatalog = carCatalogRepository.findByRegistrationNumber(registrationNumber)
-                .orElseThrow(() -> new ServiceException(String.format(CAR_CATALOG_REGISTRATION_NUMBER_EXCEPTION_MESSAGE, registrationNumber)));
-
-        return CarCatalogMapper.toCarCatalogViewDTO(carCatalog);
-    }
-
-    @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogByCarType(CarType carType, Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogByCarType(CarType carType, Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByCarType(carType, pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogByMake(String make, Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogByMake(String make, Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByMake(make, pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogByModel(String model, Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogByModel(String model, Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByModel(model, pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogByPrice(BigDecimal price, Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByPrice(price, pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public Page<CarCatalogViewDTO> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable) {
+    public Page<ViewCarCatalogDTO> getAllCarCatalogCarStatus(CarStatus carStatus, Pageable pageable) {
         Page<CarCatalog> pageCarCatalogs = carCatalogRepository.findAllByCarStatus(carStatus, pageable);
 
-        List<CarCatalogViewDTO> cars = pageCarCatalogs.stream()
-                .map(CarCatalogMapper::toCarCatalogViewDTO)
+        List<ViewCarCatalogDTO> cars = pageCarCatalogs.stream()
+                .map(CarCatalogMapper::toViewCarCatalogDTO)
                 .toList();
 
         return new PageImpl<>(cars);
     }
 
     @Override
-    public CarCatalogViewDTO getCarCatalogById(Long carCatalogId) {
-            CarCatalog carCatalog = carCatalogRepository.findById(carCatalogId)
-                    .orElseThrow(() -> new ServiceException(String.format(CAR_CATALOG_ID_EXCEPTION_MESSAGE, carCatalogId)));
-
-            return CarCatalogMapper.toCarCatalogViewDTO(carCatalog);
+    public CarCatalog getCarCatalogById(Long carCatalogId) {
+        return carCatalogRepository.findById(carCatalogId)
+                    .orElseThrow(() -> new ServiceException(
+                            String.format(CAR_CATALOG_ID_EXCEPTION_MESSAGE, carCatalogId)));
         }
 
     @Override
-    @Transactional
-    public CarCatalogCreateDTO createCarCatalog(CarCatalogCreateDTO carCatalogCreateDTO) {
-        CarCatalog newCarCatalog = CarCatalog.builder()
-                .registrationNumber(carCatalogCreateDTO.getRegistrationNumber())
-                .carType(carCatalogCreateDTO.getCarType())
-                .yearOfManufacture(carCatalogCreateDTO.getYearOfManufacture())
-                .make(carCatalogCreateDTO.getMake())
-                .model(carCatalogCreateDTO.getModel())
-                .colour(carCatalogCreateDTO.getColour())
-                .price(carCatalogCreateDTO.getPrice())
-                .carStatus(carCatalogCreateDTO.getCarStatus())
-                .build();
-
-        return CarCatalogMapper.toCarCatalogCreateDTO(carCatalogRepository.save(newCarCatalog));
+    public CarCatalog getAllCarCatalogByRegistrationNumber(String registrationNumber) {
+        return carCatalogRepository.findByRegistrationNumber(registrationNumber)
+                .orElseThrow(() -> new ServiceException(
+                        String.format(CAR_CATALOG_REGISTRATION_NUMBER_EXCEPTION_MESSAGE, registrationNumber)));
     }
 
     @Override
     @Transactional
-    public CarCatalogUpdateDTO updateCarCatalog(Long carCatalogId, CarCatalogUpdateDTO carCatalogUpdateDTO) {
+    public Long createCarCatalog(CreateCarCatalogDTO createCarCatalogDTO) {
+        CarCatalog newCarCatalog = CarCatalog.builder()
+                .registrationNumber(createCarCatalogDTO.getRegistrationNumber())
+                .carType(createCarCatalogDTO.getCarType())
+                .yearOfManufacture(createCarCatalogDTO.getYearOfManufacture())
+                .make(createCarCatalogDTO.getMake())
+                .model(createCarCatalogDTO.getModel())
+                .colour(createCarCatalogDTO.getColour())
+                .price(createCarCatalogDTO.getPrice())
+                .carStatus(createCarCatalogDTO.getCarStatus())
+                .build();
+
+        CarCatalog savedCarCatalog = carCatalogRepository.save(newCarCatalog);
+
+        return savedCarCatalog.getId();
+    }
+
+    @Override
+    @Transactional
+    public void updateCarCatalog(Long carCatalogId, UpdateCarCatalogDTO updateCarCatalogDTO) {
         CarCatalog carCatalog = carCatalogRepository.findById(carCatalogId)
                 .orElseThrow(() -> new ServiceException(String.format(CAR_CATALOG_ID_EXCEPTION_MESSAGE, carCatalogId)));
-        carCatalog.setRegistrationNumber(carCatalogUpdateDTO.getRegistrationNumber());
-        carCatalog.setCarType(carCatalogUpdateDTO.getCarType());
-        carCatalog.setYearOfManufacture(carCatalogUpdateDTO.getYearOfManufacture());
-        carCatalog.setMake(carCatalogUpdateDTO.getMake());
-        carCatalog.setModel(carCatalogUpdateDTO.getModel());
-        carCatalog.setColour(carCatalogUpdateDTO.getColour());
-        carCatalog.setPrice(carCatalogUpdateDTO.getPrice());
-        carCatalog.setCarStatus(carCatalogUpdateDTO.getCarStatus());
+        carCatalog.setRegistrationNumber(updateCarCatalogDTO.getRegistrationNumber());
+        carCatalog.setCarType(updateCarCatalogDTO.getCarType());
+        carCatalog.setYearOfManufacture(updateCarCatalogDTO.getYearOfManufacture());
+        carCatalog.setMake(updateCarCatalogDTO.getMake());
+        carCatalog.setModel(updateCarCatalogDTO.getModel());
+        carCatalog.setColour(updateCarCatalogDTO.getColour());
+        carCatalog.setPrice(updateCarCatalogDTO.getPrice());
+        carCatalog.setCarStatus(updateCarCatalogDTO.getCarStatus());
 
         carCatalogRepository.save(carCatalog);
-
-        return CarCatalogMapper.toCarCatalogUpdateDTO(carCatalog);
     }
 
     @Override

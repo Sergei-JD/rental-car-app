@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<ViewUserDTO> getUserById(
             @PathVariable(name = "id") Long id) {
         User user = userService.getUserById(id);
-        ViewUserDTO viewUserDTO = UserMapper.toUserViewDTO(user);
+        ViewUserDTO viewUserDTO = UserMapper.toViewUserDTO(user);
 
         return new ResponseEntity<>(viewUserDTO, HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class UserController {
     public ResponseEntity<ViewUserDTO> getUserByEmail(
             @RequestParam(name = "email") String email) {
         User user = userService.getUserByEmail(email);
-        ViewUserDTO viewUserDTO = UserMapper.toUserViewDTO(user);
+        ViewUserDTO viewUserDTO = UserMapper.toViewUserDTO(user);
 
         return new ResponseEntity<>(viewUserDTO, HttpStatus.OK);
     }

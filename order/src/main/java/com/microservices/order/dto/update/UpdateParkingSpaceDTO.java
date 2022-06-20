@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingSpaceUpdateDTO {
+public class UpdateParkingSpaceDTO {
 
     @NotEmpty(message = "'Address' should not be empty")
     @Size(min = 2, max = 256, message = "'Address' should be between 2 and 256 characters")

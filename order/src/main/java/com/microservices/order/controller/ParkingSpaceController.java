@@ -1,8 +1,10 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.create.ParkingSpaceCreateDTO;
-import com.microservices.order.dto.update.ParkingSpaceUpdateDTO;
-import com.microservices.order.dto.view.ParkingSpaceViewDTO;
+import com.microservices.order.dto.create.CreateParkingSpaceDTO;
+import com.microservices.order.dto.update.UpdateParkingSpaceDTO;
+import com.microservices.order.dto.view.ViewParkingSpaceDTO;
+import com.microservices.order.entity.ParkingSpace;
+import com.microservices.order.mapper.ParkingSpaceMapper;
 import com.microservices.order.service.ParkingSpaceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,43 +30,44 @@ public class ParkingSpaceController {
     private final ParkingSpaceService parkingSpaceService;
 
     @GetMapping
-    public ResponseEntity<Page<ParkingSpaceViewDTO>> getAllParkingSpaces(Pageable pageable) {
-        Page<ParkingSpaceViewDTO> creditParkingSpaces = parkingSpaceService.getAllParkingSpaces(pageable);
+    public ResponseEntity<Page<ViewParkingSpaceDTO>> getAllParkingSpaces(Pageable pageable) {
+        Page<ViewParkingSpaceDTO> creditParkingSpaces = parkingSpaceService.getAllParkingSpaces(pageable);
 
         return new ResponseEntity<>(creditParkingSpaces, HttpStatus.OK);
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<Page<ParkingSpaceViewDTO>> getAllParkingSpaceByOrderId(
+    public ResponseEntity<Page<ViewParkingSpaceDTO>> getAllParkingSpaceByOrderId(
             @PathVariable(name = "id") Long id, Pageable pageable) {
-        Page<ParkingSpaceViewDTO> parkingSpaces = parkingSpaceService.getAllParkingSpaceByOrderId(id, pageable);
+        Page<ViewParkingSpaceDTO> parkingSpaces = parkingSpaceService.getAllParkingSpaceByOrderId(id, pageable);
 
         return new ResponseEntity<>(parkingSpaces, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ParkingSpaceViewDTO> getParkingSpaceById(
+    public ResponseEntity<ViewParkingSpaceDTO> getParkingSpaceById(
             @PathVariable(name = "id") Long id) {
-        ParkingSpaceViewDTO parkingSpaceViewDTO = parkingSpaceService.getParkingSpaceById(id);
+        ParkingSpace parkingSpace = parkingSpaceService.getParkingSpaceById(id);
+        ViewParkingSpaceDTO viewParkingSpaceDTO = ParkingSpaceMapper.toViewParkingSpaceDTO(parkingSpace);
 
-        return new ResponseEntity<>(parkingSpaceViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewParkingSpaceDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ParkingSpaceCreateDTO> createParkingSpace(
-            @RequestBody @Valid ParkingSpaceCreateDTO parkingSpaceCreateDTO) {
-        ParkingSpaceCreateDTO addParkingSpace = parkingSpaceService.createParkingSpace(parkingSpaceCreateDTO);
+    public ResponseEntity<Long> createParkingSpace(
+            @RequestBody @Valid CreateParkingSpaceDTO createParkingSpaceDTO) {
+        Long addParkingSpace = parkingSpaceService.createParkingSpace(createParkingSpaceDTO);
 
         return new ResponseEntity<>(addParkingSpace, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ParkingSpaceUpdateDTO> updateParkingSpace(
+    public ResponseEntity<Void> updateParkingSpace(
             @PathVariable(name = "id") Long id,
-            @RequestBody @Valid ParkingSpaceUpdateDTO parkingSpaceUpdateDTO) {
-        ParkingSpaceUpdateDTO updateParkingSpace = parkingSpaceService.updateParkingSpace(id, parkingSpaceUpdateDTO);
+            @RequestBody @Valid UpdateParkingSpaceDTO updateParkingSpaceDTO) {
+        parkingSpaceService.updateParkingSpace(id, updateParkingSpaceDTO);
 
-        return new ResponseEntity<>(updateParkingSpace, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

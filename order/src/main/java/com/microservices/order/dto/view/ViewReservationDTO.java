@@ -12,7 +12,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReservationViewDTO {
+public class ViewReservationDTO {
 
     private Long id;
 

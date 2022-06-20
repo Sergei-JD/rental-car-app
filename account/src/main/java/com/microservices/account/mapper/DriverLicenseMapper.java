@@ -12,7 +12,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DriverLicenseMapper {
 
-    public static ViewDriverLicenseDTO toDriverLicenseViewDTO(DriverLicense driverLicense) {
+    public static ViewDriverLicenseDTO toViewDriverLicenseDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
                 .map(existDriverLicense -> ViewDriverLicenseDTO.builder()
                         .id(driverLicense.getId())
@@ -24,7 +24,7 @@ public class DriverLicenseMapper {
                 .orElse(null);
     }
 
-    public static CreateDriverLicenseDTO toDriverLicenseCreateDTO(DriverLicense driverLicense) {
+    public static CreateDriverLicenseDTO toCreateDriverLicenseDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
                 .map(existDriverLicense -> CreateDriverLicenseDTO.builder()
                         .driverLicenseNumber(driverLicense.getDriverLicenseNumber())
@@ -35,7 +35,7 @@ public class DriverLicenseMapper {
                 .orElse(null);
     }
 
-    public static UpdateDriverLicenseDTO toDriverLicenseUpdateDTO(DriverLicense driverLicense) {
+    public static UpdateDriverLicenseDTO toUpdateDriverLicenseDTO(DriverLicense driverLicense) {
         return Optional.ofNullable(driverLicense)
                 .map(existDriverLicense -> UpdateDriverLicenseDTO.builder()
                         .driverLicenseNumber(driverLicense.getDriverLicenseNumber())

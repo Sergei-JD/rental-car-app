@@ -1,8 +1,8 @@
 package com.microservices.car.mapper;
 
-import com.microservices.car.dto.create.CarCatalogCreateDTO;
-import com.microservices.car.dto.update.CarCatalogUpdateDTO;
-import com.microservices.car.dto.view.CarCatalogViewDTO;
+import com.microservices.car.dto.create.CreateCarCatalogDTO;
+import com.microservices.car.dto.update.UpdateCarCatalogDTO;
+import com.microservices.car.dto.view.ViewCarCatalogDTO;
 import com.microservices.car.entity.CarCatalog;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CarCatalogMapper {
 
-    public static CarCatalogViewDTO toCarCatalogViewDTO(CarCatalog carCatalog) {
+    public static ViewCarCatalogDTO toViewCarCatalogDTO(CarCatalog carCatalog) {
         return Optional.ofNullable(carCatalog)
-                .map(existCarCatalog -> CarCatalogViewDTO.builder()
+                .map(existCarCatalog -> ViewCarCatalogDTO.builder()
                         .id(carCatalog.getId())
                         .registrationNumber(carCatalog.getRegistrationNumber())
                         .carType(carCatalog.getCarType())
@@ -28,9 +28,9 @@ public class CarCatalogMapper {
                 .orElse(null);
     }
 
-    public static CarCatalogCreateDTO toCarCatalogCreateDTO(CarCatalog carCatalog) {
+    public static CreateCarCatalogDTO toCreateCarCatalogDTO(CarCatalog carCatalog) {
         return Optional.ofNullable(carCatalog)
-                .map(existCarCatalog -> CarCatalogCreateDTO.builder()
+                .map(existCarCatalog -> CreateCarCatalogDTO.builder()
                         .registrationNumber(carCatalog.getRegistrationNumber())
                         .carType(carCatalog.getCarType())
                         .yearOfManufacture(carCatalog.getYearOfManufacture())
@@ -43,9 +43,9 @@ public class CarCatalogMapper {
                 .orElse(null);
     }
 
-    public static CarCatalogUpdateDTO toCarCatalogUpdateDTO(CarCatalog carCatalog) {
+    public static UpdateCarCatalogDTO toUpdateCarCatalogDTO(CarCatalog carCatalog) {
         return Optional.ofNullable(carCatalog)
-                .map(existCarCatalog -> CarCatalogUpdateDTO.builder()
+                .map(existCarCatalog -> UpdateCarCatalogDTO.builder()
                         .registrationNumber(carCatalog.getRegistrationNumber())
                         .carType(carCatalog.getCarType())
                         .yearOfManufacture(carCatalog.getYearOfManufacture())

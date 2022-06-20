@@ -1,4 +1,4 @@
-package com.microservices.order.dto.update;
+package com.microservices.order.dto.create;
 
 import com.microservices.order.entity.InvoiceStatus;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceUpdateDTO {
+public class CreateInvoiceDTO {
 
     @NotEmpty(message = "'Amount' should not be empty")
     @PositiveOrZero(message = "'Amount' should be positive number or 0")

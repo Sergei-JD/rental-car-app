@@ -1,5 +1,6 @@
 package com.microservices.order.dto.view;
 
+import com.microservices.order.entity.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +10,11 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ParkingSpaceViewDTO {
+public class ViewOrderDTO {
 
     private Long id;
 
-    private String address;
+    private Long accountId;
 
-    private String level;
-
-    private String numberSpace;
+    private OrderStatus orderStatus;
 }

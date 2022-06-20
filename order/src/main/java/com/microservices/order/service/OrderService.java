@@ -1,25 +1,26 @@
 package com.microservices.order.service;
 
-import com.microservices.order.dto.create.OrderCreateDTO;
-import com.microservices.order.dto.update.OrderUpdateDTO;
-import com.microservices.order.dto.view.OrderViewDTO;
+import com.microservices.order.dto.create.CreateOrderDTO;
+import com.microservices.order.dto.update.UpdateOrderDTO;
+import com.microservices.order.dto.view.ViewOrderDTO;
+import com.microservices.order.entity.Order;
 import com.microservices.order.entity.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
 
-    Page<OrderViewDTO> getAllOrders(Pageable pageable);
+    Page<ViewOrderDTO> getAllOrders(Pageable pageable);
 
-    Page<OrderViewDTO> getAllOrdersByAccountId(Long accountId, Pageable pageable);
+    Page<ViewOrderDTO> getAllOrdersByAccountId(Long accountId, Pageable pageable);
 
-    Page<OrderViewDTO> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable);
+    Page<ViewOrderDTO> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable);
 
-    OrderViewDTO getOrderById(Long orderId);
+    Order getOrderById(Long orderId);
 
-    OrderCreateDTO createOrder(OrderCreateDTO orderCreateDTO);
+    Long createOrder(CreateOrderDTO createOrderDTO);
 
-    OrderUpdateDTO updateOrder(Long orderId, OrderUpdateDTO orderUpdateDTO);
+    void updateOrder(Long orderId, UpdateOrderDTO updateOrderDTO);
 
     boolean deleteOrder(Long orderId);
 }

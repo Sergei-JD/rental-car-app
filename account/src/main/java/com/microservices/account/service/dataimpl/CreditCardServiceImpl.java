@@ -30,7 +30,7 @@ public class CreditCardServiceImpl implements CreditCardService {
         Page<CreditCard> pageCreditCards = creditCardRepository.findAll(pageable);
 
         List<ViewCreditCardDTO> creditCards = pageCreditCards.stream()
-                .map(CreditCardMapper::toCreditCardViewDTO)
+                .map(CreditCardMapper::toViewCreditCardDTO)
                 .toList();
 
         return new PageImpl<>(creditCards);
@@ -41,7 +41,7 @@ public class CreditCardServiceImpl implements CreditCardService {
         Page<CreditCard> pageCreditCards = creditCardRepository.findCreditCardByAccountId(accountId, pageable);
 
         List<ViewCreditCardDTO> creditCards = pageCreditCards.stream()
-                .map(CreditCardMapper::toCreditCardViewDTO)
+                .map(CreditCardMapper::toViewCreditCardDTO)
                 .toList();
 
         return new PageImpl<>(creditCards);

@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         Page<User> pageUsers = userRepository.findAll(pageable);
 
         List<ViewUserDTO> users = pageUsers.stream()
-                .map(UserMapper::toUserViewDTO)
+                .map(UserMapper::toViewUserDTO)
                 .toList();
 
         return new PageImpl<>(users);
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         Page<User> pageUsers = userRepository.findAllByRole(role, pageable);
 
         List<ViewUserDTO> users = pageUsers.stream()
-                .map(UserMapper::toUserViewDTO)
+                .map(UserMapper::toViewUserDTO)
                 .toList();
 
         return new PageImpl<>(users);

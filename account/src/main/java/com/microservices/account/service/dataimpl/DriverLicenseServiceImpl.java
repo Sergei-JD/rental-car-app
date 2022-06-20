@@ -30,7 +30,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
         Page<DriverLicense> pageDriverLicenses = driverLicenseRepository.findAll(pageable);
 
         List<ViewDriverLicenseDTO> driverLicenses = pageDriverLicenses.stream()
-                .map(DriverLicenseMapper::toDriverLicenseViewDTO)
+                .map(DriverLicenseMapper::toViewDriverLicenseDTO)
                 .toList();
 
         return new PageImpl<>(driverLicenses);
@@ -41,7 +41,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
         Page<DriverLicense> pageDriverLicenses = driverLicenseRepository.findDriverLicenseByAccountId(accountId, pageable);
 
         List<ViewDriverLicenseDTO> driverLicenses = pageDriverLicenses.stream()
-                .map(DriverLicenseMapper::toDriverLicenseViewDTO)
+                .map(DriverLicenseMapper::toViewDriverLicenseDTO)
                 .toList();
 
         return new PageImpl<>(driverLicenses);

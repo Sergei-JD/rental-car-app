@@ -12,7 +12,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserMapper {
 
-    public static ViewUserDTO toUserViewDTO(User user) {
+    public static ViewUserDTO toViewUserDTO(User user) {
         return Optional.ofNullable(user)
                 .map(existUser -> ViewUserDTO.builder()
                         .id(user.getId())
@@ -28,7 +28,7 @@ public class UserMapper {
                 .orElse(null);
     }
 
-    public static CreateUserDTO toUserCreateDTO(User user) {
+    public static CreateUserDTO toCreateUserDTO(User user) {
         return Optional.ofNullable(user)
                 .map(existUser -> CreateUserDTO.builder()
                         .firstName(user.getFirstName())
@@ -43,7 +43,7 @@ public class UserMapper {
                 .orElse(null);
     }
 
-    public static UpdateUserDTO toUserUpdateDTO(User user) {
+    public static UpdateUserDTO toUpdateUserDTO(User user) {
         return Optional.ofNullable(user)
                 .map(existUser -> UpdateUserDTO.builder()
                         .firstName(user.getFirstName())

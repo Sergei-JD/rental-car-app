@@ -1,9 +1,11 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.create.InvoiceCreateDTO;
-import com.microservices.order.dto.update.InvoiceUpdateDTO;
-import com.microservices.order.dto.view.InvoiceViewDTO;
+import com.microservices.order.dto.create.CreateInvoiceDTO;
+import com.microservices.order.dto.update.UpdateInvoiceDTO;
+import com.microservices.order.dto.view.ViewInvoiceDTO;
+import com.microservices.order.entity.Invoice;
 import com.microservices.order.entity.InvoiceStatus;
+import com.microservices.order.mapper.InvoiceMapper;
 import com.microservices.order.service.InvoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,43 +32,44 @@ public class InvoiceController {
     private final InvoiceService invoiceService;
 
     @GetMapping
-    public ResponseEntity<Page<InvoiceViewDTO>> getAllInvoices(Pageable pageable) {
-        Page<InvoiceViewDTO> invoices = invoiceService.getAllInvoices(pageable);
+    public ResponseEntity<Page<ViewInvoiceDTO>> getAllInvoices(Pageable pageable) {
+        Page<ViewInvoiceDTO> invoices = invoiceService.getAllInvoices(pageable);
 
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<Page<InvoiceViewDTO>> getAllInvoicesByStatus(
+    public ResponseEntity<Page<ViewInvoiceDTO>> getAllInvoicesByStatus(
             @RequestParam(name = "status") InvoiceStatus invoiceStatus, Pageable pageable) {
-        Page<InvoiceViewDTO> invoices = invoiceService.getAllInvoicesByStatus(invoiceStatus, pageable);
+        Page<ViewInvoiceDTO> invoices = invoiceService.getAllInvoicesByStatus(invoiceStatus, pageable);
 
         return new ResponseEntity<>(invoices, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InvoiceViewDTO> getInvoiceById(
+    public ResponseEntity<ViewInvoiceDTO> getInvoiceById(
             @PathVariable(name = "id") Long id) {
-        InvoiceViewDTO invoiceViewDTO = invoiceService.getInvoiceById(id);
+        Invoice invoice = invoiceService.getInvoiceById(id);
+        ViewInvoiceDTO viewInvoiceDTO = InvoiceMapper.toViewInvoiceDTO(invoice);
 
-        return new ResponseEntity<>(invoiceViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewInvoiceDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<InvoiceCreateDTO> createInvoice(
-            @RequestBody @Valid InvoiceCreateDTO invoiceCreateDTO) {
-        InvoiceCreateDTO addInvoice = invoiceService.createInvoice(invoiceCreateDTO);
+    public ResponseEntity<Long> createInvoice(
+            @RequestBody @Valid CreateInvoiceDTO createInvoiceDTO) {
+        Long addInvoice = invoiceService.createInvoice(createInvoiceDTO);
 
         return new ResponseEntity<>(addInvoice, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InvoiceUpdateDTO> updateInvoice(
+    public ResponseEntity<Void> updateInvoice(
             @PathVariable(name = "id") Long id,
-            @RequestBody @Valid InvoiceUpdateDTO invoiceUpdateDTO) {
-        InvoiceUpdateDTO updateInvoice = invoiceService.updateInvoice(id, invoiceUpdateDTO);
+            @RequestBody @Valid UpdateInvoiceDTO updateInvoiceDTO) {
+        invoiceService.updateInvoice(id, updateInvoiceDTO);
 
-        return new ResponseEntity<>(updateInvoice, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -1,8 +1,8 @@
 package com.microservices.order.mapper;
 
-import com.microservices.order.dto.create.InvoiceCreateDTO;
-import com.microservices.order.dto.update.InvoiceUpdateDTO;
-import com.microservices.order.dto.view.InvoiceViewDTO;
+import com.microservices.order.dto.create.CreateInvoiceDTO;
+import com.microservices.order.dto.update.UpdateInvoiceDTO;
+import com.microservices.order.dto.view.ViewInvoiceDTO;
 import com.microservices.order.entity.Invoice;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,9 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class InvoiceMapper {
 
-    public static InvoiceViewDTO toInvoiceViewDTO(Invoice invoice) {
+    public static ViewInvoiceDTO toViewInvoiceDTO(Invoice invoice) {
         return Optional.ofNullable(invoice)
-                .map(existInvoice -> InvoiceViewDTO.builder()
+                .map(existInvoice -> ViewInvoiceDTO.builder()
                         .id(invoice.getId())
                         .amount(invoice.getAmount())
                         .startDateRent(invoice.getStartDateRent())
@@ -26,9 +26,9 @@ public class InvoiceMapper {
                 .orElse(null);
     }
 
-    public static InvoiceCreateDTO toInvoiceCreateDTO(Invoice invoice) {
+    public static CreateInvoiceDTO toCreateInvoiceDTO(Invoice invoice) {
         return Optional.ofNullable(invoice)
-                .map(existInvoice -> InvoiceCreateDTO.builder()
+                .map(existInvoice -> CreateInvoiceDTO.builder()
                         .amount(invoice.getAmount())
                         .startDateRent(invoice.getStartDateRent())
                         .endDateRent(invoice.getEndDateRent())
@@ -39,9 +39,9 @@ public class InvoiceMapper {
                 .orElse(null);
     }
 
-    public static InvoiceUpdateDTO toInvoiceUpdateDTO(Invoice invoice) {
+    public static UpdateInvoiceDTO toUpdateInvoiceDTO(Invoice invoice) {
         return Optional.ofNullable(invoice)
-                .map(existInvoice -> InvoiceUpdateDTO.builder()
+                .map(existInvoice -> UpdateInvoiceDTO.builder()
                         .amount(invoice.getAmount())
                         .startDateRent(invoice.getStartDateRent())
                         .endDateRent(invoice.getEndDateRent())

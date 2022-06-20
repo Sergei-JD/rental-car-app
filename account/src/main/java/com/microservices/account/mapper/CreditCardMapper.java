@@ -12,7 +12,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CreditCardMapper {
 
-    public static ViewCreditCardDTO toCreditCardViewDTO(CreditCard creditCard) {
+    public static ViewCreditCardDTO toViewCreditCardDTO(CreditCard creditCard) {
         return Optional.ofNullable(creditCard)
                 .map(existCreditCard -> ViewCreditCardDTO.builder()
                         .id(creditCard.getId())
@@ -27,7 +27,7 @@ public class CreditCardMapper {
                 .orElse(null);
     }
 
-    public static CreateCreditCardDTO toCreditCardCreateDTO(CreditCard creditCard) {
+    public static CreateCreditCardDTO toCreateCreditCardDTO(CreditCard creditCard) {
         return Optional.ofNullable(creditCard)
                 .map(existCreditCard -> CreateCreditCardDTO.builder()
                         .creditCardType(creditCard.getCreditCardType())
@@ -41,7 +41,7 @@ public class CreditCardMapper {
                 .orElse(null);
     }
 
-    public static UpdateCreditCardDTO toCreditCardUpdateDTO(CreditCard creditCard) {
+    public static UpdateCreditCardDTO toUpdateCreditCardDTO(CreditCard creditCard) {
         return Optional.ofNullable(creditCard)
                 .map(existCreditCard -> UpdateCreditCardDTO.builder()
                         .creditCardType(creditCard.getCreditCardType())

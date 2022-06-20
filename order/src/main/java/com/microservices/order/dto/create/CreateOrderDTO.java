@@ -1,4 +1,4 @@
-package com.microservices.order.dto.update;
+package com.microservices.order.dto.create;
 
 import com.microservices.order.entity.OrderStatus;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderUpdateDTO {
+public class CreateOrderDTO {
 
     @NotEmpty(message = "'Account id' should not be empty")
     @Positive(message = "'Account id' should be positive number")

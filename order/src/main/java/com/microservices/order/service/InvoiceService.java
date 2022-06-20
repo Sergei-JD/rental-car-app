@@ -1,23 +1,24 @@
 package com.microservices.order.service;
 
-import com.microservices.order.dto.create.InvoiceCreateDTO;
-import com.microservices.order.dto.update.InvoiceUpdateDTO;
-import com.microservices.order.dto.view.InvoiceViewDTO;
+import com.microservices.order.dto.create.CreateInvoiceDTO;
+import com.microservices.order.dto.update.UpdateInvoiceDTO;
+import com.microservices.order.dto.view.ViewInvoiceDTO;
+import com.microservices.order.entity.Invoice;
 import com.microservices.order.entity.InvoiceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface InvoiceService {
 
-    Page<InvoiceViewDTO> getAllInvoices(Pageable pageable);
+    Page<ViewInvoiceDTO> getAllInvoices(Pageable pageable);
 
-    Page<InvoiceViewDTO> getAllInvoicesByStatus(InvoiceStatus invoiceStatus, Pageable pageable);
+    Page<ViewInvoiceDTO> getAllInvoicesByStatus(InvoiceStatus invoiceStatus, Pageable pageable);
 
-    InvoiceViewDTO getInvoiceById(Long invoiceId);
+    Invoice getInvoiceById(Long invoiceId);
 
-    InvoiceCreateDTO createInvoice(InvoiceCreateDTO invoiceCreateDTO);
+    Long createInvoice(CreateInvoiceDTO createInvoiceDTO);
 
-    InvoiceUpdateDTO updateInvoice(Long invoiceId, InvoiceUpdateDTO invoiceUpdateDTO);
+    void updateInvoice(Long invoiceId, UpdateInvoiceDTO updateInvoiceDTO);
 
     boolean deleteInvoice(Long invoiceId);
 }

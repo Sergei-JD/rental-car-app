@@ -1,8 +1,8 @@
 package com.microservices.order.service.dataimpl;
 
-import com.microservices.order.dto.create.InvoiceCreateDTO;
-import com.microservices.order.dto.update.InvoiceUpdateDTO;
-import com.microservices.order.dto.view.InvoiceViewDTO;
+import com.microservices.order.dto.create.CreateInvoiceDTO;
+import com.microservices.order.dto.update.UpdateInvoiceDTO;
+import com.microservices.order.dto.view.ViewInvoiceDTO;
 import com.microservices.order.entity.Invoice;
 import com.microservices.order.entity.InvoiceStatus;
 import com.microservices.order.mapper.InvoiceMapper;
@@ -27,65 +27,63 @@ public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
 
     @Override
-    public Page<InvoiceViewDTO> getAllInvoices(Pageable pageable) {
+    public Page<ViewInvoiceDTO> getAllInvoices(Pageable pageable) {
         Page<Invoice> pageInvoices = invoiceRepository.findAll(pageable);
 
-        List<InvoiceViewDTO> invoices = pageInvoices.stream()
-                .map(InvoiceMapper::toInvoiceViewDTO)
+        List<ViewInvoiceDTO> invoices = pageInvoices.stream()
+                .map(InvoiceMapper::toViewInvoiceDTO)
                 .toList();
 
         return new PageImpl<>(invoices);
     }
 
     @Override
-    public Page<InvoiceViewDTO> getAllInvoicesByStatus(InvoiceStatus invoiceStatus, Pageable pageable) {
+    public Page<ViewInvoiceDTO> getAllInvoicesByStatus(InvoiceStatus invoiceStatus, Pageable pageable) {
         Page<Invoice> pageInvoices = invoiceRepository.findAllByInvoiceStatus(invoiceStatus, pageable);
 
-        List<InvoiceViewDTO> invoices = pageInvoices.stream()
-                .map(InvoiceMapper::toInvoiceViewDTO)
+        List<ViewInvoiceDTO> invoices = pageInvoices.stream()
+                .map(InvoiceMapper::toViewInvoiceDTO)
                 .toList();
 
         return new PageImpl<>(invoices);
     }
 
     @Override
-    public InvoiceViewDTO getInvoiceById(Long invoiceId) {
-        Invoice invoice = invoiceRepository.findById(invoiceId)
+    public Invoice getInvoiceById(Long invoiceId) {
+        return invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new ServiceException(String.format(INVOICE_ID_EXCEPTION_MESSAGE, invoiceId)));
-
-        return InvoiceMapper.toInvoiceViewDTO(invoice);
     }
 
     @Override
     @Transactional
-    public InvoiceCreateDTO createInvoice(InvoiceCreateDTO invoiceCreateDTO) {
+    public Long createInvoice(CreateInvoiceDTO createInvoiceDTO) {
         Invoice newInvoice = Invoice.builder()
-                .amount(invoiceCreateDTO.getAmount())
-                .startDateRent(invoiceCreateDTO.getStartDateRent())
-                .endDateRent(invoiceCreateDTO.getEndDateRent())
-                .rentalPeriod(invoiceCreateDTO.getRentalPeriod())
-                .paymentDate(invoiceCreateDTO.getPaymentDate())
-                .invoiceStatus(invoiceCreateDTO.getInvoiceStatus())
+                .amount(createInvoiceDTO.getAmount())
+                .startDateRent(createInvoiceDTO.getStartDateRent())
+                .endDateRent(createInvoiceDTO.getEndDateRent())
+                .rentalPeriod(createInvoiceDTO.getRentalPeriod())
+                .paymentDate(createInvoiceDTO.getPaymentDate())
+                .invoiceStatus(createInvoiceDTO.getInvoiceStatus())
                 .build();
 
-        return InvoiceMapper.toInvoiceCreateDTO(invoiceRepository.save(newInvoice));
+        Invoice savedInvoice = invoiceRepository.save(newInvoice);
+
+        return savedInvoice.getId();
     }
 
     @Override
     @Transactional
-    public InvoiceUpdateDTO updateInvoice(Long invoiceId, InvoiceUpdateDTO invoiceUpdateDTO) {
+    public void updateInvoice(Long invoiceId, UpdateInvoiceDTO updateInvoiceDTO) {
         Invoice invoice = invoiceRepository.findById(invoiceId)
                 .orElseThrow(() -> new ServiceException(String.format(INVOICE_ID_EXCEPTION_MESSAGE, invoiceId)));
-        invoice.setAmount(invoiceUpdateDTO.getAmount());
-        invoice.setStartDateRent(invoiceUpdateDTO.getStartDateRent());
-        invoice.setEndDateRent(invoiceUpdateDTO.getEndDateRent());
-        invoice.setRentalPeriod(invoiceUpdateDTO.getRentalPeriod());
-        invoice.setPaymentDate(invoiceUpdateDTO.getPaymentDate());
-        invoice.setInvoiceStatus(invoiceUpdateDTO.getInvoiceStatus());
+        invoice.setAmount(updateInvoiceDTO.getAmount());
+        invoice.setStartDateRent(updateInvoiceDTO.getStartDateRent());
+        invoice.setEndDateRent(updateInvoiceDTO.getEndDateRent());
+        invoice.setRentalPeriod(updateInvoiceDTO.getRentalPeriod());
+        invoice.setPaymentDate(updateInvoiceDTO.getPaymentDate());
+        invoice.setInvoiceStatus(updateInvoiceDTO.getInvoiceStatus());
 
         invoiceRepository.save(invoice);
-
-        return InvoiceMapper.toInvoiceUpdateDTO(invoice);
     }
 
     @Override

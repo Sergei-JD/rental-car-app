@@ -48,7 +48,7 @@ public class DriverLicenseController {
     public ResponseEntity<ViewDriverLicenseDTO> getDriverLicenseById(
             @PathVariable(name = "id") Long id) {
         DriverLicense driverLicense = driverLicenseService.getDriverLicenseById(id);
-        ViewDriverLicenseDTO viewDriverLicenseDTO = DriverLicenseMapper.toDriverLicenseViewDTO(driverLicense);
+        ViewDriverLicenseDTO viewDriverLicenseDTO = DriverLicenseMapper.toViewDriverLicenseDTO(driverLicense);
 
         return new ResponseEntity<>(viewDriverLicenseDTO, HttpStatus.OK);
     }

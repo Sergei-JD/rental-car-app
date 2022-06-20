@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarCatalogViewDTO {
+public class ViewCarCatalogDTO {
 
     private Long id;
 

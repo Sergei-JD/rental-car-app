@@ -1,8 +1,8 @@
 package com.microservices.order.service.dataimpl;
 
-import com.microservices.order.dto.create.ParkingSpaceCreateDTO;
-import com.microservices.order.dto.update.ParkingSpaceUpdateDTO;
-import com.microservices.order.dto.view.ParkingSpaceViewDTO;
+import com.microservices.order.dto.create.CreateParkingSpaceDTO;
+import com.microservices.order.dto.update.UpdateParkingSpaceDTO;
+import com.microservices.order.dto.view.ViewParkingSpaceDTO;
 import com.microservices.order.entity.ParkingSpace;
 import com.microservices.order.mapper.ParkingSpaceMapper;
 import com.microservices.order.repository.ParkingSpaceRepository;
@@ -26,59 +26,57 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     private final ParkingSpaceRepository parkingSpaceRepository;
 
     @Override
-    public Page<ParkingSpaceViewDTO> getAllParkingSpaces(Pageable pageable) {
+    public Page<ViewParkingSpaceDTO> getAllParkingSpaces(Pageable pageable) {
         Page<ParkingSpace> pageParkingSpaces = parkingSpaceRepository.findAll(pageable);
 
-        List<ParkingSpaceViewDTO> parkingSpaces = pageParkingSpaces.stream()
-                .map(ParkingSpaceMapper::toParkingSpaceViewDTO)
+        List<ViewParkingSpaceDTO> parkingSpaces = pageParkingSpaces.stream()
+                .map(ParkingSpaceMapper::toViewParkingSpaceDTO)
                 .toList();
 
         return new PageImpl<>(parkingSpaces);
     }
 
     @Override
-    public Page<ParkingSpaceViewDTO> getAllParkingSpaceByOrderId(Long orderId, Pageable pageable) {
+    public Page<ViewParkingSpaceDTO> getAllParkingSpaceByOrderId(Long orderId, Pageable pageable) {
         Page<ParkingSpace> pageParkingSpaces = parkingSpaceRepository.findParkingSpaceByOrderId(orderId, pageable);
 
-        List<ParkingSpaceViewDTO> parkingSpaces = pageParkingSpaces.stream()
-                .map(ParkingSpaceMapper::toParkingSpaceViewDTO)
+        List<ViewParkingSpaceDTO> parkingSpaces = pageParkingSpaces.stream()
+                .map(ParkingSpaceMapper::toViewParkingSpaceDTO)
                 .toList();
 
         return new PageImpl<>(parkingSpaces);
     }
 
     @Override
-    public ParkingSpaceViewDTO getParkingSpaceById(Long parkingSpaceId) {
-        ParkingSpace parkingSpace = parkingSpaceRepository.findById(parkingSpaceId)
+    public ParkingSpace getParkingSpaceById(Long parkingSpaceId) {
+        return parkingSpaceRepository.findById(parkingSpaceId)
                 .orElseThrow(() -> new ServiceException(String.format(PARKING_SPACE_ID_EXCEPTION_MESSAGE, parkingSpaceId)));
-
-        return ParkingSpaceMapper.toParkingSpaceViewDTO(parkingSpace);
     }
 
     @Override
     @Transactional
-    public ParkingSpaceCreateDTO createParkingSpace(ParkingSpaceCreateDTO parkingSpaceCreateDTO) {
+    public Long createParkingSpace(CreateParkingSpaceDTO createParkingSpaceDTO) {
         ParkingSpace newParkingSpace = ParkingSpace.builder()
-                .address(parkingSpaceCreateDTO.getAddress())
-                .level(parkingSpaceCreateDTO.getLevel())
-                .numberSpace(parkingSpaceCreateDTO.getNumberSpace())
+                .address(createParkingSpaceDTO.getAddress())
+                .level(createParkingSpaceDTO.getLevel())
+                .numberSpace(createParkingSpaceDTO.getNumberSpace())
                 .build();
 
-        return ParkingSpaceMapper.toParkingSpaceCreateDTO(parkingSpaceRepository.save(newParkingSpace));
+        ParkingSpace savedParkingSpace = parkingSpaceRepository.save(newParkingSpace);
+
+        return savedParkingSpace.getId();
     }
 
     @Override
     @Transactional
-    public ParkingSpaceUpdateDTO updateParkingSpace(Long parkingSpaceId, ParkingSpaceUpdateDTO parkingSpaceUpdateDTO) {
+    public void updateParkingSpace(Long parkingSpaceId, UpdateParkingSpaceDTO updateParkingSpaceDTO) {
         ParkingSpace parkingSpace = parkingSpaceRepository.findById(parkingSpaceId)
                 .orElseThrow(() -> new ServiceException(String.format(PARKING_SPACE_ID_EXCEPTION_MESSAGE, parkingSpaceId)));
-        parkingSpace.setAddress(parkingSpaceUpdateDTO.getAddress());
-        parkingSpace.setLevel(parkingSpaceUpdateDTO.getLevel());
-        parkingSpace.setNumberSpace(parkingSpaceUpdateDTO.getNumberSpace());
+        parkingSpace.setAddress(updateParkingSpaceDTO.getAddress());
+        parkingSpace.setLevel(updateParkingSpaceDTO.getLevel());
+        parkingSpace.setNumberSpace(updateParkingSpaceDTO.getNumberSpace());
 
         parkingSpaceRepository.save(parkingSpace);
-
-        return ParkingSpaceMapper.toParkingSpaceUpdateDTO(parkingSpace);
     }
 
     @Override

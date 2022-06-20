@@ -1,9 +1,11 @@
 package com.microservices.order.controller;
 
-import com.microservices.order.dto.create.ReservationCreateDTO;
-import com.microservices.order.dto.update.ReservationUpdateDTO;
-import com.microservices.order.dto.view.ReservationViewDTO;
+import com.microservices.order.dto.create.CreateReservationDTO;
+import com.microservices.order.dto.update.UpdateReservationDTO;
+import com.microservices.order.dto.view.ViewReservationDTO;
+import com.microservices.order.entity.Reservation;
 import com.microservices.order.entity.ReservationStatus;
+import com.microservices.order.mapper.ReservationMapper;
 import com.microservices.order.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,51 +32,52 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @GetMapping
-    public ResponseEntity<Page<ReservationViewDTO>> getAllReservations(Pageable pageable) {
-        Page<ReservationViewDTO> reservations = reservationService.getAllReservations(pageable);
+    public ResponseEntity<Page<ViewReservationDTO>> getAllReservations(Pageable pageable) {
+        Page<ViewReservationDTO> reservations = reservationService.getAllReservations(pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/status")
-    public ResponseEntity<Page<ReservationViewDTO>> getAllReservationsStatus(
+    public ResponseEntity<Page<ViewReservationDTO>> getAllReservationsStatus(
             @RequestParam(name = "status") ReservationStatus reservationStatus, Pageable pageable) {
-        Page<ReservationViewDTO> reservations = reservationService.getAllReservationsStatus(reservationStatus, pageable);
+        Page<ViewReservationDTO> reservations = reservationService.getAllReservationsStatus(reservationStatus, pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/order/{id}")
-    public ResponseEntity<Page<ReservationViewDTO>> getAllReservationByOrderId(
+    public ResponseEntity<Page<ViewReservationDTO>> getAllReservationByOrderId(
             @PathVariable(name = "id") Long id, Pageable pageable) {
-        Page<ReservationViewDTO> reservations = reservationService.getAllReservationByOrderId(id, pageable);
+        Page<ViewReservationDTO> reservations = reservationService.getAllReservationByOrderId(id, pageable);
 
         return new ResponseEntity<>(reservations, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ReservationViewDTO> getReservationById(
+    public ResponseEntity<ViewReservationDTO> getReservationById(
             @PathVariable(name = "id") Long id) {
-        ReservationViewDTO reservationViewDTO = reservationService.getReservationById(id);
+        Reservation reservation = reservationService.getReservationById(id);
+        ViewReservationDTO viewReservationDTO = ReservationMapper.toViewReservationDTO(reservation);
 
-        return new ResponseEntity<>(reservationViewDTO, HttpStatus.OK);
+        return new ResponseEntity<>(viewReservationDTO, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ReservationCreateDTO> createReservation(
-            @RequestBody @Valid ReservationCreateDTO reservationCreateDTO) {
-        ReservationCreateDTO addReservation = reservationService.createReservation(reservationCreateDTO);
+    public ResponseEntity<Long> createReservation(
+            @RequestBody @Valid CreateReservationDTO createReservationDTO) {
+        Long addReservation = reservationService.createReservation(createReservationDTO);
 
         return new ResponseEntity<>(addReservation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationUpdateDTO> updateReservation(
+    public ResponseEntity<Void> updateReservation(
             @PathVariable(name = "id") Long id,
-            @RequestBody @Valid ReservationUpdateDTO reservationUpdateDTO) {
-        ReservationUpdateDTO updateReservation = reservationService.updateReservation(id, reservationUpdateDTO);
+            @RequestBody @Valid UpdateReservationDTO updateReservationDTO) {
+        reservationService.updateReservation(id, updateReservationDTO);
 
-        return new ResponseEntity<>(updateReservation, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

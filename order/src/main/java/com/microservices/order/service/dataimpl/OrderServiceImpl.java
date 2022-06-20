@@ -1,8 +1,8 @@
 package com.microservices.order.service.dataimpl;
 
-import com.microservices.order.dto.create.OrderCreateDTO;
-import com.microservices.order.dto.update.OrderUpdateDTO;
-import com.microservices.order.dto.view.OrderViewDTO;
+import com.microservices.order.dto.create.CreateOrderDTO;
+import com.microservices.order.dto.update.UpdateOrderDTO;
+import com.microservices.order.dto.view.ViewOrderDTO;
 import com.microservices.order.entity.Order;
 import com.microservices.order.entity.OrderStatus;
 import com.microservices.order.mapper.OrderMapper;
@@ -27,68 +27,66 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public Page<OrderViewDTO> getAllOrders(Pageable pageable) {
+    public Page<ViewOrderDTO> getAllOrders(Pageable pageable) {
         Page<Order> pageOrders = orderRepository.findAll(pageable);
 
-        List<OrderViewDTO> orders = pageOrders.stream()
-                .map(OrderMapper::toOrderViewDTO)
+        List<ViewOrderDTO> orders = pageOrders.stream()
+                .map(OrderMapper::toViewOrderDTO)
                 .toList();
 
         return new PageImpl<>(orders);
     }
 
     @Override
-    public Page<OrderViewDTO> getAllOrdersByAccountId(Long accountId, Pageable pageable) {
+    public Page<ViewOrderDTO> getAllOrdersByAccountId(Long accountId, Pageable pageable) {
         Page<Order> pageOrders = orderRepository.findByAccountId(accountId, pageable);
 
-        List<OrderViewDTO> orders = pageOrders.stream()
-                .map(OrderMapper::toOrderViewDTO)
+        List<ViewOrderDTO> orders = pageOrders.stream()
+                .map(OrderMapper::toViewOrderDTO)
                 .toList();
 
         return new PageImpl<>(orders);
     }
 
     @Override
-    public Page<OrderViewDTO> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
+    public Page<ViewOrderDTO> getAllOrdersByStatus(OrderStatus orderStatus, Pageable pageable) {
         Page<Order> pageOrders = orderRepository.findAllByOrderStatus(orderStatus, pageable);
 
-        List<OrderViewDTO> orders = pageOrders.stream()
-                .map(OrderMapper::toOrderViewDTO)
+        List<ViewOrderDTO> orders = pageOrders.stream()
+                .map(OrderMapper::toViewOrderDTO)
                 .toList();
 
         return new PageImpl<>(orders);
     }
 
     @Override
-    public OrderViewDTO getOrderById(Long orderId) {
-        Order order = orderRepository.findById(orderId)
+    public Order getOrderById(Long orderId) {
+        return orderRepository.findById(orderId)
                 .orElseThrow(() -> new ServiceException(String.format(ORDER_ID_EXCEPTION_MESSAGE, orderId)));
-
-        return OrderMapper.toOrderViewDTO(order);
     }
 
     @Override
     @Transactional
-    public OrderCreateDTO createOrder(OrderCreateDTO orderCreateDTO) {
+    public Long createOrder(CreateOrderDTO createOrderDTO) {
         Order newOrder = Order.builder()
-                .accountId(orderCreateDTO.getAccountId())
-                .orderStatus(orderCreateDTO.getOrderStatus())
+                .accountId(createOrderDTO.getAccountId())
+                .orderStatus(createOrderDTO.getOrderStatus())
                 .build();
 
-        return OrderMapper.toOrderCreateDTO(orderRepository.save(newOrder));
+        Order savedOrder = orderRepository.save(newOrder);
+
+        return savedOrder.getId();
     }
 
     @Override
     @Transactional
-    public OrderUpdateDTO updateOrder(Long orderId, OrderUpdateDTO orderUpdateDTO) {
+    public void updateOrder(Long orderId, UpdateOrderDTO updateOrderDTO) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ServiceException(String.format(ORDER_ID_EXCEPTION_MESSAGE, orderId)));
-        order.setAccountId(orderUpdateDTO.getAccountId());
-        order.setOrderStatus(orderUpdateDTO.getOrderStatus());
+        order.setAccountId(updateOrderDTO.getAccountId());
+        order.setOrderStatus(updateOrderDTO.getOrderStatus());
 
         orderRepository.save(order);
-
-        return OrderMapper.toOrderUpdateDTO(order);
     }
 
     @Override

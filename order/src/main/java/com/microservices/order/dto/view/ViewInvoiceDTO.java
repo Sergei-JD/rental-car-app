@@ -13,7 +13,7 @@ import java.time.Instant;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InvoiceViewDTO {
+public class ViewInvoiceDTO {
 
     private Long id;
 

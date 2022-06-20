@@ -48,7 +48,7 @@ public class CreditCardController {
     public ResponseEntity<ViewCreditCardDTO> getCreditCardById(
             @PathVariable(name = "id") Long id) {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
-        ViewCreditCardDTO viewCreditCardDTO = CreditCardMapper.toCreditCardViewDTO(creditCard);
+        ViewCreditCardDTO viewCreditCardDTO = CreditCardMapper.toViewCreditCardDTO(creditCard);
 
         return new ResponseEntity<>(viewCreditCardDTO, HttpStatus.OK);
     }
