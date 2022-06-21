@@ -3,8 +3,10 @@ package com.microservices.account.service.dataimpl;
 import com.microservices.account.dto.create.CreateCreditCardDTO;
 import com.microservices.account.dto.update.UpdateCreditCardDTO;
 import com.microservices.account.dto.view.ViewCreditCardDTO;
+import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCard;
 import com.microservices.account.mapper.CreditCardMapper;
+import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.repository.CreditCardRepository;
 import com.microservices.account.service.CreditCardService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ import static com.microservices.account.util.ServiceData.CREDIT_CARD_ID_EXCEPTIO
 public class CreditCardServiceImpl implements CreditCardService {
 
     private final CreditCardRepository creditCardRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public Page<ViewCreditCardDTO> getAllCreditCards(Pageable pageable) {
@@ -56,6 +59,8 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     @Transactional
     public Long createCreditCard(CreateCreditCardDTO createCreditCardDTO) {
+        Account account = accountRepository.findById(createCreditCardDTO.getAccountId())
+                .orElseThrow(() -> new ServiceException("Failed to create 'credit card'. No such 'account'"));
         CreditCard newCreditCard = CreditCard.builder()
                 .creditCardType(createCreditCardDTO.getCreditCardType())
                 .cardNumber(createCreditCardDTO.getCardNumber())
@@ -64,6 +69,7 @@ public class CreditCardServiceImpl implements CreditCardService {
                 .cvvCode(createCreditCardDTO.getCvvCode())
                 .nameCardOwner(createCreditCardDTO.getNameCardOwner())
                 .balance(createCreditCardDTO.getBalance())
+                .account(account)
                 .build();
 
         CreditCard savedCreditCard = creditCardRepository.save(newCreditCard);

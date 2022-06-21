@@ -3,10 +3,12 @@ package com.microservices.account.service.dataimpl;
 import com.microservices.account.dto.create.CreateUserDTO;
 import com.microservices.account.dto.update.UpdateUserDTO;
 import com.microservices.account.dto.view.ViewUserDTO;
+import com.microservices.account.entity.Account;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
 import com.microservices.account.exception.ServiceException;
 import com.microservices.account.mapper.UserMapper;
+import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.repository.UserRepository;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ import static com.microservices.account.util.ServiceData.USER_ID_EXCEPTION_MESSA
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final AccountRepository accountRepository;
 
     @Override
     public Page<ViewUserDTO> getAllUsers(Pageable pageable) {
@@ -64,6 +67,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long createUser(CreateUserDTO createUserDTO) {
+        Account account = accountRepository.findById(createUserDTO.getAccountId())
+                .orElseThrow(() -> new ServiceException("Failed to create 'user'. No such 'account'"));
         User newUser = User.builder()
                 .firstName(createUserDTO.getFirstName())
                 .lastName(createUserDTO.getLastName())
@@ -73,7 +78,7 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(createUserDTO.getPhoneNumber())
                 .gender(createUserDTO.getGender())
                 .role(createUserDTO.getRole())
-//                .account(userCreateDTO.getAccountId())
+                .account(account)
                 .build();
 
         User savedUser = userRepository.save(newUser);

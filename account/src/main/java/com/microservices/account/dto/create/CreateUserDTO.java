@@ -1,5 +1,6 @@
 package com.microservices.account.dto.create;
 
+import com.microservices.account.entity.Account;
 import com.microservices.account.entity.Gender;
 import com.microservices.account.entity.Role;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.domain.Persistable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -53,6 +55,6 @@ public class CreateUserDTO {
     @Size(min = 2, max = 64, message = "'Role' should be 'ADMIN' or 'CUSTOMER' or 'MECHANIC'")
     private Role role;
 
-//    @NotEmpty(message = "'Account id' should not be empty")
-//    private Account accountId;
+    @NotEmpty(message = "'Account id' should not be empty")
+    private Long accountId;
 }

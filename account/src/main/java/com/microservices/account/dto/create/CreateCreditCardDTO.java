@@ -1,6 +1,5 @@
 package com.microservices.account.dto.create;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.microservices.account.entity.CreditCardType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,7 +39,6 @@ public class CreateCreditCardDTO {
     @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
 
-    @JsonProperty("password")
     @NotEmpty(message = "'CVV-code' should not be empty")
     @Pattern(regexp = "\\d{3}", message = "'CVV-code' should be valid")
     private String cvvCode;
@@ -52,4 +50,7 @@ public class CreateCreditCardDTO {
     @NotEmpty(message = "'Balance' should not be empty")
     @PositiveOrZero(message = "'Balance' should be positive number or 0")
     private BigDecimal balance;
+
+    @NotEmpty(message = "'Account id' should not be empty")
+    private Long accountId;
 }

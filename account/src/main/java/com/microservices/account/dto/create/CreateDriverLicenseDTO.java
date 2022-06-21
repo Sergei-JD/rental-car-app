@@ -34,4 +34,7 @@ public class CreateDriverLicenseDTO {
     @NotEmpty(message = "'Expiration date' should not be empty")
     @Future(message = "'Expiration date' should be after current")
     private Instant expirationDate;
+
+    @NotEmpty(message = "'Account id' should not be empty")
+    private Long accountId;
 }

@@ -5,6 +5,7 @@ import com.microservices.account.dto.update.UpdateUserDTO;
 import com.microservices.account.dto.view.ViewUserDTO;
 import com.microservices.account.entity.Role;
 import com.microservices.account.entity.User;
+import com.microservices.account.exception.ServiceException;
 import com.microservices.account.mapper.UserMapper;
 import com.microservices.account.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,9 @@ public class UserController {
     @PostMapping
     public ResponseEntity<Long> createUser(
             @RequestBody @Valid CreateUserDTO createUserDTO) {
+        if (createUserDTO.getAccountId() == null) {
+            throw new ServiceException("Not possible to create a user who isn't associated with an account");
+        }
         Long addUser = userService.createUser(createUserDTO);
 
         return new ResponseEntity<>(addUser, HttpStatus.CREATED);

@@ -32,6 +32,4 @@ public class ViewUserDTO {
     private Gender gender;
 
     private Role role;
-
-//    private Account accountId;
 }
