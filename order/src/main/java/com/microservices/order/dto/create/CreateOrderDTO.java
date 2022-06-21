@@ -25,4 +25,7 @@ public class CreateOrderDTO {
     @NotEmpty(message = "'Order status' should not be empty")
     @Size(min = 2, max = 64, message = "'Order status' should be 'PENDING' or 'CONFIRMED' or 'CANCELLED'")
     private OrderStatus orderStatus;
+
+    @NotEmpty(message = "'Invoice id' should not be empty")
+    private Long invoiceId;
 }

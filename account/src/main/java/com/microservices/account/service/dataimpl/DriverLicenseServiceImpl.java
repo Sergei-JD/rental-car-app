@@ -6,8 +6,8 @@ import com.microservices.account.dto.view.ViewDriverLicenseDTO;
 import com.microservices.account.entity.Account;
 import com.microservices.account.entity.DriverLicense;
 import com.microservices.account.mapper.DriverLicenseMapper;
-import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.repository.DriverLicenseRepository;
+import com.microservices.account.service.AccountService;
 import com.microservices.account.service.DriverLicenseService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -26,7 +26,7 @@ import static com.microservices.account.util.ServiceData.DRIVER_LICENSE_ID_EXCEP
 public class DriverLicenseServiceImpl implements DriverLicenseService {
 
     private final DriverLicenseRepository driverLicenseRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Override
     public Page<ViewDriverLicenseDTO> getAllDriverLicenses(Pageable pageable) {
@@ -59,8 +59,7 @@ public class DriverLicenseServiceImpl implements DriverLicenseService {
     @Override
     @Transactional
     public Long createDriverLicense(CreateDriverLicenseDTO createDriverLicenseDTO) {
-        Account account = accountRepository.findById(createDriverLicenseDTO.getAccountId())
-                .orElseThrow(() -> new ServiceException("Failed to create 'driver license'. No such 'account'"));
+        Account account = accountService.getAccountById(createDriverLicenseDTO.getAccountId());
         DriverLicense newDriverLicense = DriverLicense.builder()
                 .driverLicenseNumber(createDriverLicenseDTO.getDriverLicenseNumber())
                 .category(createDriverLicenseDTO.getCategory())

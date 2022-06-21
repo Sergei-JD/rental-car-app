@@ -3,10 +3,12 @@ package com.microservices.order.service.dataimpl;
 import com.microservices.order.dto.create.CreateOrderDTO;
 import com.microservices.order.dto.update.UpdateOrderDTO;
 import com.microservices.order.dto.view.ViewOrderDTO;
+import com.microservices.order.entity.Invoice;
 import com.microservices.order.entity.Order;
 import com.microservices.order.entity.OrderStatus;
 import com.microservices.order.mapper.OrderMapper;
 import com.microservices.order.repository.OrderRepository;
+import com.microservices.order.service.InvoiceService;
 import com.microservices.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -25,6 +27,7 @@ import static com.microservices.order.util.ServiceData.ORDER_ID_EXCEPTION_MESSAG
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final InvoiceService invoiceService;
 
     @Override
     public Page<ViewOrderDTO> getAllOrders(Pageable pageable) {
@@ -68,9 +71,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Long createOrder(CreateOrderDTO createOrderDTO) {
+        Invoice invoice = invoiceService.getInvoiceById(createOrderDTO.getInvoiceId());
         Order newOrder = Order.builder()
                 .accountId(createOrderDTO.getAccountId())
                 .orderStatus(createOrderDTO.getOrderStatus())
+                .invoice(invoice)
                 .build();
 
         Order savedOrder = orderRepository.save(newOrder);

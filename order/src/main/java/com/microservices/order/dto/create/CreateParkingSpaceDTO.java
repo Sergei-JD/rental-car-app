@@ -27,4 +27,7 @@ public class CreateParkingSpaceDTO {
     @NotEmpty(message = "'Number space' should not be empty")
     @Size(min = 1, message = "'Number space' should be at least one character")
     private String numberSpace;
+
+    @NotEmpty(message = "'Order id' should not be empty")
+    private Long orderId;
 }

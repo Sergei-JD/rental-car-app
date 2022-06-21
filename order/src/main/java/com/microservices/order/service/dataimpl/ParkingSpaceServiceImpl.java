@@ -3,9 +3,11 @@ package com.microservices.order.service.dataimpl;
 import com.microservices.order.dto.create.CreateParkingSpaceDTO;
 import com.microservices.order.dto.update.UpdateParkingSpaceDTO;
 import com.microservices.order.dto.view.ViewParkingSpaceDTO;
+import com.microservices.order.entity.Order;
 import com.microservices.order.entity.ParkingSpace;
 import com.microservices.order.mapper.ParkingSpaceMapper;
 import com.microservices.order.repository.ParkingSpaceRepository;
+import com.microservices.order.service.OrderService;
 import com.microservices.order.service.ParkingSpaceService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -24,6 +26,7 @@ import static com.microservices.order.util.ServiceData.PARKING_SPACE_ID_EXCEPTIO
 public class ParkingSpaceServiceImpl implements ParkingSpaceService {
 
     private final ParkingSpaceRepository parkingSpaceRepository;
+    private final OrderService orderService;
 
     @Override
     public Page<ViewParkingSpaceDTO> getAllParkingSpaces(Pageable pageable) {
@@ -56,10 +59,12 @@ public class ParkingSpaceServiceImpl implements ParkingSpaceService {
     @Override
     @Transactional
     public Long createParkingSpace(CreateParkingSpaceDTO createParkingSpaceDTO) {
+        Order order = orderService.getOrderById(createParkingSpaceDTO.getOrderId());
         ParkingSpace newParkingSpace = ParkingSpace.builder()
                 .address(createParkingSpaceDTO.getAddress())
                 .level(createParkingSpaceDTO.getLevel())
                 .numberSpace(createParkingSpaceDTO.getNumberSpace())
+                .order(order)
                 .build();
 
         ParkingSpace savedParkingSpace = parkingSpaceRepository.save(newParkingSpace);

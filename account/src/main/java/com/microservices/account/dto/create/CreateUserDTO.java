@@ -1,6 +1,5 @@
 package com.microservices.account.dto.create;
 
-import com.microservices.account.entity.Account;
 import com.microservices.account.entity.Gender;
 import com.microservices.account.entity.Role;
 import lombok.AllArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.domain.Persistable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

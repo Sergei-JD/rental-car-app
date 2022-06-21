@@ -3,10 +3,12 @@ package com.microservices.order.service.dataimpl;
 import com.microservices.order.dto.create.CreateReservationDTO;
 import com.microservices.order.dto.update.UpdateReservationDTO;
 import com.microservices.order.dto.view.ViewReservationDTO;
+import com.microservices.order.entity.Order;
 import com.microservices.order.entity.Reservation;
 import com.microservices.order.entity.ReservationStatus;
 import com.microservices.order.mapper.ReservationMapper;
 import com.microservices.order.repository.ReservationRepository;
+import com.microservices.order.service.OrderService;
 import com.microservices.order.service.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -25,6 +27,7 @@ import static com.microservices.order.util.ServiceData.RESERVATION_ID_EXCEPTION_
 public class ReservationServiceImpl implements ReservationService {
 
     private final ReservationRepository reservationRepository;
+    private final OrderService orderService;
 
     @Override
     public Page<ViewReservationDTO> getAllReservations(Pageable pageable) {
@@ -68,11 +71,13 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public Long createReservation(CreateReservationDTO createReservationDTO) {
+        Order order = orderService.getOrderById(createReservationDTO.getOrderId());
         Reservation newReservation = Reservation.builder()
                 .carCatalogId(createReservationDTO.getCarCatalogId())
                 .pickUpDateTime(createReservationDTO.getPickUpDateTime())
                 .dropOffDateTime(createReservationDTO.getDropOffDateTime())
                 .reservationStatus(createReservationDTO.getReservationStatus())
+                .order(order)
                 .build();
 
         Reservation savedReservation = reservationRepository.save(newReservation);

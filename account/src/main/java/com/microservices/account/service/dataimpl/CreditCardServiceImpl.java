@@ -6,8 +6,8 @@ import com.microservices.account.dto.view.ViewCreditCardDTO;
 import com.microservices.account.entity.Account;
 import com.microservices.account.entity.CreditCard;
 import com.microservices.account.mapper.CreditCardMapper;
-import com.microservices.account.repository.AccountRepository;
 import com.microservices.account.repository.CreditCardRepository;
+import com.microservices.account.service.AccountService;
 import com.microservices.account.service.CreditCardService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.service.spi.ServiceException;
@@ -26,7 +26,7 @@ import static com.microservices.account.util.ServiceData.CREDIT_CARD_ID_EXCEPTIO
 public class CreditCardServiceImpl implements CreditCardService {
 
     private final CreditCardRepository creditCardRepository;
-    private final AccountRepository accountRepository;
+    private final AccountService accountService;
 
     @Override
     public Page<ViewCreditCardDTO> getAllCreditCards(Pageable pageable) {
@@ -59,8 +59,7 @@ public class CreditCardServiceImpl implements CreditCardService {
     @Override
     @Transactional
     public Long createCreditCard(CreateCreditCardDTO createCreditCardDTO) {
-        Account account = accountRepository.findById(createCreditCardDTO.getAccountId())
-                .orElseThrow(() -> new ServiceException("Failed to create 'credit card'. No such 'account'"));
+        Account account = accountService.getAccountById(createCreditCardDTO.getAccountId());
         CreditCard newCreditCard = CreditCard.builder()
                 .creditCardType(createCreditCardDTO.getCreditCardType())
                 .cardNumber(createCreditCardDTO.getCardNumber())

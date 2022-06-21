@@ -32,4 +32,7 @@ public class CreateReservationDTO {
     @NotEmpty(message = "'Reservation status' should not be empty")
     @Size(min = 2, max = 64, message = "'Reservation status' should be 'FREE' or 'BOOKED'")
     private ReservationStatus reservationStatus;
+
+    @NotEmpty(message = "'Order id' should not be empty")
+    private Long orderId;
 }
