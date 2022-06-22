@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CreateCarCatalogDTO {
 
+    @UniqueElements
     @NotEmpty(message = "'Registration number' name should not be empty")
     @Pattern(regexp = "\\d{8}", message = "'Registration number' should be valid")
     private String registrationNumber;

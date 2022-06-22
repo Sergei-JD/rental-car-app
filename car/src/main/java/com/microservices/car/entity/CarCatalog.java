@@ -32,7 +32,7 @@ public class CarCatalog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "registration_number", nullable = false)
+    @Column(name = "registration_number", unique = true, nullable = false)
     private String registrationNumber;
 
     @Enumerated(EnumType.STRING)
