@@ -1,6 +1,8 @@
 server.port: 8080
-spring.application.name: account
+
 spring:
+  application:
+    name: account
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5433/rental-car-app-account
